@@ -39,3 +39,12 @@ export const AppTextStyles = {
   body: 'text-hc-body',
   caption: 'text-hc-caption',
 } as const;
+
+/** Bundle of design tokens for TypeScript consumers (NM-0187). */
+export const AppTheme = {
+  colors: AppColors,
+  spacing: AppSpacing,
+  radius: AppRadius,
+  breakpoints: AppBreakpoints,
+  textStyles: AppTextStyles,
+} as const;

@@ -1,7 +1,9 @@
+import { lazy, Suspense } from 'react';
 import { useTranslation } from 'react-i18next';
 import { createBrowserRouter, Link, type RouteObject } from 'react-router';
 import { SplashPage } from '@/features/auth/pages/SplashPage';
 import { HcEmptyState } from '@/shared/ui/states/HcEmptyState';
+import { HcLoading } from '@/shared/ui/states/HcLoading';
 import { RequireRole } from './RequireRole';
 import { RoutePlaceholder } from './RoutePlaceholder';
 
@@ -28,10 +30,26 @@ function StatusPage({ kind }: { kind: 'forbidden' | 'notFound' }) {
   );
 }
 
+const LazyUiGallery = lazy(() =>
+  import('@/shared/gallery/UiGalleryPage').then((mod) => ({ default: mod.UiGalleryPage })),
+);
+
 const placeholder = (path: string, wf: string): RouteObject => ({ path, element: <RoutePlaceholder wf={wf} /> });
 
 export const routes: RouteObject[] = [
   { path: '/', element: <SplashPage /> },
+  ...(import.meta.env.DEV
+    ? [
+        {
+          path: '/dev/ui',
+          element: (
+            <Suspense fallback={<HcLoading lines={6} />}>
+              <LazyUiGallery />
+            </Suspense>
+          ),
+        },
+      ]
+    : []),
   placeholder('/register', 'WF-S-02'),
   { path: '/forbidden', element: <StatusPage kind="forbidden" /> },
   {

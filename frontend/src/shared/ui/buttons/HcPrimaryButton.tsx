@@ -1,14 +1,41 @@
 import type { ButtonHTMLAttributes } from 'react';
+import { HcIcon } from '../display/HcIcon';
 
-/** UI-20: one primary button per screen, label is a verb. Height 48 (40 when dense). Minimal version – TV2 owns UI kit. */
-type HcPrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & { dense?: boolean; fullWidth?: boolean };
+/** UI-20: one primary button per screen, label is a verb. Height 48 (40 when dense). NM-0188. */
+type HcPrimaryButtonProps = ButtonHTMLAttributes<HTMLButtonElement> & {
+  dense?: boolean;
+  fullWidth?: boolean;
+  loading?: boolean;
+  icon?: string;
+};
 
-export function HcPrimaryButton({ dense, fullWidth, className = '', type = 'button', ...rest }: HcPrimaryButtonProps) {
+export function HcPrimaryButton({
+  dense,
+  fullWidth,
+  loading = false,
+  icon,
+  disabled,
+  children,
+  className = '',
+  type = 'button',
+  ...rest
+}: HcPrimaryButtonProps) {
   return (
     <button
       type={type}
-      className={`inline-flex items-center justify-center gap-hc-sm rounded-hc-sm bg-hc-primary px-hc-lg text-hc-body font-semibold text-hc-on-primary disabled:opacity-50 ${dense ? 'h-hc-button-dense' : 'h-hc-button'} ${fullWidth ? 'w-full' : ''} ${className}`}
+      disabled={disabled || loading}
+      aria-busy={loading || undefined}
+      className={`hc-pressable inline-flex cursor-pointer items-center justify-center gap-hc-sm whitespace-nowrap rounded-hc-sm bg-hc-primary px-hc-lg text-hc-body font-semibold text-hc-on-primary shadow-hc-card hover:opacity-95 disabled:cursor-not-allowed disabled:opacity-50 ${
+        dense ? 'h-hc-button-dense px-hc-md' : 'h-hc-button'
+      } ${fullWidth ? 'w-full' : ''} ${className}`}
       {...rest}
-    />
+    >
+      {loading ? (
+        <HcIcon name="progress_activity" dense className="animate-spin" />
+      ) : (
+        icon && <HcIcon name={icon} dense />
+      )}
+      <span>{children}</span>
+    </button>
   );
 }
