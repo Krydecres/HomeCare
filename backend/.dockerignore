@@ -1,0 +1,3 @@
+# Only the prebuilt service JARs are sent to the Docker build context.
+**
+!*/target/*-0.1.0-SNAPSHOT.jar

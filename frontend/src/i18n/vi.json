@@ -1,0 +1,73 @@
+{
+  "app": {
+    "name": "HomeCare",
+    "tagline": "Chăm sóc tại nhà – đặt lịch nhanh, nhân viên đã xác minh",
+    "skipToContent": "Bỏ qua tới nội dung chính",
+    "openMenu": "Mở menu",
+    "closeMenu": "Đóng menu",
+    "mainNavigation": "Điều hướng chính"
+  },
+  "splash": {
+    "title": "Chăm sóc người thân tại nhà, an tâm mỗi ngày",
+    "subtitle": "Người cao tuổi, người bệnh, mẹ và bé – nhân viên thuộc bệnh viện đối tác, đã được xác minh.",
+    "chooseRole": "Bạn là ai?",
+    "needCare": "Tôi cần chăm sóc",
+    "needCareHint": "Đặt lịch chăm sóc cho bản thân hoặc người thân",
+    "isCaregiver": "Tôi là nhân viên",
+    "isCaregiverHint": "Điều dưỡng, người chăm sóc thuộc bệnh viện đối tác",
+    "login": "Đăng nhập",
+    "haveAccount": "Đã có tài khoản?",
+    "emergency": "HomeCare không phải dịch vụ cấp cứu. Khi nguy hiểm, gọi 115."
+  },
+  "auth": {
+    "logout": "Đăng xuất",
+    "sessionExpired": "Phiên đăng nhập đã hết hạn. Vui lòng đăng nhập lại.",
+    "account": "Tài khoản",
+    "switchToCaregiver": "Chuyển sang chế độ Nhân viên",
+    "switchToCustomer": "Chuyển sang chế độ Khách",
+    "modeCustomer": "Khách",
+    "modeCaregiver": "Nhân viên"
+  },
+  "nav": {
+    "home": "Trang chủ",
+    "bookings": "Lịch đặt",
+    "careRecipients": "Người thân",
+    "notifications": "Thông báo",
+    "schedule": "Lịch làm",
+    "earnings": "Thu nhập",
+    "dispatchBoard": "Bảng điều phối",
+    "incidents": "Sự cố",
+    "complaints": "Khiếu nại",
+    "assistedBooking": "Đặt hộ",
+    "overview": "Tổng quan",
+    "caregiverReview": "Duyệt nhân viên",
+    "partnerOrgs": "Bệnh viện đối tác",
+    "servicesPricing": "Dịch vụ & giá",
+    "areasHospitals": "Khu vực & bệnh viện",
+    "policies": "Chính sách",
+    "users": "Người dùng",
+    "auditLog": "Nhật ký",
+    "reports": "Báo cáo",
+    "moderation": "Kiểm duyệt",
+    "reconciliation": "Đối soát",
+    "payouts": "Rút tiền",
+    "refunds": "Hoàn tiền",
+    "revenue": "Doanh thu",
+    "staffApproval": "Duyệt nhân viên",
+    "roleChangeRequests": "Yêu cầu đổi vai trò",
+    "affiliatedStaff": "Nhân viên liên kết",
+    "partnerRevenue": "Doanh thu & đối soát"
+  },
+  "state": {
+    "loading": "Đang tải…",
+    "errorTitle": "Không tải được dữ liệu",
+    "errorHint": "Kiểm tra kết nối mạng rồi thử lại.",
+    "retry": "Thử lại",
+    "placeholderTitle": "Màn hình đang được phát triển",
+    "placeholderHint": "Màn hình {{wf}} sẽ được chủ gói code theo wireframe đã duyệt.",
+    "forbiddenTitle": "Bạn không có quyền xem trang này",
+    "forbiddenHint": "Trang này dành cho vai trò khác. Quay về trang chủ của bạn.",
+    "notFoundTitle": "Không tìm thấy trang",
+    "backHome": "Về trang chủ"
+  }
+}

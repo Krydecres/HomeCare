@@ -1,0 +1,6 @@
+# Shared configuration served by config-server to every service (profile native in dev, Git repo homecare-config later).
+# Each service's own application.yml already works without config-server; put only environment-wide overrides here.
+# NEVER put plain-text secrets in this repository (R-17).
+homecare:
+  outbox:
+    poll-interval: PT1S

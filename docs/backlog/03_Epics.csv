@@ -1,0 +1,167 @@
+Epic ID,Epic,As a (với vai trò),I want to (tôi muốn),So that I can (để),Service chính,User stories (tự động từ 04_Backlog),Số story
+EP01,Tài khoản & xác thực,Mọi người dùng (R01–R07),"đăng ký, đăng nhập an toàn và quản lý tài khoản, vai trò, thiết bị",chỉ đúng người mới truy cập được đúng chức năng và dữ liệu của mình,"SV00, SV04","US-01-001: Đăng ký tài khoản khách hàng
+US-01-002: Đăng nhập / đăng xuất
+US-01-003: Quên mật khẩu
+US-01-004: Đăng ký tài khoản nhân viên
+US-01-005: MFA cho tài khoản nội bộ
+US-01-006: Quản lý thiết bị & phiên
+US-01-007: Tạo tài khoản nội bộ
+US-01-008: Khóa / mở khóa tài khoản
+US-01-009: Một tài khoản nhiều vai trò",9
+EP02,Hồ sơ khách hàng & người được chăm sóc,R01 Khách hàng (người đặt/người thân),"tạo và quản lý hồ sơ người cần chăm sóc: sức khỏe nền, địa chỉ, liên hệ khẩn cấp, người giám hộ",nhân viên nắm rõ tình trạng trước khi đến và xử lý đúng khi có sự cố,SV05,"US-02-001: Tạo hồ sơ người được chăm sóc
+US-02-002: Hồ sơ sức khỏe nền
+US-02-003: Địa chỉ chăm sóc
+US-02-004: Liên hệ khẩn cấp & thông tin cấp cứu
+US-02-005: Cờ 'sống một mình' & mức độ phụ thuộc
+US-02-006: Mời người thân cùng quản lý
+US-02-007: Đồng ý của người được chăm sóc / người giám hộ
+US-02-008: Chế độ người cao tuổi
+US-02-009: Nhân viên yêu thích / chặn
+US-02-010: Tiêu chí ưu tiên nhân viên
+US-02-011: Người được chăm sóc là trẻ sơ sinh (mẹ & bé sau sinh)
+US-02-012: Địa điểm chăm sóc là bệnh viện",12
+EP03,Tuyển chọn & xác minh nhân viên,R03 Nhân viên y tế / R04 Người chăm sóc / R06 Admin,"đăng ký làm nhân viên và được xác minh danh tính, giấy phép hành nghề, kinh nghiệm, lý lịch, kỹ năng","khách hàng yên tâm người đến nhà là người thật, đủ năng lực, đủ điều kiện pháp lý",SV06,"US-03-001: Hồ sơ nhân viên
+US-03-002: Xác minh danh tính (eKYC)
+US-03-003: Nộp giấy phép hành nghề & văn bằng
+US-03-004: Admin đối chiếu GPHN với cơ quan y tế
+US-03-005: Xác minh kinh nghiệm làm việc
+US-03-006: Lý lịch tư pháp & giấy khám sức khỏe
+US-03-007: Bài kiểm tra kỹ năng online
+US-03-008: Phỏng vấn video & đánh giá thực hành
+US-03-009: Đào tạo bắt buộc trước khi nhận ca
+US-03-010: Giai đoạn thử việc
+US-03-011: Kiểm tra sơ bộ hồ sơ & theo dõi trạng thái (trước khi bệnh viện duyệt)
+US-03-012: Cấp độ & năng lực nhân viên
+US-03-013: Nhắc gia hạn & tự tạm ngưng khi giấy tờ hết hạn
+US-03-014: Tạm ngưng / thu hồi tư cách nhân viên
+US-03-015: Hồ sơ năng lực hiển thị cho khách
+US-03-016: Bệnh viện / cơ sở đối tác duyệt nhân viên
+US-03-017: Đổi vai trò / đổi hoặc rời bệnh viện
+US-03-018: Admin quản lý bệnh viện / cơ sở đối tác",18
+EP04,"Danh mục dịch vụ, giá & khu vực",R06 Admin / R01 Khách hàng,"cấu hình và xem dịch vụ, giá minh bạch, phụ phí, yêu cầu năng lực, khu vực phục vụ, chính sách",biết trước chi phí và chỉ đặt được dịch vụ mà nền tảng thật sự cung cấp được ở khu vực đó,SV07,"US-04-001: Danh mục dịch vụ & yêu cầu năng lực
+US-04-002: Khách xem danh mục & chi tiết dịch vụ
+US-04-003: Bảng giá & phụ phí
+US-04-004: Khu vực phục vụ
+US-04-005: Gói dịch vụ dài hạn
+US-04-006: Chính sách hủy, hoa hồng, phí phạt (có version)
+US-04-007: Mã giảm giá / khuyến mãi
+US-04-008: Danh mục bệnh viện & dịch vụ trông bệnh",8
+EP05,Đặt lịch,R01 Khách hàng,"đặt ca chăm sóc 1 lần, định kỳ, dài hạn, khẩn cấp cho mình hoặc người thân; hủy, dời, gia hạn",người thân được chăm sóc đúng lúc dù tôi ở xa,SV08,"US-05-001: Đặt ca chăm sóc 1 lần
+US-05-002: Báo giá chi tiết & xác nhận đặt
+US-05-003: Đặt lịch định kỳ
+US-05-004: Đặt chăm sóc 24/7 hoặc dài ngày
+US-05-005: Đặt gấp (trong vòng 4 giờ)
+US-05-006: Không có nhân viên: gợi ý giờ khác & danh sách chờ
+US-05-007: Danh sách đơn & chi tiết đơn
+US-05-008: Khách hủy đơn / hủy ca
+US-05-009: Dời lịch
+US-05-010: Gia hạn ca tại chỗ
+US-05-011: Điều phối viên đặt hộ qua điện thoại
+US-05-012: Tự động nhắc lịch & dọn đơn treo
+US-05-013: Chống đặt trùng & giữ chỗ tạm
+US-05-014: Đặt lại nhanh
+US-05-015: Tải y lệnh / đơn thuốc khi đặt dịch vụ y tế
+US-05-016: Đặt trông bệnh tại bệnh viện",16
+EP06,Ghép & điều phối nhân viên,R08 Hệ thống / R05 Điều phối viên / R03–R04 Nhân viên,"tự động ghép nhân viên phù hợp nhất; điều phối viên xử lý ca khó, thiếu người, thay thế",mọi đơn đều có người nhận hoặc khách được báo sớm phương án khác,SV09,"US-06-001: Ghép nhân viên tự động
+US-06-002: Gửi lời mời nhận ca (offer)
+US-06-003: Nhân viên xem & nhận/từ chối lời mời
+US-06-004: Mở rộng tìm kiếm khi thiếu người
+US-06-005: Không ghép được → báo khách & hoàn tiền
+US-06-006: Hàng đợi & ghép thủ công cho điều phối viên
+US-06-007: Tự động tìm người thay thế
+US-06-008: Khách tự chọn nhân viên từ danh sách gợi ý
+US-06-009: Nhân viên chính & dự phòng cho chuỗi ca
+US-06-010: Nhân viên hủy ca đã nhận",10
+EP07,Lịch làm việc nhân viên,R03 Nhân viên y tế / R04 Người chăm sóc,"quản lý giờ rảnh, ca đã nhận, nghỉ phép, khu vực nhận việc","chủ động thu nhập, không bị trùng lịch hay quá tải","SV06, SV09","US-07-001: Đặt giờ rảnh hàng tuần
+US-07-002: Xem lịch ca đã nhận
+US-07-003: Đăng ký nghỉ
+US-07-004: Khu vực & dịch vụ nhận việc
+US-07-005: Giới hạn giờ làm chống kiệt sức
+US-07-006: Chế độ sẵn sàng nhận ca gấp
+US-07-007: Đồng bộ lịch ra lịch cá nhân",7
+EP08,Thực hiện ca chăm sóc,R03–R04 Nhân viên / R01 Khách hàng,"check-in/out, làm theo kế hoạch chăm sóc, ghi nhật ký & chỉ số sinh tồn, gửi báo cáo",gia đình theo dõi minh bạch từ xa và có bằng chứng khi tranh chấp,SV10,"US-08-001: Báo 'Đang tới' & chia sẻ vị trí khi di chuyển
+US-08-002: Check-in có GPS + xác thực khuôn mặt
+US-08-003: Kế hoạch chăm sóc (care plan)
+US-08-004: Checklist công việc trong ca
+US-08-005: Ghi chỉ số sinh tồn & cảnh báo bất thường
+US-08-006: Ghi nhận dùng thuốc theo y lệnh
+US-08-007: Ảnh trong ca (có đồng ý)
+US-08-008: Check-out & báo cáo cuối ca
+US-08-009: Gia đình theo dõi ca từ xa
+US-08-010: Nhật ký sức khỏe dài hạn
+US-08-011: Bàn giao ca giữa nhân viên
+US-08-012: Phát hiện nhân viên không đến (no-show)
+US-08-013: Báo dấu hiệu bạo hành / bỏ bê
+US-08-014: Bệnh nhân/gia đình từ chối dịch vụ khi nhân viên đã đến
+US-08-015: Check-in khi trông bệnh tại bệnh viện",15
+EP09,Khẩn cấp & sự cố,R03–R04 Nhân viên / R01 Khách hàng / R05 Điều phối viên,"báo SOS và xử lý sự cố y tế, an toàn, mất liên lạc theo quy trình rõ ràng",giảm rủi ro tính mạng và xác định rõ trách nhiệm,SV14,"US-09-001: Nút SOS cho nhân viên khi bệnh nhân gặp nguy
+US-09-002: Phân loại sự cố & quy trình xử lý (playbook)
+US-09-003: Bảng điều khiển sự cố realtime
+US-09-004: Báo cáo sự cố (không sửa được sau khi đóng)
+US-09-005: SOS cho người được chăm sóc / gia đình
+US-09-006: An toàn cho nhân viên (SOS kín)
+US-09-007: Quy trình kiểm tra an toàn (welfare check)
+US-09-008: Xử lý khi người được chăm sóc tử vong
+US-09-009: Nhân viên gặp tai nạn / ốm đột xuất trong ca
+US-09-010: Người được chăm sóc đi lạc
+US-09-011: Cảnh báo bệnh truyền nhiễm
+US-09-012: Sự cố khi trông bệnh tại bệnh viện",12
+EP10,"Thanh toán, hoa hồng & đối soát",R01 Khách hàng / R03–R04 Nhân viên / R07 Kế toán,"thanh toán online được giữ tạm, hoàn tiền đúng chính sách, nhân viên nhận tiền sau ca đã trừ hoa hồng","nền tảng có doanh thu bền vững, cả hai bên được bảo vệ tiền",SV11,"US-10-001: Thanh toán online & giữ tiền tạm (escrow)
+US-10-002: Hoàn tiền tự động theo sự kiện
+US-10-003: Ghi nhận doanh thu & chia tiền khi ca hoàn thành
+US-10-004: Ví thu nhập nhân viên
+US-10-005: Tài khoản ngân hàng nhận tiền
+US-10-006: Rút tiền (payout)
+US-10-007: Hóa đơn / biên nhận
+US-10-008: Đối soát hằng ngày với cổng thanh toán
+US-10-009: Hoàn tiền thủ công / ngoại lệ
+US-10-010: Thanh toán theo kỳ & thanh toán bổ sung
+US-10-011: Tip cho nhân viên
+US-10-012: Phí phạt & bồi thường
+US-10-013: Khấu trừ & báo cáo thuế thay nhân viên
+US-10-014: Báo cáo doanh thu nền tảng
+US-10-015: Phần chia & thanh toán cho bệnh viện đối tác",15
+EP11,Thông báo & liên lạc,Mọi người dùng,"nhận thông báo đúng lúc, chat và gọi qua app mà không lộ số điện thoại",liên lạc kịp thời và hạn chế giao dịch ngoài nền tảng,SV12,"US-11-001: Thông báo push & trung tâm thông báo
+US-11-002: Email giao dịch
+US-11-003: Chat trong app (che thông tin liên lạc)
+US-11-004: Gọi điện ẩn số
+US-11-005: Quản lý mẫu thông báo & đa ngôn ngữ
+US-11-006: Thông báo cho liên hệ khẩn cấp không có app
+US-11-007: Đảm bảo gửi thông báo tin cậy",7
+EP12,"Đánh giá, chất lượng & tranh chấp",R01 Khách hàng / R03–R04 Nhân viên / R05 CSKH,"đánh giá hai chiều, khiếu nại, mở tranh chấp và được xử lý công bằng","chất lượng dịch vụ được duy trì, người tốt được ưu tiên, người vi phạm bị xử lý",SV13,"US-12-001: Khách đánh giá nhân viên
+US-12-002: Nhân viên đánh giá khách / môi trường
+US-12-003: Điểm uy tín nhân viên
+US-12-004: Khiếu nại
+US-12-005: Xử lý tranh chấp
+US-12-006: Kiểm duyệt đánh giá
+US-12-007: Báo cáo giao dịch ngoài nền tảng",7
+EP13,"Quản trị, vận hành & báo cáo",R06 Admin / R05 Điều phối viên / R07 Kế toán,"xem dashboard, báo cáo vận hành & tài chính, nhật ký kiểm toán, quản lý người dùng","ra quyết định dựa trên số liệu (thiếu nhân lực ở đâu, doanh thu bao nhiêu)",SV15,"US-13-001: Dashboard quản trị
+US-13-002: Báo cáo thiếu hụt nhân lực theo khu vực
+US-13-003: Quản lý người dùng
+US-13-004: Nhật ký kiểm toán tập trung
+US-13-005: Báo cáo hiệu suất nhân viên
+US-13-006: Cấu hình tham số vận hành
+US-13-007: Thông báo hàng loạt (broadcast)
+US-13-008: Tạm ngưng dịch vụ khu vực khẩn cấp",8
+EP14,"Bảo mật, quyền riêng tư & tuân thủ",Mọi người dùng / R06 Admin,"đồng ý xử lý dữ liệu, xem/tải/xóa dữ liệu của mình, dữ liệu sức khỏe được mã hóa và ghi vết truy cập",tuân thủ pháp luật về dữ liệu cá nhân và giữ niềm tin người dùng,Tất cả,"US-14-001: Quản lý đồng ý xử lý dữ liệu
+US-14-002: Xem & tải dữ liệu của tôi
+US-14-003: Xóa tài khoản & dữ liệu
+US-14-004: Mã hóa dữ liệu nhạy cảm
+US-14-005: Kiểm soát truy cập theo quan hệ & thời gian
+US-14-006: Che dữ liệu trong log & hiển thị
+US-14-007: Quy trình khi rò rỉ dữ liệu
+US-14-008: Chống lạm dụng & brute force",8
+EP15,Nền tảng kỹ thuật SOA (enabler),R09 Lập trình viên / DevOps,"có hạ tầng gateway, registry, config, messaging, CI, giám sát, kiểm tra kiến trúc tự động",5 người + AI cùng code mà không phá vỡ kiến trúc,SV01–SV03,"US-15-001: Khởi tạo repo multi-module
+US-15-002: Docker Compose chạy toàn hệ thống
+US-15-003: Eureka + Config Server + API Gateway
+US-15-004: Thư viện dùng chung homecare-common
+US-15-005: Kiểm tra kiến trúc tự động + CI
+US-15-006: Giám sát & truy vết
+US-15-007: Cấu hình Keycloak realm
+US-15-008: Khung dự án React
+US-15-009: Dữ liệu mẫu demo
+US-15-010: Đồng bộ backlog sang repo
+US-15-011: Code mẫu chuẩn (golden sample)
+US-15-012: Bộ UI Kit React theo Design System
+US-15-013: CI kiểm tra tên đã đăng ký + PR checklist
+US-15-014: PWA & quyền trình duyệt",14

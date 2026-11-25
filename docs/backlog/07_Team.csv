@@ -1,0 +1,8 @@
+Mã TV,Họ tên,Liên hệ (email/Zalo),Công cụ AI đang dùng,Story đang nhận (tự động),Ghi chú
+TV1,Phạm Hữu Đức,pducdddd@gmail.com/0332609031,Claude,"US-15-001, US-15-002, US-15-003, US-15-004, US-15-006, US-15-007, US-15-008, US-15-013","← ĐIỀN HỌ TÊN vào cột B (ô vàng). Các sheet 08, 16 tự hiện tên theo mã TV. Mọi thành viên vừa code vừa test, không phân vai cố định"
+TV2,Lê Ngô Dong Gun,lengodonggun@gmail.com,Gemini & Claude,,
+TV3,Long Quốc Cường,cuonghackerlord@gmail.com,,,
+TV4,Huỳnh Gia Phong ,huynhphong1472005@gmail.com/0369943602,Chat GPT,,
+TV5,Đặng Ngọc Châu,dnccrack76@gmail.com,,,
+,,,,,
+,,,,,"Cách nhận việc: chọn mã TV ở cột 'Người nhận' (04_Backlog: story, 16_WF_Packages: gói wireframe). Mã TV cố định, không đổi; đổi người thì chỉ sửa tên ở đây"

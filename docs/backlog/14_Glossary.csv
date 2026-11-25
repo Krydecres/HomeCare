@@ -1,0 +1,46 @@
+Tiếng Việt,English,Tên trong code,Định nghĩa
+Khách hàng / người đặt,Customer,Customer,Người có tài khoản đặt và trả tiền dịch vụ
+Người được chăm sóc,Care recipient,CareRecipient,Người nhận dịch vụ; có thể khác người đặt
+Nhân viên (chung),Caregiver,Caregiver,Mọi người cung cấp dịch vụ (y tế hoặc không chuyên)
+Nhân viên y tế,Medical caregiver,CaregiverType.NURSE_MEDICAL,"Có giấy phép hành nghề: điều dưỡng, hộ sinh, KTV..."
+Người chăm sóc không chuyên,Non-medical caregiver,CaregiverType.CAREGIVER,"Chăm sóc sinh hoạt, không làm thủ thuật y tế"
+Giấy phép hành nghề (GPHN),Practice license,PracticeLicense,"Giấy phép do Sở/Bộ Y tế cấp, có phạm vi và thời hạn"
+Xác minh,Verification,Verification,"Quá trình kiểm tra danh tính, giấy tờ, kinh nghiệm"
+Cấp độ,Level,CaregiverLevel,C1–C5
+Điểm uy tín,Reputation score,reputationScore,"Tổng hợp đánh giá, hủy, no-show, khiếu nại"
+Đơn đặt,Booking,Booking,"Yêu cầu dịch vụ của khách, gồm 1 hoặc nhiều ca"
+Ca,Shift,Shift,Một khoảng thời gian cụ thể do 1 nhân viên thực hiện
+Báo giá,Quote,Quote,Giá chi tiết có hiệu lực 15 phút
+Lời mời nhận ca,Shift offer,ShiftOffer,"Lời mời gửi tới nhân viên, có hạn trả lời"
+Ghép / điều phối,Dispatch / matching,Dispatch,Chọn nhân viên cho ca
+Danh sách chờ,Waitlist,WaitlistEntry,Khách chờ khi chưa có nhân viên
+Dịch vụ (trong danh mục),Care service,CareService,KHÔNG dùng tên 'Service' cho entity để tránh nhầm với lớp Service của Spring
+Gói dịch vụ,Care package,CarePackage,Gói dài hạn có giảm giá
+Phụ phí,Surcharge,Surcharge,"Đêm, cuối tuần, lễ, đặt gấp..."
+Chính sách (có phiên bản),Policy,"Policy, policyVersion","Hủy/hoàn, hoa hồng, phí phạt"
+Khu vực phục vụ,Service area,ServiceArea,Tỉnh/thành → phường/xã
+Kế hoạch chăm sóc,Care plan,CarePlan,Danh sách nhiệm vụ cho người được chăm sóc
+Nhiệm vụ,Care task,CareTask,Một việc trong care plan
+Lượt thực hiện ca,Visit,Visit,"Bản ghi thực tế của ca: check-in, checklist, check-out"
+Chỉ số sinh tồn,Vital signs,VitalSign,"Huyết áp, mạch, nhiệt độ, SpO2..."
+Y lệnh,Medical order,MedicalOrder,Chỉ định của bác sĩ khách tải lên
+Bàn giao ca,Shift handover,ShiftHandover,Ghi chú chuyển giữa 2 nhân viên
+Không đến,No-show,ShiftStatus.NO_SHOW,Nhân viên không check-in sau 30 phút
+Liên hệ khẩn cấp,Emergency contact,EmergencyContact,
+Người giám hộ / đại diện,Guardian,Guardian,Người đồng ý thay khi người được chăm sóc không tự quyết định được
+Đồng ý,Consent,Consent,Đồng ý xử lý dữ liệu theo mục đích
+Sự cố,Incident,Incident,"Mọi sự cố y tế, an toàn, tài sản..."
+SOS,SOS alert,SosAlert,Cảnh báo khẩn cấp
+Kiểm tra an toàn,Welfare check,WelfareCheck,Quy trình khi không liên lạc được người ở một mình
+Quy trình xử lý,Playbook,IncidentPlaybook,Checklist theo loại sự cố
+Khiếu nại,Complaint,Complaint,
+Tranh chấp,Dispute,Dispute,Khiếu nại cần ra quyết định về tiền/xử lý
+Đánh giá,Review,Review,
+Giữ tiền tạm,Escrow,escrow,"Tiền khách đã trả, nền tảng giữ tới khi ca hoàn thành"
+Sổ cái,Ledger,LedgerEntry,"Bút toán kép, không sửa/xóa"
+Hoa hồng,Commission,commission,Phần nền tảng giữ lại từ giá ca
+Ví,Wallet,Wallet,Số dư chờ / khả dụng của nhân viên
+Rút tiền,Payout,Payout,
+Hoàn tiền,Refund,Refund,
+Điều phối viên,Dispatcher,DISPATCHER,"Role nội bộ xử lý đơn khó, sự cố, CSKH"
+Đối tác tổ chức,Partner organization,PartnerOrganization,Phòng khám/trung tâm cung cấp nhân sự (chờ OQ-004)

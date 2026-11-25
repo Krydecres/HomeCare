@@ -1,0 +1,27 @@
+Chức năng / quyền,CUSTOMER (R01),ELDER (R02),CAREGIVER_PENDING,CAREGIVER (R03/R04),DISPATCHER (R05),ADMIN (R06),ACCOUNTANT (R07),PARTNER_ORG (R10),SYSTEM (service account),Ghi chú
+Đăng ký / đăng nhập,✔,✔ (OTP),✔,✔,✔ + MFA,✔ + MFA,✔ + MFA,✔ + MFA,client credentials,
+Quản lý hồ sơ người được chăm sóc,Của mình / được mời,Xem của mình,–,–,Khi đặt hộ / xử lý đơn,Xem tóm tắt,–,–,–,Mọi lượt xem ghi audit
+Xem hồ sơ sức khỏe chi tiết,Của mình,Của mình,–,Khi có ca (24h trước → 24h sau),Khi xử lý đơn / sự cố,Có lý do + audit,–,–,–,US-14-005
+Đặt / hủy / dời lịch,Của mình,–,–,–,Đặt hộ,–,–,–,–,
+Thanh toán,Của mình,–,–,–,Gửi link,–,–,–,–,
+Nhận / từ chối / hủy ca,–,–,–,✔ (đủ điều kiện),–,–,–,–,–,
+Ghép thủ công,–,–,–,–,✔ (không override bộ lọc cứng),✔,–,Nhân viên của tổ chức,–,
+"Giờ rảnh, nghỉ, khu vực nhận việc",–,–,–,Của mình,Xem,Xem,–,Nhân viên của tổ chức,–,
+"Check-in/out, checklist, chỉ số, báo cáo ca",Xem (đơn của mình),Xem,–,Ca của mình,Xem,Xem + audit,–,–,–,
+SOS,✔,✔,–,✔,Nhận & xử lý,✔,–,–,–,SOS không bao giờ bị chặn bởi quyền
+Xử lý sự cố / đóng sự cố,–,–,–,Khai báo,✔,✔,–,–,–,
+Nộp hồ sơ xác minh,–,–,✔,Cập nhật giấy tờ,–,–,–,–,–,
+Kiểm tra sơ bộ / tạm ngưng nhân viên,–,–,–,–,–,"✔ kiểm tra giấy tờ, tạm ngưng (KHÔNG tự cấp role CAREGIVER)",–,–,–,US-03-011. Người kiểm tra ≠ người nộp
+"Duyệt nhân viên / duyệt đổi vai trò, đổi bệnh viện / chấm dứt liên kết",–,–,Gửi yêu cầu,"Gửi yêu cầu, rời bệnh viện",–,Xem + tạm khóa đối tác,–,✔ CHỈ hồ sơ chọn bệnh viện mình (lọc theo partnerOrgId trong token),identity-service gán role khi nhận sự kiện duyệt,"US-03-016, US-03-017 (OQ-037 b). Audit mọi quyết định"
+"Danh mục dịch vụ, giá, khu vực, chính sách",Xem,–,Xem,Xem,Xem,✔ Sửa,Xem,Xem,–,
+"Ví, tài khoản ngân hàng, rút tiền",–,–,–,Của mình,–,Xem,Xem,"Ví bệnh viện (phần chia từ ca), xem + xác nhận đối soát",–,"US-10-004, US-10-015"
+"Duyệt payout, đối soát, hoàn tiền thủ công",–,–,–,–,–,Xem,✔ (2 người nếu > ngưỡng) – gồm payout nhân viên và bệnh viện,–,–,"US-10-006, US-10-015"
+Báo cáo doanh thu & thuế,–,–,–,–,–,✔,✔,Của bệnh viện mình (không có dữ liệu sức khỏe/địa chỉ khách),–,"US-10-014, US-10-015"
+Đánh giá,Tạo (ca của mình),–,–,Đánh giá khách,Xem,Kiểm duyệt,–,–,–,
+Khiếu nại / tranh chấp,Tạo,–,–,Phản hồi,Xử lý,Xử lý,Xem (tiền),–,–,
+Dashboard & báo cáo vận hành,–,–,–,–,Xem,✔,–,–,–,
+"Quản lý người dùng, tạo tài khoản nội bộ",–,–,–,–,–,✔,–,–,–,
+Audit log,–,–,–,–,–,✔,–,–,–,Không ai xóa được
+"Broadcast, tạm ngưng khu vực",–,–,–,–,–,✔,–,–,–,
+Gọi API nội bộ giữa service,–,–,–,–,–,–,–,–,✔,Scope riêng theo service
+Chú thích,✔ = được phép; – = không; 'Của mình' = chỉ dữ liệu thuộc mình. Tên role = tên realm role trong Keycloak (Approved),,,,,,,,,

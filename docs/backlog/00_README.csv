@@ -1,0 +1,66 @@
+BACKLOG – HỆ THỐNG ĐẶT LỊCH & ĐIỀU PHỐI CHĂM SÓC TẠI NHÀ (HomeCare),,
+"Kiến trúc: SOA theo hướng microservice + Spring Boot (Controller → Service → Repository). Client: 1 web React.js (Vite + TypeScript, PWA, responsive) cho mọi role, đăng nhập qua api-gateway làm BFF. Đã BỎ app mobile Flutter từ 24/11/2026 (OQ-036).",,
+"Đây là SOURCE OF TRUTH của dự án. Code, wireframe và backlog phải luôn khớp nhau. Mọi AI và mọi thành viên BẮT BUỘC đọc sheet 01_AI_RULES trước khi làm. Dùng AI vẽ wireframe → dán prompt P-1; dùng AI code → dán prompt P-2 (cuối sheet 01). Quy trình từng bước ở phần 'QUY TRÌNH' bên dưới.",,
+,,
+DANH SÁCH SHEET,Mục đích,Khi nào cần đọc / ghi
+00_README,"Hướng dẫn tổng quan, quy ước ID, quy trình làm việc",Đọc đầu tiên
+01_AI_RULES,Quy tắc BẮT BUỘC cho mọi AI và mọi người,Đọc trước mọi phiên làm việc
+02_Tech_Stack,Công nghệ đã chốt + phiên bản + lý do. KHÔNG tự thêm thư viện ngoài danh sách,Trước khi thêm dependency
+03_Epics,Danh sách Epic theo đúng form template (Epic | As a | I want to | So that I can | User stories),Khi cần nhìn tổng thể
+04_Backlog,"Sheet chính: mỗi dòng = 1 user story, có AC, rule, wireframe, service, người nhận",Trước khi code bất kỳ tính năng nào
+05_Scenarios,"Tình huống thực tế / edge case (hết nhân viên, sự cố y tế, ở một mình...) + cách hệ thống xử lý","Khi viết AC, khi test"
+06_Open_Questions,Câu hỏi chưa chốt + quyết định (Decision log). Chưa chốt = chưa được code phần liên quan,Khi gặp điều không rõ
+07_Team,"Thành viên, liên hệ, đang nhận story nào",Khi nhận việc
+08_Wireframes,Danh sách màn hình + link Figma + trạng thái duyệt,Trước khi code UI / API
+09_Service_Catalog,"Danh sách service SOA: trách nhiệm, port, schema DB, base path, event",Khi quyết định code nằm ở service nào
+10_API_Contract,Hợp đồng API giữa client ↔ service và service ↔ service,Trước khi viết Controller / gọi service khác
+11_Naming_Registry,"Sổ đăng ký TẤT CẢ tên: class, method, biến, bảng, cột, event, màn hình. Có lưu tên cũ khi đổi",Trước và sau mỗi lần tạo/đổi tên
+12_Data_Dictionary,Entity / bảng / cột / kiểu / ràng buộc / quan hệ,"Khi tạo Entity, Flyway migration"
+13_RBAC,Ma trận vai trò × quyền,Khi cấu hình Spring Security / Keycloak
+14_Glossary,Thuật ngữ nghiệp vụ (Việt ↔ English ↔ tên trong code),Khi đặt tên
+15_Change_Log,"Nhật ký: ai/AI nào sửa gì, ở đâu, khi nào, vì sao",Sau MỌI thay đổi backlog
+16_WF_Packages,Chia 62 wireframe thành 5 gói vẽ + quy tắc tránh xung đột trên Figma. Ghi mã TV vào cột 'Người nhận' để nhận gói,Trước khi vẽ wireframe
+17_UI_Standards,"Chuẩn giao diện chung: token, điều hướng, component Figma ↔ component React, nhãn trạng thái, định dạng, responsive (UI-15), giới hạn web (UI-16), checklist rà soát wireframe CK-01 → CK-12",Trước khi vẽ wireframe và trước khi code UI
+18_Code_Packages,"Chia việc CODE cho 5 người theo service (mỗi người sở hữu trọn vẹn service + trang React của service đó), thứ tự làm, quy tắc sửa code của gói khác, security lead (TV1)",
+99_Lists,Nguồn dữ liệu cho dropdown. Muốn thêm lựa chọn thì thêm ở đây,Khi cần thêm giá trị dropdown
+,,
+QUY ƯỚC ID,Định dạng,Ví dụ
+Epic,EPxx,EP05
+User story,US-xx-yyy (xx = số Epic),US-05-003
+Scenario,SC-xxx,SC-012
+Câu hỏi mở,OQ-xxx,OQ-007
+Wireframe,"WF-<NHÓM>-xx (C=Khách, N=Nhân viên, D=Điều phối, A=Admin, K=Kế toán, P=Bệnh viện/cơ sở đối tác, S=Chung)",WF-C-04
+Service,SVxx,SV08
+API,API-<SV>-xxx,API-SV08-001
+Tên (Naming),NM-xxxx,NM-0123
+Data (entity/field),DD-xxxx,DD-0042
+Test case,TC-US-xx-yyy-n,TC-US-05-003-1
+,,
+"QUY TRÌNH VẼ 1 WIREFRAME (bắt buộc theo thứ tự, người hay AI đều vậy)",,Luật chi tiết
+Bước 1,Nhận gói ở 16_WF_Packages: ghi mã TV vào cột 'Người nhận'. Chỉ vẽ WF thuộc gói của mình,16_WF_Packages
+Bước 2,"Đọc 17_UI_Standards, page '00 – Design System' trong file Penpot 'HomeCare WireFrame', story liên quan (cột E sheet 08) và màn hình liên kết sang gói khác (cột N sheet 08)",R-29
+Bước 3,TRƯỚC KHI VẼ: tạo board trống 1440×900 đúng tên 'WF-ID Tên màn hình' trên PAGE của gói trong Penpot → DÁN LINK vào cột 'Link thiết kế' sheet 08 → đổi trạng thái 'Đang vẽ'. Chưa có link = chưa ai nhận (dòng bị tô đỏ). Frame cũ trên Figma chỉ giữ những cái đã đạt (xem 16_WF_Packages),R-28
+Bước 4,Dùng AI để vẽ → dán prompt P-1 (01_AI_RULES) ở đầu mỗi phiên. AI phải dừng nếu chưa thấy link trên sheet 08,P-1
+Bước 5,"Vẽ: CHỈ dùng component / token / nhãn trạng thái / thuật ngữ / điều hướng của 17_UI_Standards; đủ trạng thái màn hình (UI-30); dùng dữ liệu mẫu chung (UI-52). Thiếu component → thêm dòng Proposed vào 17, chờ G5 duyệt",R-29
+Bước 6,"Reviewer (gói duyệt chéo: G1←G2, G2←G3, G3←G4, G4←G5, G5←G1) chấm theo đúng checklist → 'Đã duyệt' hoặc 'Cần sửa' (kèm comment trên Penpot)",R-30
+Bước 7,"Reviewer (gói duyệt chéo: G1←G2, G2←G3, G3←G4, G4←G5, G5←G1) chấm theo đúng checklist → 'Đã duyệt' hoặc 'Cần sửa' (kèm comment Figma)","R-13, R-30"
+Bước 8,"Hai wireframe mâu thuẫn: 17_UI_Standards là chuẩn → chưa có chuẩn thì G5 (chủ Design System) quyết và bổ sung vào 17 → mâu thuẫn nghiệp vụ thì theo story, story chưa rõ thì tạo OQ. KHÔNG sửa frame của gói khác",R-31
+,,
+QUY TRÌNH LÀM (CODE) 1 STORY (bắt buộc theo thứ tự),,Luật chi tiết
+Bước 1,"Story ở trạng thái Approved, không còn OQ liên quan ở trạng thái 'Mở'",R-15
+Bước 2,Wireframe liên quan ở trạng thái 'Đã duyệt' (hoặc 'Không cần UI'),R-13
+Bước 3,"Code mẫu chuẩn US-15-011 đã Done; đọc docs/GOLDEN_SAMPLE.md và bắt chước đúng cấu trúc file, đặt tên, cách viết test",R-33
+Bước 4,"Đã khai báo đủ API (10), tên class/method/biến (11), bảng/cột (12), quyền (13) ở trạng thái Approved. Thiếu → đề xuất Proposed, chờ người duyệt","R-10, R-14"
+Bước 5,Ghi tên mình vào cột 'Người nhận' + 'Ngày nhận' (04_Backlog) để người khác không làm trùng; đổi trạng thái In progress,R-22
+Bước 6,Chạy build + unit/integration test + ArchUnit + pnpm lint / typecheck / test (Vitest) + Playwright (1440 & 390) + scripts/check-naming.py; tạo PR theo .github/pull_request_template.md (kèm ảnh trang web đặt cạnh wireframe),"R-02 → R-09, R-32, P-2"
+Bước 7,"Đổi/thêm tên: cập nhật 11_Naming_Registry (ghi tên cũ vào cột 'Tên cũ'), 10, 12, cột 'Class/Method chính' ở 04 và 15_Change_Log trong CÙNG 1 PR",R-11
+Bước 8,Chạy build + unit/integration test + ArchUnit + scripts/check-naming.py; tạo PR theo .github/pull_request_template.md (kèm ảnh app đặt cạnh wireframe),"R-20, R-34"
+Bước 9,CI xanh → người khác review → Done; ghi 15_Change_Log; AI báo cáo cuối phiên,"R-24, R-26"
+,,
+QUY ƯỚC CHUNG,,
+Mô tả nghiệp vụ,Tiếng Việt,
+"Tên trong code, API, DB","Tiếng Anh. Class PascalCase, method/biến camelCase, hằng UPPER_SNAKE_CASE, bảng/cột snake_case (số nhiều cho bảng), API /api/v1/<kebab-case-số-nhiều>","BookingController, createBooking(), booking_requests, /api/v1/bookings"
+Không xóa dòng,Không xóa story/tên/câu hỏi. Muốn bỏ thì đổi trạng thái sang Deprecated/Hủy + ghi lý do,
+Không gộp ô (merge),Trừ 03_Epics. Gộp ô làm hỏng lọc/sắp xếp và AI đọc sai,
+Thêm cột / sheet mới,"Được, nhưng thêm ở cuối bảng, ghi vào 15_Change_Log và cập nhật mục 'DANH SÁCH SHEET' phía trên",
+Story có chữ [CẦN CHỐT],Phụ thuộc câu hỏi ở 06_Open_Questions. Chưa chốt thì chưa code,

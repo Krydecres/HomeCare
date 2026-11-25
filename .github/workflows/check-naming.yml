@@ -1,0 +1,16 @@
+# Chặn merge khi code dùng tên chưa đăng ký trong 11_Naming_Registry (R-10, R-11, R-34)
+name: check-naming
+on:
+  pull_request:
+  push:
+    branches: [main]
+jobs:
+  check-naming:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Kiểm tra tên class/page/component đã đăng ký
+        run: python3 scripts/check-naming.py --registry docs/backlog/11_Naming_Registry.csv --root .

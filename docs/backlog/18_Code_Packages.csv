@@ -1,0 +1,22 @@
+Gói code,Mã TV,Họ tên (tự động từ 07),Backend sở hữu (service),Epic / story chính,Trang React (WF),Enabler EP15,Số story (ước tính),Trách nhiệm thêm,Review chéo
+C1 – Security & xác thực,TV1,Phạm Hữu Đức,"identity-service, api-gateway (BFF), Keycloak realm, report-service (audit log), phần security/audit/mã hóa của homecare-common","EP01, EP14, US-13 (quản lý người dùng, audit log, báo cáo)","WF-S-01 → S-05, S-08, S-09, WF-A-01, A-06, A-07, A-08 + khung app (HcAppShell, chặn route theo role, đăng nhập qua BFF)","US-15-002, 15-003, 15-004, 15-006, 15-007, 15-008, 15-013",≈ 28,"SECURITY LEAD: duyệt mọi PR gắn nhãn 'security' (R-35): đăng nhập/role, luồng bệnh viện duyệt (US-03-011/016/017 của TV4), callback thanh toán & payout (TV5), upload ảnh/giấy tờ, dữ liệu sức khỏe. Viết bộ test phân quyền 403 dùng chung + giữ SC-047",TV2
+"C2 – Khách, danh mục & đánh giá",TV2,Lê Ngô Dong Gun,"customer-service, catalog-service, review-service","EP02, EP04, EP12, US-13 tham số/broadcast","WF-C-01 → C-04, C-12, C-13, C-14, C-18, WF-A-03, A-04, A-05, A-09, WF-D-06","US-15-011 (code mẫu chuẩn = US-02-001), 15-012 (UI kit + UiGalleryPage), 15-014 (PWA)",≈ 33,Chủ src/shared/ui: cần component mới → nhờ TV2,TV3
+"C3 – Trong ca, khẩn cấp & thông báo",TV3,Long Quốc Cường,"care-record-service, incident-service, notification-service","EP08, EP09, EP11","WF-C-10, C-11, C-17, WF-N-09, N-10, N-11, WF-D-03, D-04, WF-S-06, S-07",-,≈ 35,Chủ WebSocket /ws (STOMP) + Web Push; xác thực WebSocket làm cùng TV1,TV4
+C4 – Nhân viên & điều phối,TV4,Huỳnh Gia Phong ,"caregiver-service, dispatch-service","EP03 (gồm luồng bệnh viện duyệt US-03-016/017), EP06, EP07","WF-N-01 → N-08, N-13, N-14, N-15, WF-P-01, WF-A-02, WF-A-10, WF-D-01, D-02, WF-C-16",-,≈ 34,US-03-011/016/017 là story security → TV1 bắt buộc duyệt,TV5
+C5 – Đặt lịch & thanh toán,TV5,Đặng Ngọc Châu,"booking-service, payment-service","EP05, EP10","WF-C-05 → C-09, C-15, WF-D-05, WF-N-12, WF-K-01 → K-04, WF-P-02","US-15-001 (repo), 15-005 (CI + ArchUnit), 15-009 (dữ liệu mẫu), 15-010 (export backlog)",≈ 34,"Callback VNPay/MoMo, payout, hoàn tiền là story security → TV1 duyệt",TV1
+TỔNG,,,15 service + 1 web,165 story,62 wireframe,14 enabler,≈ 164,Số story chỉ ước tính. Cân lại sau buổi ước lượng Story Point (cột SP ở 04),
+,,,,,,,,,
+THỨ TỰ LÀM,,,,,,,,,
+GĐ0 – Nền tảng (tuần 1),"Theo thứ tự phụ thuộc: US-15-001 repo (TV5) → 15-002 Docker Compose (TV1) → 15-007 Keycloak (TV1) → 15-003 gateway/BFF + 15-004 homecare-common (TV1) → 15-005 CI + ArchUnit (TV5) → 15-008 khung React (TV1) + 15-012 UI kit (TV2). Trong lúc chờ: mỗi người khai báo API (10), tên (11), bảng/cột (12) cho service của mình ở trạng thái Proposed",,,,,,,,
+GĐ1 – Code mẫu chuẩn,"US-15-011 (TV2 làm, cả nhóm review, cần ≥ 3/5 duyệt). Chưa Done thì KHÔNG ai code story nghiệp vụ (R-33)",,,,,,,,
+GĐ2 – Nghiệp vụ Must,"TV1 làm EP01 (đăng nhập, role) trước vì mọi gói phụ thuộc. Gói khác làm backend + story 'Không cần UI' trước; trang React chỉ code khi WF 'Đã duyệt' (R-13)",,,,,,,,
+GĐ3 – Should/Could + tích hợp,Story Should/Could; Playwright cho luồng chính xuyên gói (đặt lịch → ghép → check-in → thanh toán → đánh giá); rà soát security cuối (TV1),,,,,,,,
+,,,,,,,,,
+QUY TẮC CHIA VIỆC CODE,,,,,,,,,
+1,"Chỉ sửa code trong service + thư mục feature của gói mình. Cần sửa service khác → nhờ chủ service, hoặc tạo PR và chủ service phải review",,,,,,,,
+2,"Các gói nói chuyện với nhau qua hợp đồng: API ở 10_API_Contract, event ở 09_Service_Catalog. Đổi hợp đồng → báo chủ service phụ thuộc + ghi 15_Change_Log",,,,,,,,
+3,"homecare-common chỉ TV1 merge; frontend/src/shared/ui chỉ TV2 merge; frontend/src/app (router, auth) chỉ TV1 merge. Người khác đề xuất bằng PR",,,,,,,,
+4,"Bắt đầu story: ghi mã TV vào cột 'Người nhận' ở 04 + ngày nhận + In progress (R-22). Chỉ nhận story thuộc gói mình, trừ khi chủ gói đồng ý nhường",,,,,,,,
+5,"PR đụng tới đăng nhập/role/phân quyền, thanh toán, upload file, dữ liệu sức khỏe → gắn nhãn 'security', TV1 phải duyệt (R-35)",,,,,,,,
+6,"Mỗi PR có 1 reviewer theo cột 'Review chéo' (TV1←TV2, TV2←TV3, TV3←TV4, TV4←TV5, TV5←TV1) + TV1 nếu là PR security",,,,,,,,
+7,"Số story là ước tính: sau buổi ước lượng Story Point cả nhóm cân lại gói (chuyển nguyên service, không chia nhỏ 1 service cho 2 người)",,,,,,,,

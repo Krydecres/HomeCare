@@ -1,0 +1,319 @@
+# api-gateway (SV01) – routing + BFF. Routes are generated from 10_API_Contract (Public/Callback paths only;
+# /internal/** is never routed). Regenerate when the contract changes: scripts/gen-gateway-routes.py.
+# Secrets only from environment variables (.env, never committed) – R-17.
+server:
+  port: ${SERVER_PORT:8080}
+  shutdown: graceful
+  forward-headers-strategy: framework
+  servlet:
+    session:
+      timeout: 30m
+      cookie:
+        name: HC_SESSION
+        http-only: true
+        secure: ${SESSION_COOKIE_SECURE:true}
+        same-site: lax
+
+spring:
+  application:
+    name: api-gateway
+  config:
+    import: optional:configserver:${CONFIG_SERVER_URL:http://localhost:8888}
+  threads:
+    virtual:
+      enabled: true
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  session:
+    redis:
+      namespace: homecare:gateway:session
+  security:
+    oauth2:
+      client:
+        registration:
+          keycloak:
+            provider: keycloak
+            client-id: homecare-bff
+            client-secret: ${KEYCLOAK_BFF_CLIENT_SECRET}
+            authorization-grant-type: authorization_code
+            redirect-uri: "{baseUrl}/login/oauth2/code/{registrationId}"
+            scope: openid,profile,email
+        provider:
+          keycloak:
+            # Browser-facing URL (KEYCLOAK_PUBLIC_URL) vs. URL the gateway reaches inside Docker (KEYCLOAK_INTERNAL_URL).
+            authorization-uri: ${KEYCLOAK_PUBLIC_URL:http://localhost:8180}/realms/homecare/protocol/openid-connect/auth
+            token-uri: ${KEYCLOAK_INTERNAL_URL:http://localhost:8180}/realms/homecare/protocol/openid-connect/token
+            jwk-set-uri: ${KEYCLOAK_INTERNAL_URL:http://localhost:8180}/realms/homecare/protocol/openid-connect/certs
+            user-info-uri: ${KEYCLOAK_INTERNAL_URL:http://localhost:8180}/realms/homecare/protocol/openid-connect/userinfo
+            user-name-attribute: sub
+  cloud:
+    gateway:
+      server:
+        webmvc:
+          routes:
+          - id: identity-service
+            uri: lb://identity-service
+            predicates:
+              - Path=/api/v1/accounts/**,/api/v1/admin/accounts/**,/api/v1/consents/**,/api/v1/devices/**,/api/v1/otp/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: customer-service
+            uri: lb://customer-service
+            predicates:
+              - Path=/api/v1/care-recipients,/api/v1/care-recipients/*,/api/v1/care-recipients/*/addresses/**,/api/v1/care-recipients/*/consents/**,/api/v1/care-recipients/*/emergency-contacts/**,/api/v1/care-recipients/*/guardian-invitations/**,/api/v1/care-recipients/*/health-profile/**,/api/v1/care-recipients/*/matching-preferences/**,/api/v1/customers/**,/api/v1/elder/**,/api/v1/guardian-invitations/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: caregiver-service
+            uri: lb://caregiver-service
+            predicates:
+              - Path=/api/v1/admin/caregivers/**,/api/v1/admin/partner-orgs/**,/api/v1/admin/verifications/**,/api/v1/caregivers/*/public-profile/**,/api/v1/caregivers/me/**,/api/v1/partner-orgs/**,/api/v1/partner/affiliations/**,/api/v1/partner/applications/**,/api/v1/partner/role-change-requests/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: catalog-service
+            uri: lb://catalog-service
+            predicates:
+              - Path=/api/v1/admin/hospitals/**,/api/v1/admin/packages/**,/api/v1/admin/policies/**,/api/v1/admin/promotions/**,/api/v1/admin/service-areas/**,/api/v1/admin/services/**,/api/v1/admin/surcharges/**,/api/v1/hospitals/**,/api/v1/packages/**,/api/v1/promotions/**,/api/v1/service-areas/**,/api/v1/services/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: booking-service
+            uri: lb://booking-service
+            predicates:
+              - Path=/api/v1/bookings,/api/v1/bookings/*,/api/v1/bookings/*/cancellation/**,/api/v1/bookings/*/prescriptions/**,/api/v1/bookings/*/rebook/**,/api/v1/bookings/*/reschedule/**,/api/v1/calendar-feeds/**,/api/v1/quotes/**,/api/v1/shifts/*,/api/v1/shifts/*/caregiver-cancellation/**,/api/v1/shifts/*/extension/**,/api/v1/shifts/me/**,/api/v1/waitlist-entries/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: dispatch-service
+            uri: lb://dispatch-service
+            predicates:
+              - Path=/api/v1/bookings/*/selected-caregiver/**,/api/v1/bookings/*/suggested-caregivers/**,/api/v1/dispatch-queue/**,/api/v1/dispatch/**,/api/v1/offers/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: care-record-service
+            uri: lb://care-record-service
+            predicates:
+              - Path=/api/v1/care-plans/**,/api/v1/care-recipients/*/care-plan/**,/api/v1/care-recipients/*/health-log/**,/api/v1/care-recipients/*/vital-thresholds/**,/api/v1/shifts/*/visit/**,/api/v1/visits/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: payment-service
+            uri: lb://payment-service
+            predicates:
+              - Path=/api/v1/admin/payout-batches/**,/api/v1/admin/payouts/**,/api/v1/admin/reconciliation-exceptions/**,/api/v1/admin/reconciliation-runs/**,/api/v1/admin/refunds/**,/api/v1/admin/reports/revenue/**,/api/v1/bank-accounts/**,/api/v1/bookings/*/additional-payments/**,/api/v1/invoices/**,/api/v1/partner/settlements/**,/api/v1/payments/**,/api/v1/payouts/**,/api/v1/tips/**,/api/v1/wallets/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: notification-service
+            uri: lb://notification-service
+            predicates:
+              - Path=/api/v1/admin/broadcasts/**,/api/v1/admin/notification-templates/**,/api/v1/conversations/**,/api/v1/masked-calls/**,/api/v1/notification-preferences/**,/api/v1/notifications/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: review-service
+            uri: lb://review-service
+            predicates:
+              - Path=/api/v1/admin/review-moderation/**,/api/v1/admin/reviews/**,/api/v1/caregivers/*/reviews/**,/api/v1/complaints/**,/api/v1/disputes/**,/api/v1/reviews/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: incident-service
+            uri: lb://incident-service
+            predicates:
+              - Path=/api/v1/incidents/**,/api/v1/sos/**,/api/v1/welfare-checks/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: report-service
+            uri: lb://report-service
+            predicates:
+              - Path=/api/v1/admin/audit-logs/**,/api/v1/admin/dashboard/**,/api/v1/admin/reports/caregiver-performance/**,/api/v1/admin/reports/staffing-gaps/**
+            filters:
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-identity-service
+            uri: lb://identity-service
+            predicates:
+              - Path=/v3/api-docs/identity-service
+            filters:
+              - RewritePath=/v3/api-docs/identity-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-customer-service
+            uri: lb://customer-service
+            predicates:
+              - Path=/v3/api-docs/customer-service
+            filters:
+              - RewritePath=/v3/api-docs/customer-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-caregiver-service
+            uri: lb://caregiver-service
+            predicates:
+              - Path=/v3/api-docs/caregiver-service
+            filters:
+              - RewritePath=/v3/api-docs/caregiver-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-catalog-service
+            uri: lb://catalog-service
+            predicates:
+              - Path=/v3/api-docs/catalog-service
+            filters:
+              - RewritePath=/v3/api-docs/catalog-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-booking-service
+            uri: lb://booking-service
+            predicates:
+              - Path=/v3/api-docs/booking-service
+            filters:
+              - RewritePath=/v3/api-docs/booking-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-dispatch-service
+            uri: lb://dispatch-service
+            predicates:
+              - Path=/v3/api-docs/dispatch-service
+            filters:
+              - RewritePath=/v3/api-docs/dispatch-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-care-record-service
+            uri: lb://care-record-service
+            predicates:
+              - Path=/v3/api-docs/care-record-service
+            filters:
+              - RewritePath=/v3/api-docs/care-record-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-payment-service
+            uri: lb://payment-service
+            predicates:
+              - Path=/v3/api-docs/payment-service
+            filters:
+              - RewritePath=/v3/api-docs/payment-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-notification-service
+            uri: lb://notification-service
+            predicates:
+              - Path=/v3/api-docs/notification-service
+            filters:
+              - RewritePath=/v3/api-docs/notification-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-review-service
+            uri: lb://review-service
+            predicates:
+              - Path=/v3/api-docs/review-service
+            filters:
+              - RewritePath=/v3/api-docs/review-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-incident-service
+            uri: lb://incident-service
+            predicates:
+              - Path=/v3/api-docs/incident-service
+            filters:
+              - RewritePath=/v3/api-docs/incident-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+          - id: docs-report-service
+            uri: lb://report-service
+            predicates:
+              - Path=/v3/api-docs/report-service
+            filters:
+              - RewritePath=/v3/api-docs/report-service, /v3/api-docs
+              - TokenRelay=
+              - RemoveRequestHeader=Cookie
+              - RemoveResponseHeader=X-Correlation-Id
+
+eureka:
+  client:
+    service-url:
+      defaultZone: ${EUREKA_URL:http://localhost:8761/eureka}
+  instance:
+    prefer-ip-address: true
+
+homecare:
+  security:
+    jwt:
+      issuer: ${KEYCLOAK_ISSUER:http://localhost:8180/realms/homecare}
+
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:true}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:true}
+    path: /swagger-ui
+    urls:
+      - name: api-gateway
+        url: /v3/api-docs
+      - name: identity-service
+        url: /v3/api-docs/identity-service
+      - name: customer-service
+        url: /v3/api-docs/customer-service
+      - name: caregiver-service
+        url: /v3/api-docs/caregiver-service
+      - name: catalog-service
+        url: /v3/api-docs/catalog-service
+      - name: booking-service
+        url: /v3/api-docs/booking-service
+      - name: dispatch-service
+        url: /v3/api-docs/dispatch-service
+      - name: care-record-service
+        url: /v3/api-docs/care-record-service
+      - name: payment-service
+        url: /v3/api-docs/payment-service
+      - name: notification-service
+        url: /v3/api-docs/notification-service
+      - name: review-service
+        url: /v3/api-docs/review-service
+      - name: incident-service
+        url: /v3/api-docs/incident-service
+      - name: report-service
+        url: /v3/api-docs/report-service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info
+  endpoint:
+    health:
+      probes:
+        enabled: true
+  tracing:
+    sampling:
+      probability: ${TRACING_SAMPLING:1.0}
