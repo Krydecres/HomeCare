@@ -5,8 +5,8 @@
 - React (frontend/src/**/*.tsx, bỏ qua *.test.tsx, *.stories.tsx):
     + component export có tên kết thúc bằng "Page" (ở bất kỳ đâu),
     + mọi component export (PascalCase) trong frontend/src/shared/ui.
-- Chấp nhận tên có trạng thái Approved, Implemented hoặc Renamed
-  (Renamed = tên hiện tại sau khi đổi tên).
+- Chấp nhận MỌI tên đã đăng ký (Proposed, Approved, Implemented, Renamed...) trừ Deprecated
+  (R-10 bản nới 26/11/2026: tên không cần duyệt, chỉ cần có trong registry).
 - Báo lỗi nếu code dùng tên Deprecated hoặc tên nằm ở cột "Tên cũ" (kiểm tra ở MỌI export PascalCase của .tsx).
 - Ngoại lệ (đã được review) ghi trong scripts/naming-ignore.txt, mỗi dòng 1 tên.
 
@@ -20,7 +20,6 @@ import re
 import sys
 from pathlib import Path
 
-OK_STATUSES = {"Approved", "Implemented", "Renamed"}
 BAD_STATUSES = {"Deprecated"}
 
 JAVA_DECL = re.compile(
@@ -72,11 +71,11 @@ def load_registry(path: Path):
         nm_id = r[c_id].strip() if c_id < len(r) else ""
         status = r[c_status].strip()
         names = split_names(r[c_name])
-        if status in OK_STATUSES:
-            allowed.update(names)
-        elif status in BAD_STATUSES:
+        if status in BAD_STATUSES:
             for n in names:
                 banned[n] = f"{nm_id} trạng thái {status}"
+        else:
+            allowed.update(names)
         if c_old < len(r):
             for n in split_names(r[c_old]):
                 if n not in names:  # tên cũ trùng tên hiện tại thì bỏ qua
@@ -134,10 +133,10 @@ def main() -> int:
         if name in banned:
             errors.append(f"  ✗ {rel}:{line}  '{name}' — {banned[name]}")
         elif must_register and name not in allowed and name not in ignore:
-            errors.append(f"  ✗ {rel}:{line}  '{name}' chưa đăng ký (Approved/Implemented/Renamed) trong 11_Naming_Registry")
+            errors.append(f"  ✗ {rel}:{line}  '{name}' chưa đăng ký trong 11_Naming_Registry — tìm tên cùng nghĩa để dùng lại, không có thì tự thêm dòng")
 
     if errors:
-        print("[check-naming] LỖI — cập nhật 11_Naming_Registry trước khi merge (R-10, R-11):")
+        print("[check-naming] LỖI — thêm/cập nhật 11_Naming_Registry rồi export lại CSV (R-10, R-11):")
         print("\n".join(errors))
         return 1
     print("[check-naming] OK — mọi tên đều đã đăng ký.")

@@ -5,86 +5,86 @@ US-01-001,EP01,Tài khoản & xác thực,Đăng ký tài khoản khách hàng,R
 • SĐT đã tồn tại → thông báo và gợi ý đăng nhập
 • Thành công → tạo account role CUSTOMER trên Keycloak + phát event account.registered","• Người đặt phải ≥ 18 tuổi
 • 1 SĐT = 1 tài khoản
-• SMS OTP dùng adapter mock, dự phòng OTP qua email",,"OQ-025, OQ-031","Nghị định 13/2023 + Luật BVDLCN: phải có sự đồng ý rõ ràng, lưu bằng chứng đồng ý",Must,,US-15-007,identity-service,"WF-S-02, WF-S-09",Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• SMS OTP dùng adapter mock, dự phòng OTP qua email",,"OQ-025, OQ-031","Nghị định 13/2023 + Luật BVDLCN: phải có sự đồng ý rõ ràng, lưu bằng chứng đồng ý",Must,,US-15-007,identity-service,"WF-S-02, WF-S-09",Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-002,EP01,Tài khoản & xác thực,Đăng nhập / đăng xuất,R00 Mọi người dùng,"đăng nhập an toàn (OIDC qua Keycloak, Authorization Code + PKCE do api-gateway làm BFF), duy trì phiên và đăng xuất",dùng web liên tục mà tài khoản không bị chiếm đoạt,"• Trình duyệt KHÔNG giữ token: gateway (BFF) giữ access/refresh token trong Spring Session (Redis), trình duyệt chỉ có cookie phiên HttpOnly + Secure + SameSite=Lax; bật CSRF cho request ghi
 • Phiên: tối đa 30 ngày (Khách, Nhân viên – 'Ghi nhớ đăng nhập') / 8 giờ (nội bộ); hết hạn → về trang đăng nhập, giữ lại URL đang mở
 • Sai mật khẩu/OTP 5 lần → khóa tạm 15 phút
 • Đăng xuất → hủy phiên ở gateway + thu hồi refresh token trên Keycloak
-• Sau đăng nhập điều hướng theo role (khách / nhân viên / nội bộ)","• Tài khoản bị khóa hoặc nhân viên bị tạm ngưng → không đăng nhập được, hiển thị lý do + cách liên hệ",,,,Must,,US-15-007,identity-service,WF-S-03,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Sau đăng nhập điều hướng theo role (khách / nhân viên / nội bộ)","• Tài khoản bị khóa hoặc nhân viên bị tạm ngưng → không đăng nhập được, hiển thị lý do + cách liên hệ",,,,Must,,US-15-007,identity-service,WF-S-03,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-003,EP01,Tài khoản & xác thực,Quên mật khẩu,R00 Mọi người dùng,đặt lại mật khẩu qua OTP SĐT hoặc email,lấy lại quyền truy cập khi quên mật khẩu,"• OTP hết hạn 5 phút, dùng 1 lần
 • Mật khẩu mới ≥ 8 ký tự, có chữ + số, không trùng 3 mật khẩu gần nhất
-• Đặt lại thành công → đăng xuất mọi thiết bị + gửi thông báo bảo mật",• Không tiết lộ SĐT/email có tồn tại hay không (trả cùng 1 thông báo),,,,Must,,US-01-002,identity-service,WF-S-04,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Đặt lại thành công → đăng xuất mọi thiết bị + gửi thông báo bảo mật",• Không tiết lộ SĐT/email có tồn tại hay không (trả cùng 1 thông báo),,,,Must,,US-01-002,identity-service,WF-S-04,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-004,EP01,Tài khoản & xác thực,Đăng ký tài khoản nhân viên,R11 Nhân viên (cả R03 và R04),"đăng ký làm nhân viên, chọn loại (Nhân viên y tế hoặc Người chăm sóc) và chọn bệnh viện / cơ sở đối tác nơi tôi đang công tác",bắt đầu quy trình xác minh; bệnh viện duyệt xong tôi mới được nhận ca,"• Tài khoản đã có (đã đăng ký khách) hoặc tạo mới → thêm role CAREGIVER_PENDING (chưa được nhận ca, chưa thấy dữ liệu khách)
 • Bắt buộc chọn 1 bệnh viện/cơ sở đối tác đang hoạt động trên nền tảng – áp dụng cho CẢ nhân viên y tế và người chăm sóc không chuyên (OQ-037, OQ-039). Nhân viên y tế khai khoa/vị trí; người chăm sóc khai nơi muốn đăng ký đánh giá
 • Chuyển ngay sang wizard hồ sơ (US-03-001)
 • Phải đồng ý Quy tắc ứng xử nhân viên + Chính sách không giao dịch ngoài nền tảng + đồng ý chia sẻ hồ sơ cho bệnh viện đã chọn để duyệt
 • Request đăng ký KHÔNG có trường role/trạng thái (chống mass assignment); server tự gán CAREGIVER_PENDING","• Nhân viên ≥ 18 tuổi
 • Chọn 'Nhân viên y tế' thì bắt buộc có giấy phép hành nghề ở bước sau
-• Chỉ role CAREGIVER (do bệnh viện duyệt, US-03-016) mới được nhận ca",SC-013,OQ-031,,Must,,US-01-001,identity-service,"WF-S-02, WF-N-01",Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Chỉ role CAREGIVER (do bệnh viện duyệt, US-03-016) mới được nhận ca",SC-013,OQ-031,,Must,,US-01-001,identity-service,"WF-S-02, WF-N-01",Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-005,EP01,Tài khoản & xác thực,MFA cho tài khoản nội bộ,R06 Quản trị viên (Admin),"bắt buộc xác thực 2 lớp (TOTP) cho Admin, Kế toán, Điều phối viên",tài khoản có quyền xem dữ liệu sức khỏe và tiền không bị chiếm đoạt,"• Lần đăng nhập đầu phải cài đặt TOTP (Google Authenticator...)
 • Không có MFA → không vào được trang nội bộ
-• Có mã khôi phục 1 lần",• Cấu hình bằng Keycloak authentication flow theo role,SC-029,,Bảo vệ dữ liệu nhạy cảm,Must,,US-15-007,identity-service,WF-S-03,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Có mã khôi phục 1 lần",• Cấu hình bằng Keycloak authentication flow theo role,SC-029,,Bảo vệ dữ liệu nhạy cảm,Must,,US-15-007,identity-service,WF-S-03,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-006,EP01,Tài khoản & xác thực,Quản lý thiết bị & phiên,R00 Mọi người dùng,xem các thiết bị đang đăng nhập và đăng xuất thiết bị lạ,kiểm soát ai đang dùng tài khoản của mình,"• Danh sách phiên đăng nhập: trình duyệt, hệ điều hành, lần cuối hoạt động (lấy từ User-Agent)
 • Đăng xuất từng phiên / tất cả
 • Đăng ký Web Push subscription (VAPID) khi người dùng cho phép thông báo; xóa subscription khi đăng xuất hoặc bị từ chối quyền
-• Đăng nhập từ trình duyệt mới → thông báo cho các phiên cũ",,,,,Should,,US-01-002,identity-service,WF-S-05,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Đăng nhập từ trình duyệt mới → thông báo cho các phiên cũ",,,,,Should,,US-01-002,identity-service,WF-S-05,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-007,EP01,Tài khoản & xác thực,Tạo tài khoản nội bộ,R06 Quản trị viên (Admin),"tạo tài khoản cho Điều phối viên, Kế toán, Admin và gán vai trò","nhân sự nội bộ có đúng quyền, không ai tự đăng ký được quyền nội bộ","• Chỉ Admin tạo được, gửi lời mời qua email để đặt mật khẩu + MFA
 • Một tài khoản nội bộ có thể có nhiều role
 • Ghi audit log ai tạo, gán role gì","• Không có trang tự đăng ký role nội bộ
-• Phải luôn còn ít nhất 1 Admin hoạt động",,,,Must,,US-01-005,identity-service,WF-A-06,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Phải luôn còn ít nhất 1 Admin hoạt động",,,,Must,,US-01-005,identity-service,WF-A-06,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-008,EP01,Tài khoản & xác thực,Khóa / mở khóa tài khoản,R06 Quản trị viên (Admin),khóa hoặc mở khóa tài khoản người dùng kèm lý do,ngăn người vi phạm tiếp tục sử dụng hệ thống,"• Bắt buộc nhập lý do
 • Khóa → thu hồi mọi token ngay, phát account.locked
 • Nếu là nhân viên có ca tương lai → dispatch-service tìm người thay (US-06-007)
 • Nếu là khách có đơn tương lai → hủy + hoàn tiền theo quyết định admin
-• Người bị khóa nhận thông báo lý do + kênh khiếu nại",• Không khóa khi đang có ca đang diễn ra (trừ sự cố an toàn) → cảnh báo admin,SC-014,,,Must,,US-01-007,identity-service,WF-A-06,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Người bị khóa nhận thông báo lý do + kênh khiếu nại",• Không khóa khi đang có ca đang diễn ra (trừ sự cố an toàn) → cảnh báo admin,SC-014,,,Must,,US-01-007,identity-service,WF-A-06,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-01-009,EP01,Tài khoản & xác thực,Một tài khoản nhiều vai trò,R00 Mọi người dùng,dùng cùng 1 tài khoản vừa là khách hàng vừa là nhân viên và chuyển chế độ,không phải tạo 2 tài khoản khác nhau,"• Nút chuyển chế độ Khách ↔ Nhân viên CHỈ hiện khi tài khoản đã có role CAREGIVER (đã được bệnh viện duyệt). Chuyển chế độ chỉ đổi menu/trang hiển thị, KHÔNG cấp thêm quyền
 • Server KHÔNG BAO GIỜ dùng 'chế độ' do trình duyệt gửi để phân quyền; quyền chỉ lấy từ role trong JWT do Keycloak ký. Gateway xóa mọi header X-User-* từ bên ngoài
 • Role bị gỡ (rời bệnh viện, bị tạm ngưng) → thu hồi phiên/refresh token ngay, lần tải trang sau chỉ còn chế độ Khách
 • Nhân viên KHÔNG được nhận ca của chính mình hoặc người được chăm sóc thuộc tài khoản mình; ngoài ra nếu đơn trùng SĐT, địa chỉ chăm sóc hoặc tài khoản ngân hàng với nhân viên → không tự ghép, chuyển điều phối xem tay
 • Test bắt buộc: mọi API của nhân viên gọi bằng tài khoản chỉ có CUSTOMER hoặc CAREGIVER_PENDING → 403","• Chống tự đặt tự nhận để gian lận khuyến mãi/đánh giá
-• Không cần duyệt khi chuyển chế độ vì quyền đã được duyệt lúc cấp role (US-03-016); đổi vai trò thật sự → US-03-017",SC-028,OQ-031,,Could,,US-01-004,identity-service,WF-S-05,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,Đã chốt OQ-031 (2026-11-22)
+• Không cần duyệt khi chuyển chế độ vì quyền đã được duyệt lúc cấp role (US-03-016); đổi vai trò thật sự → US-03-017",SC-028,OQ-031,,Could,,US-01-004,identity-service,WF-S-05,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,Đã chốt OQ-031 (2026-11-22)
 US-02-001,EP02,Hồ sơ khách hàng & người được chăm sóc,Tạo hồ sơ người được chăm sóc,R01 Khách hàng (người đặt/người thân),"tạo nhiều hồ sơ người được chăm sóc (bố, mẹ, chính mình...) với thông tin cơ bản",đặt lịch cho đúng người và nhân viên biết mình chăm sóc ai,"• Trường bắt buộc: họ tên, ngày sinh, giới tính, quan hệ với người đặt, mức độ vận động (tự đi / cần hỗ trợ / nằm tại giường), tình trạng nhận thức (tỉnh táo / suy giảm / sa sút trí tuệ)
 • Trường tùy chọn: cân nặng, chiều cao, ngôn ngữ/phương ngữ, sở thích, ảnh
 • 1 khách có thể có nhiều hồ sơ
 • Phát event care-recipient.created","• Người được chăm sóc có thể là chính người đặt
-• Cân nặng > 80kg + nằm tại giường → cảnh báo có thể cần 2 nhân viên khi di chuyển bệnh nhân",SC-021,,Dữ liệu cá nhân,Must,,US-01-001,customer-service,"WF-C-02, WF-C-03",Chưa vẽ,API-SV05-001→006,"NM-0066, NM-0132, NM-0133, NM-0218→0225, NM-0310, NM-0311, NM-0312",TC-US-02-001-1→10,Approved,TV2,2026-11-25,TV3,TV1 + AI: Gemini,2026-11-25,
+• Cân nặng > 80kg + nằm tại giường → cảnh báo có thể cần 2 nhân viên khi di chuyển bệnh nhân",SC-021,,Dữ liệu cá nhân,Must,,US-01-001,customer-service,"WF-C-02, WF-C-03",Đã duyệt,API-SV05-001→006,"NM-0066, NM-0132, NM-0133, NM-0218→0225, NM-0310, NM-0311, NM-0312",TC-US-02-001-1→10,Approved,TV2,2026-11-25,TV3,TV1 + AI: Gemini,2026-11-25,
 US-02-002,EP02,Hồ sơ khách hàng & người được chăm sóc,Hồ sơ sức khỏe nền,R01 Khách hàng (người đặt/người thân),"khai báo bệnh nền, dị ứng, thuốc đang dùng, thiết bị y tế đang gắn, nguy cơ và bệnh truyền nhiễm; tải lên giấy ra viện/đơn thuốc",nhân viên chuẩn bị đúng và tránh sai sót nguy hiểm (ví dụ dị ứng thuốc),"• Danh mục bệnh nền chọn sẵn + nhập tự do
 • Dị ứng (thuốc / thức ăn / khác) hiển thị nổi bật màu đỏ cho nhân viên
 • Thiết bị: ống sonde, ống thông tiểu, oxy, máy hút đờm, hậu môn nhân tạo...
 • Nguy cơ: té ngã, loét tì đè, đi lạc, nuốt sặc
 • Bệnh truyền nhiễm (lao, viêm gan B/C, HIV - tùy chọn khai báo, cúm...) → nhân viên thấy cảnh báo PPE trước khi nhận ca (không thấy tên bệnh nếu khách chọn ẩn)
 • Dữ liệu mã hóa khi lưu; mỗi lượt xem ghi audit","• Chỉ nhân viên được giao ca (24h trước → 24h sau ca) mới xem được chi tiết (US-14-005)
-• Hồ sơ có version, lưu ai cập nhật","SC-018, SC-033, SC-029",,"Dữ liệu sức khỏe = dữ liệu cá nhân nhạy cảm: cần đồng ý riêng, mã hóa, hạn chế truy cập",Must,,"US-02-001, US-14-001",customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Hồ sơ có version, lưu ai cập nhật","SC-018, SC-033, SC-029",,"Dữ liệu sức khỏe = dữ liệu cá nhân nhạy cảm: cần đồng ý riêng, mã hóa, hạn chế truy cập",Must,,"US-02-001, US-14-001",customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-003,EP02,Hồ sơ khách hàng & người được chăm sóc,Địa chỉ chăm sóc,R01 Khách hàng (người đặt/người thân),"khai báo địa chỉ chăm sóc, ghim vị trí trên bản đồ và mô tả lối vào","nhân viên tìm đúng nhà, đến đúng giờ và biết trước môi trường làm việc","• Địa chỉ theo đơn vị hành chính mới: Tỉnh/Thành phố → Phường/Xã → số nhà, đường
 • Ghim tọa độ trên bản đồ (OSM), geocode tự động + cho kéo ghim
 • Mô tả lối vào: hẻm, tầng, mã cổng, chỗ đậu xe
 • Khai báo: có thú nuôi, có camera trong nhà, có người khác ở cùng
 • Địa chỉ ngoài khu vực phục vụ → vẫn lưu nhưng báo không đặt được (US-04-004)","• Địa chỉ đầy đủ chỉ hiển thị cho nhân viên SAU khi nhận ca
-• Có camera → bắt buộc thông báo cho nhân viên trước khi nhận","SC-025, SC-008","OQ-018, OQ-024",Từ 01/07/2025 VN bỏ cấp quận/huyện → dữ liệu địa chỉ chỉ còn 2 cấp,Must,,US-02-001,customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Có camera → bắt buộc thông báo cho nhân viên trước khi nhận","SC-025, SC-008","OQ-018, OQ-024",Từ 01/07/2025 VN bỏ cấp quận/huyện → dữ liệu địa chỉ chỉ còn 2 cấp,Must,,US-02-001,customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-004,EP02,Hồ sơ khách hàng & người được chăm sóc,Liên hệ khẩn cấp & thông tin cấp cứu,R01 Khách hàng (người đặt/người thân),"khai báo danh sách liên hệ khẩn cấp có thứ tự ưu tiên, bệnh viện ưu tiên, nhóm máu, bảo hiểm y tế","khi có sự cố, nhân viên và điều phối biết gọi ai và đưa đi viện nào","• Tối thiểu 1 liên hệ; nếu người được chăm sóc 'sống một mình' → bắt buộc ≥ 2 liên hệ, ít nhất 1 người ở cùng tỉnh/thành
 • Mỗi liên hệ: tên, SĐT, quan hệ, thứ tự, có chìa khóa nhà không
 • Bệnh viện ưu tiên (tên, địa chỉ), số thẻ BHYT (tùy chọn, mã hóa), nhóm máu
-• Liên hệ khẩn cấp nhận SMS xác nhận được thêm vào danh sách",• Không đủ liên hệ khẩn cấp → không đặt được lịch,"SC-005, SC-006, SC-009",OQ-032,,Must,,US-02-001,customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Liên hệ khẩn cấp nhận SMS xác nhận được thêm vào danh sách",• Không đủ liên hệ khẩn cấp → không đặt được lịch,"SC-005, SC-006, SC-009",OQ-032,,Must,,US-02-001,customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-005,EP02,Hồ sơ khách hàng & người được chăm sóc,Cờ 'sống một mình' & mức độ phụ thuộc,R01 Khách hàng (người đặt/người thân),đánh dấu người được chăm sóc sống một mình và mức độ phụ thuộc (thấp / trung bình / cao),hệ thống tự áp dụng quy trình an toàn tăng cường khi không có người nhà giám sát,"• Khi cờ bật: (1) ca bắt buộc check-in có selfie; (2) báo cáo cuối ca tự gửi cho tất cả liên hệ khẩn cấp; (3) no-show 15 phút → báo ngay liên hệ khẩn cấp; (4) áp quy trình welfare check (US-09-007); (5) chỉ ghép nhân viên cấp ≥ 2 và đã qua thử việc
-• Phụ thuộc cao + sống 1 mình → gợi ý gói có nhiều ca/ngày hoặc ca 24h","• Nhân viên không được rời ca sớm khi người phụ thuộc cao ở một mình, trừ khi đã bàn giao cho người nhà/nhân viên khác","SC-006, SC-007",,,Must,,US-02-004,customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Phụ thuộc cao + sống 1 mình → gợi ý gói có nhiều ca/ngày hoặc ca 24h","• Nhân viên không được rời ca sớm khi người phụ thuộc cao ở một mình, trừ khi đã bàn giao cho người nhà/nhân viên khác","SC-006, SC-007",,,Must,,US-02-004,customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-006,EP02,Hồ sơ khách hàng & người được chăm sóc,Mời người thân cùng quản lý,R01 Khách hàng (người đặt/người thân),mời anh chị em cùng quản lý hồ sơ người được chăm sóc với quyền Xem / Đặt lịch / Quản trị,"cả gia đình cùng theo dõi và thay nhau đặt lịch, thanh toán","• Mời qua SĐT, người được mời phải chấp nhận
 • 3 mức quyền; chỉ 'Quản trị' mới sửa hồ sơ sức khỏe, xóa hồ sơ
 • Tất cả nhận thông báo ca theo cài đặt riêng
-• Thu hồi quyền bất kỳ lúc nào",• Luôn có ít nhất 1 người Quản trị,SC-021,,,Should,,US-02-001,customer-service,WF-C-02,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Thu hồi quyền bất kỳ lúc nào",• Luôn có ít nhất 1 người Quản trị,SC-021,,,Should,,US-02-001,customer-service,WF-C-02,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-007,EP02,Hồ sơ khách hàng & người được chăm sóc,Đồng ý của người được chăm sóc / người giám hộ,R01 Khách hàng (người đặt/người thân),"xác nhận sự đồng ý của người được chăm sóc, hoặc xác nhận tôi là người giám hộ/đại diện khi họ không tự quyết định được",việc chia sẻ dữ liệu sức khỏe và cho người lạ vào nhà là hợp pháp,"• Người được chăm sóc tỉnh táo → xác nhận qua OTP SĐT của họ HOẶC ký xác nhận trên app của nhân viên ở ca đầu
 • Người được chăm sóc suy giảm nhận thức/ trẻ em → người đặt tích cam kết là người giám hộ/đại diện hợp pháp + quan hệ (tùy chọn tải giấy tờ)
 • Lưu bằng chứng đồng ý (ai, lúc nào, phiên bản văn bản)
-• Người được chăm sóc từ chối → không đặt được lịch",,"SC-019, SC-032",,Luật BVDLCN: xử lý dữ liệu của người mất/hạn chế năng lực hành vi và trẻ em cần đồng ý của người đại diện,Must,,"US-02-001, US-14-001",customer-service,"WF-C-03, WF-N-09",Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Người được chăm sóc từ chối → không đặt được lịch",,"SC-019, SC-032",,Luật BVDLCN: xử lý dữ liệu của người mất/hạn chế năng lực hành vi và trẻ em cần đồng ý của người đại diện,Must,,"US-02-001, US-14-001",customer-service,"WF-C-03, WF-N-09",Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-008,EP02,Hồ sơ khách hàng & người được chăm sóc,Chế độ người cao tuổi,R02 Người được chăm sóc,"dùng web ở chế độ đơn giản: chữ to, xem hôm nay ai đến, nút gọi người thân và nút SOS lớn",tự biết ai sẽ đến nhà mình và gọi trợ giúp khi cần,"• Người thân tạo tài khoản con (đăng nhập bằng SĐT người già + OTP, phiên dài 90 ngày để người già không phải đăng nhập lại)
 • 1 trang duy nhất: ảnh + tên nhân viên sắp đến, giờ đến; nút 'Gọi con/cháu' (link tel:); nút SOS
 • Cỡ chữ ≥ 20px, độ tương phản cao (WCAG AA)
 • Người thân được hướng dẫn cài PWA lên màn hình chính điện thoại của người già (1 chạm là mở)
-• Không có thanh toán, không sửa hồ sơ",• Giúp người già nhận diện đúng nhân viên (chống người lạ mạo danh),"SC-020, SC-007",,,Should,,US-02-001,customer-service,WF-C-18,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Không có thanh toán, không sửa hồ sơ",• Giúp người già nhận diện đúng nhân viên (chống người lạ mạo danh),"SC-020, SC-007",,,Should,,US-02-001,customer-service,WF-C-18,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-009,EP02,Hồ sơ khách hàng & người được chăm sóc,Nhân viên yêu thích / chặn,R01 Khách hàng (người đặt/người thân),đánh dấu nhân viên yêu thích hoặc chặn nhân viên không muốn gặp lại,"người thân được chăm sóc bởi người quen, tránh người không phù hợp","• Yêu thích → ưu tiên khi ghép (US-06-001), cho đặt lại nhanh
 • Chặn → không bao giờ ghép lại cho người được chăm sóc này
-• Nhân viên không biết mình bị chặn",,SC-036,,,Should,,US-02-001,customer-service,WF-C-14,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Nhân viên không biết mình bị chặn",,SC-036,,,Should,,US-02-001,customer-service,WF-C-14,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-010,EP02,Hồ sơ khách hàng & người được chăm sóc,Tiêu chí ưu tiên nhân viên,R01 Khách hàng (người đặt/người thân),"đặt tiêu chí ưu tiên: giới tính nhân viên, ngôn ngữ, không hút thuốc, kinh nghiệm với bệnh cụ thể",người được chăm sóc thấy thoải mái (ví dụ bà cụ chỉ muốn nữ tắm rửa),"• Mỗi tiêu chí chọn Bắt buộc hoặc Ưu tiên
-• Tiêu chí bắt buộc làm giảm số ứng viên → hiển thị cảnh báo có thể khó ghép","• KHÔNG cho lọc theo vùng miền, dân tộc, tôn giáo (chống phân biệt đối xử)",SC-027,OQ-021,,Should,,US-02-001,customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Tiêu chí bắt buộc làm giảm số ứng viên → hiển thị cảnh báo có thể khó ghép","• KHÔNG cho lọc theo vùng miền, dân tộc, tôn giáo (chống phân biệt đối xử)",SC-027,OQ-021,,Should,,US-02-001,customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-02-011,EP02,Hồ sơ khách hàng & người được chăm sóc,Người được chăm sóc là trẻ sơ sinh (mẹ & bé sau sinh),R01 Khách hàng (người đặt/người thân),"tạo hồ sơ cho trẻ sơ sinh (≤ 3 tháng tuổi) và mẹ sau sinh, đặt dịch vụ chăm sóc mẹ & bé",mẹ và bé được chăm sóc đúng chuyên môn trong tháng đầu sau sinh,"• Hồ sơ bé: ngày sinh, cân nặng lúc sinh, tuần thai, sinh thường/mổ, bú mẹ/sữa công thức, vàng da, tiêm chủng đã làm
 • Hồ sơ mẹ được liên kết (người được chăm sóc thứ 2 cùng đơn)
 • Người đặt bắt buộc là cha/mẹ/giám hộ
@@ -92,74 +92,74 @@ US-02-011,EP02,Hồ sơ khách hàng & người được chăm sóc,Người đ�
 • Ngưỡng chỉ số sinh tồn riêng cho trẻ sơ sinh (nhiệt độ, nhịp thở, nhịp tim khác người lớn) dùng cho US-08-005
 • Checklist dấu hiệu nguy hiểm (bỏ bú, sốt/hạ thân nhiệt, vàng da lan xuống chân, tím tái, co giật, ngưng thở) → gợi ý SOS + 115","• Bắt buộc có người lớn của gia đình trong nhà suốt ca (không nhận ca trẻ ở một mình)
 • Nhân viên không cho bé dùng thuốc ngoài y lệnh
-• Trẻ > 3 tháng có bệnh lý: ngoài phạm vi hiện tại","SC-032, SC-045",OQ-019,Luật Trẻ em; dữ liệu trẻ em cần đồng ý của cha mẹ/giám hộ,Should,,US-02-007,customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Đã chốt OQ-019 (2026-11-22)
+• Trẻ > 3 tháng có bệnh lý: ngoài phạm vi hiện tại","SC-032, SC-045",OQ-019,Luật Trẻ em; dữ liệu trẻ em cần đồng ý của cha mẹ/giám hộ,Should,,US-02-007,customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Đã chốt OQ-019 (2026-11-22)
 US-03-001,EP03,Tuyển chọn & xác minh nhân viên,Hồ sơ nhân viên,R11 Nhân viên (cả R03 và R04),"khai hồ sơ: thông tin cá nhân, loại nhân viên, chức danh, số năm kinh nghiệm, nơi từng làm, kỹ năng, ngôn ngữ, ảnh chân dung",khách hàng và admin hiểu năng lực của tôi,"• Wizard nhiều bước, lưu nháp từng bước
 • Loại: NURSE_MEDICAL (y tế) / CAREGIVER (không chuyên)
 • Chức danh (y tế): điều dưỡng, hộ sinh, kỹ thuật viên phục hồi chức năng, y sĩ...
 • Lịch sử công tác: nơi làm, khoa, từ–đến, vị trí
 • Kỹ năng dạng tag từ danh mục (thay băng, cho ăn qua sonde, chăm sóc loét, phục hồi sau đột quỵ, sa sút trí tuệ, nhi...)
-• Ảnh chân dung rõ mặt (dùng so khớp eKYC và check-in)",• Mọi kỹ năng/kinh nghiệm tự khai có trạng thái 'Tự khai' cho tới khi được xác minh,,,,Must,,US-01-004,caregiver-service,WF-N-01,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Ảnh chân dung rõ mặt (dùng so khớp eKYC và check-in)",• Mọi kỹ năng/kinh nghiệm tự khai có trạng thái 'Tự khai' cho tới khi được xác minh,,,,Must,,US-01-004,caregiver-service,WF-N-01,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-002,EP03,Tuyển chọn & xác minh nhân viên,Xác minh danh tính (eKYC),R11 Nhân viên (cả R03 và R04),chụp CCCD gắn chip 2 mặt và selfie (kiểm tra người thật),"chứng minh tôi là người thật, đúng danh tính","• OCR đọc số CCCD, họ tên, ngày sinh → so với hồ sơ, lệch → yêu cầu sửa
 • So khớp khuôn mặt selfie ↔ ảnh CCCD, điểm dưới ngưỡng → chuyển admin duyệt tay
 • Ảnh lưu bucket private, mã hóa, chỉ admin xem qua presigned URL ngắn hạn
 • Code qua interface EkycProvider (MockEkycProvider mặc định)
-• 1 số CCCD chỉ gắn 1 tài khoản nhân viên",,SC-010,,"Số CCCD, ảnh khuôn mặt = dữ liệu cá nhân (sinh trắc học là nhạy cảm)",Must,,US-03-001,caregiver-service,WF-N-02,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• 1 số CCCD chỉ gắn 1 tài khoản nhân viên",,SC-010,,"Số CCCD, ảnh khuôn mặt = dữ liệu cá nhân (sinh trắc học là nhạy cảm)",Must,,US-03-001,caregiver-service,WF-N-02,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-003,EP03,Tuyển chọn & xác minh nhân viên,Nộp giấy phép hành nghề & văn bằng,R03 Nhân viên y tế (có giấy phép hành nghề),"tải giấy phép hành nghề (GPHN) và văn bằng chuyên môn, khai số GPHN, nơi cấp, ngày cấp, phạm vi hành nghề, thời hạn",được nhận các dịch vụ y tế tại nhà đúng pháp luật,"• Bắt buộc với loại NURSE_MEDICAL
 • Trường: số GPHN, cơ quan cấp (Sở Y tế/Bộ Y tế), ngày cấp, ngày hết hạn/gia hạn, phạm vi hoạt động chuyên môn, ảnh 2 mặt
 • Văn bằng: trường, ngành, năm tốt nghiệp, ảnh
 • Chứng chỉ bổ sung (CME, chăm sóc giảm nhẹ, phục hồi...) tùy chọn
-• Chưa có GPHN → chỉ đăng ký được loại CAREGIVER, không nhận dịch vụ y tế",• Dịch vụ nhân viên được nhận phải nằm trong phạm vi hành nghề ghi trên GPHN,"SC-010, SC-012","OQ-002, OQ-012","Luật Khám bệnh, chữa bệnh 2023: người hành nghề phải có giấy phép hành nghề còn hiệu lực và hành nghề đúng phạm vi (cần xác minh chi tiết điều kiện hành nghề tại nhà)",Must,,US-03-001,caregiver-service,WF-N-02,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Đã chốt OQ-002 (2026-11-22)
+• Chưa có GPHN → chỉ đăng ký được loại CAREGIVER, không nhận dịch vụ y tế",• Dịch vụ nhân viên được nhận phải nằm trong phạm vi hành nghề ghi trên GPHN,"SC-010, SC-012","OQ-002, OQ-012","Luật Khám bệnh, chữa bệnh 2023: người hành nghề phải có giấy phép hành nghề còn hiệu lực và hành nghề đúng phạm vi (cần xác minh chi tiết điều kiện hành nghề tại nhà)",Must,,US-03-001,caregiver-service,WF-N-02,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Đã chốt OQ-002 (2026-11-22)
 US-03-004,EP03,Tuyển chọn & xác minh nhân viên,Admin đối chiếu GPHN với cơ quan y tế,R06 Quản trị viên (Admin),tra cứu GPHN trên cổng công khai của Sở Y tế / Bộ Y tế và ghi lại kết quả đối chiếu,"loại bỏ giấy phép giả, hết hạn hoặc sai phạm vi","• Màn hình hiển thị song song ảnh GPHN và thông tin khai báo
 • Admin ghi: nguồn tra cứu, kết quả (Khớp / Không tìm thấy / Lệch thông tin / Hết hiệu lực), ảnh chụp màn hình tra cứu, thời điểm, người tra
 • Không khớp → từ chối + cờ nghi giả mạo, khóa SĐT/CCCD đăng ký lại
 • Phạm vi hành nghề được map sang danh sách dịch vụ được phép","• Bắt buộc 2 người: 1 người tra cứu, 1 người duyệt (4-eyes) với dịch vụ y tế
-• Tái đối chiếu ngẫu nhiên 10% hồ sơ mỗi quý","SC-010, SC-011",OQ-012,,Must,,US-03-003,caregiver-service,WF-A-02,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Trả lời câu: 'Làm sao xác nhận nhân viên y tế đủ điều kiện?'
+• Tái đối chiếu ngẫu nhiên 10% hồ sơ mỗi quý","SC-010, SC-011",OQ-012,,Must,,US-03-003,caregiver-service,WF-A-02,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Trả lời câu: 'Làm sao xác nhận nhân viên y tế đủ điều kiện?'
 US-03-005,EP03,Tuyển chọn & xác minh nhân viên,Xác minh kinh nghiệm làm việc,R06 Quản trị viên (Admin),xác minh số năm kinh nghiệm qua giấy xác nhận công tác/hợp đồng lao động và gọi 2 người tham chiếu,"khách hàng thấy 'số năm kinh nghiệm đã xác minh' đáng tin, không phải tự khai","• Nhân viên tải: giấy xác nhận công tác / HĐLĐ / sổ BHXH (ảnh) cho từng nơi đã làm
 • Khai 2 người tham chiếu (tên, SĐT, chức vụ, quan hệ)
 • Admin ghi kết quả gọi tham chiếu theo mẫu câu hỏi cố định
 • Mỗi dòng kinh nghiệm có trạng thái: Tự khai / Đã xác minh / Không xác minh được
-• Số năm kinh nghiệm hiển thị cho khách = tổng thời gian 'Đã xác minh'",• Kinh nghiệm tối thiểu để nhận dịch vụ y tế: xem OQ-013,SC-010,OQ-013,,Must,,US-03-001,caregiver-service,"WF-A-02, WF-N-02",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Trả lời câu: 'Làm sao biết đủ kinh nghiệm?'
+• Số năm kinh nghiệm hiển thị cho khách = tổng thời gian 'Đã xác minh'",• Kinh nghiệm tối thiểu để nhận dịch vụ y tế: xem OQ-013,SC-010,OQ-013,,Must,,US-03-001,caregiver-service,"WF-A-02, WF-N-02",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Trả lời câu: 'Làm sao biết đủ kinh nghiệm?'
 US-03-006,EP03,Tuyển chọn & xác minh nhân viên,Lý lịch tư pháp & giấy khám sức khỏe,R11 Nhân viên (cả R03 và R04),nộp Phiếu lý lịch tư pháp và giấy khám sức khỏe còn hiệu lực,"chứng minh tôi an toàn để vào nhà người già, người bệnh (kể cả người ở một mình)","• Phiếu LLTP cấp trong vòng 6 tháng (có thể xin online qua VNeID / Cổng DVC)
 • Giấy khám sức khỏe trong vòng 6 tháng, không mắc bệnh truyền nhiễm đang tiến triển
 • Admin kiểm tra và ghi kết quả, LLTP có án tích liên quan bạo lực/trộm cắp/lừa đảo/ma túy → từ chối
-• Nhắc nộp lại định kỳ mỗi 12 tháng",• Áp dụng cho CẢ nhân viên y tế và người chăm sóc không chuyên,SC-007,OQ-012,"Dữ liệu tiền án tiền sự = dữ liệu nhạy cảm: chỉ lưu kết quả Đạt/Không đạt + ảnh mã hóa, xóa ảnh sau khi duyệt 90 ngày",Must,,US-03-001,caregiver-service,"WF-N-02, WF-A-02",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhắc nộp lại định kỳ mỗi 12 tháng",• Áp dụng cho CẢ nhân viên y tế và người chăm sóc không chuyên,SC-007,OQ-012,"Dữ liệu tiền án tiền sự = dữ liệu nhạy cảm: chỉ lưu kết quả Đạt/Không đạt + ảnh mã hóa, xóa ảnh sau khi duyệt 90 ngày",Must,,US-03-001,caregiver-service,"WF-N-02, WF-A-02",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-007,EP03,Tuyển chọn & xác minh nhân viên,Bài kiểm tra kỹ năng online,R11 Nhân viên (cả R03 và R04),làm bài kiểm tra tình huống theo loại nhân viên và kỹ năng đăng ký,"chứng minh năng lực thực tế, không chỉ dựa vào giấy tờ","• Ngân hàng câu hỏi theo chủ đề: sơ cứu, phòng té ngã, xử trí khó thở/sặc, chăm sóc loét, kiểm soát nhiễm khuẩn, giao tiếp với người sa sút trí tuệ, quy trình SOS của nền tảng
 • Đề ngẫu nhiên, giới hạn thời gian, đạt ≥ 80%
 • Trượt → làm lại sau 7 ngày, tối đa 3 lần
-• Kỹ năng nào đạt bài test riêng → gắn badge 'Đã kiểm tra'",,,,,Should,,US-03-001,caregiver-service,WF-N-04,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Kỹ năng nào đạt bài test riêng → gắn badge 'Đã kiểm tra'",,,,,Should,,US-03-001,caregiver-service,WF-N-04,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-008,EP03,Tuyển chọn & xác minh nhân viên,Phỏng vấn video & đánh giá thực hành,R06 Quản trị viên (Admin),"hẹn lịch phỏng vấn video, đánh giá thái độ và kỹ năng thực hành theo phiếu chấm chuẩn",loại người có giấy tờ đầy đủ nhưng thái độ/kỹ năng không phù hợp,"• Nhân viên chọn khung giờ phỏng vấn admin mở
 • Link họp video ngoài (Google Meet/Zoom) lưu trong hồ sơ
 • Phiếu chấm: giao tiếp, đạo đức nghề, xử lý tình huống, kỹ năng chuyên môn (thang 1-5)
-• Kết quả Đạt/Không đạt + nhận xét",,,,,Should,,US-03-007,caregiver-service,WF-A-02,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Kết quả Đạt/Không đạt + nhận xét",,,,,Should,,US-03-007,caregiver-service,WF-A-02,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-009,EP03,Tuyển chọn & xác minh nhân viên,Đào tạo bắt buộc trước khi nhận ca,R11 Nhân viên (cả R03 và R04),"hoàn thành khóa đào tạo nội bộ: quy tắc ứng xử, quy trình SOS, bảo mật dữ liệu, chống giao dịch ngoài, cách dùng app",làm đúng quy trình của nền tảng ngay từ ca đầu,"• Khóa gồm video/bài đọc + câu hỏi cuối mỗi bài
 • Chưa hoàn thành → không được duyệt chính thức
-• Khi quy trình thay đổi (version mới) → bắt buộc học lại phần thay đổi",,"SC-005, SC-013",,,Should,,US-03-001,caregiver-service,WF-N-04,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Khi quy trình thay đổi (version mới) → bắt buộc học lại phần thay đổi",,"SC-005, SC-013",,,Should,,US-03-001,caregiver-service,WF-N-04,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-010,EP03,Tuyển chọn & xác minh nhân viên,Giai đoạn thử việc,R08 Hệ thống (tác vụ tự động),"cho nhân viên mới được duyệt ở trạng thái Thử việc trong 3 ca đầu, chỉ nhận ca độ khó thấp",giảm rủi ro khi chưa có lịch sử thực tế,"• Thử việc: không ghép ca có người sống một mình + phụ thuộc cao, không ca 24h, không ca khẩn cấp
 • Sau 3 ca hoàn thành, điểm TB ≥ 4.5 và không có khiếu nại được xác nhận → tự chuyển Chính thức
-• Không đạt → chuyển admin xem xét",• Khách được thấy nhãn 'Nhân viên mới' và có quyền không nhận nhân viên mới,SC-007,,,Should,,US-03-011,caregiver-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Không đạt → chuyển admin xem xét",• Khách được thấy nhãn 'Nhân viên mới' và có quyền không nhận nhân viên mới,SC-007,,,Should,,US-03-011,caregiver-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-011,EP03,Tuyển chọn & xác minh nhân viên,Kiểm tra sơ bộ hồ sơ & theo dõi trạng thái (trước khi bệnh viện duyệt),R06 Quản trị viên (Admin),"kiểm tra checklist xác minh của nền tảng (eKYC, giấy tờ, LLTP...) rồi chuyển hồ sơ đạt sang bệnh viện nhân viên đã chọn; nhân viên xem tiến độ từng bước","bệnh viện chỉ phải duyệt hồ sơ đã đủ giấy tờ, người nộp biết mình còn thiếu gì","• Checklist: eKYC, GPHN (nếu y tế, đối chiếu tra cứu công khai), kinh nghiệm, LLTP, khám SK, bài test, đào tạo, tài khoản ngân hàng
 • Nút 'Chuyển bệnh viện duyệt' chỉ bật khi mọi mục bắt buộc Đạt → trạng thái AWAITING_PARTNER_APPROVAL
 • Admin KHÔNG có quyền tự cấp role CAREGIVER (chỉ bệnh viện duyệt ở US-03-016); Admin được từ chối hoặc yêu cầu bổ sung (bắt buộc lý do từng mục)
 • Người kiểm tra không được là chính người nộp (kể cả tài khoản Admin có nộp hồ sơ nhân viên)
 • Mọi thao tác ghi audit (ai, lúc nào, kết quả, lý do); nhân viên nhận thông báo
 • SLA kiểm tra ≤ 3 ngày làm việc, hiển thị hàng đợi theo thời gian chờ","• Admin đăng nhập bắt buộc MFA
-• Quyết định cuối thuộc bệnh viện (OQ-037 (b)); Admin kiểm tra sơ bộ là trách nhiệm pháp lý của nền tảng (eKYC, bảo vệ người dùng)",SC-010,,,Must,,"US-03-002, US-03-003, US-03-005, US-03-006",caregiver-service,"WF-A-02, WF-N-03",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Quyết định cuối thuộc bệnh viện (OQ-037 (b)); Admin kiểm tra sơ bộ là trách nhiệm pháp lý của nền tảng (eKYC, bảo vệ người dùng)",SC-010,,,Must,,"US-03-002, US-03-003, US-03-005, US-03-006",caregiver-service,"WF-A-02, WF-N-03",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-012,EP03,Tuyển chọn & xác minh nhân viên,Cấp độ & năng lực nhân viên,R08 Hệ thống (tác vụ tự động),"tính cấp độ nhân viên (1–5) dựa trên kinh nghiệm đã xác minh, chứng chỉ, đánh giá, số ca hoàn thành, sự cố",ghép đúng người cho đúng mức độ phức tạp và trả giá tương xứng,"• Công thức cấu hình được (admin), tính lại hằng ngày và khi có event review.submitted / incident.closed
 • Ví dụ mặc định: C1 mới; C2 ≥ 20 ca & ≥ 4.5★; C3 ≥ 2 năm KN xác minh & ≥ 100 ca; C4 ≥ 5 năm & chứng chỉ chuyên sâu; C5 do admin cấp
 • Hạ cấp khi điểm uy tín giảm hoặc sự cố do lỗi nhân viên
-• Cấp độ ảnh hưởng giá (US-04-003) và điều kiện dịch vụ (US-04-001)",,,OQ-013,,Must,,US-03-011,caregiver-service,WF-N-14,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Cấp độ ảnh hưởng giá (US-04-003) và điều kiện dịch vụ (US-04-001)",,,OQ-013,,Must,,US-03-011,caregiver-service,WF-N-14,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-013,EP03,Tuyển chọn & xác minh nhân viên,Nhắc gia hạn & tự tạm ngưng khi giấy tờ hết hạn,R08 Hệ thống (tác vụ tự động),"nhắc nhân viên gia hạn GPHN, LLTP, giấy khám sức khỏe và tự động ngưng nhận ca khi hết hạn",không bao giờ có nhân viên hành nghề với giấy tờ hết hạn,"• Job hằng ngày (ShedLock): nhắc trước 60/30/7 ngày qua push + email
 • Hết hạn GPHN → ngưng các dịch vụ y tế (vẫn nhận được dịch vụ sinh hoạt nếu đủ điều kiện)
 • Ca tương lai đã nhận nằm sau ngày hết hạn → phát caregiver.license-expiring → dispatch tìm người thay trước 7 ngày
-• Nộp giấy tờ mới → quay lại US-03-004 để duyệt",,SC-011,,Không để hành nghề khi GPHN hết hiệu lực,Must,,US-03-003,caregiver-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nộp giấy tờ mới → quay lại US-03-004 để duyệt",,SC-011,,Không để hành nghề khi GPHN hết hiệu lực,Must,,US-03-003,caregiver-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-014,EP03,Tuyển chọn & xác minh nhân viên,Tạm ngưng / thu hồi tư cách nhân viên,R06 Quản trị viên (Admin),"tạm ngưng hoặc thu hồi tư cách nhân viên vi phạm, có quy trình kháng nghị",bảo vệ khách hàng và uy tín nền tảng nhưng vẫn công bằng với nhân viên,"• Lý do theo danh mục: sự cố nghiêm trọng, gian lận, giao dịch ngoài, nhiều khiếu nại, giấy tờ giả...
 • Tạm ngưng (có thời hạn) / Thu hồi vĩnh viễn (khóa CCCD)
 • Phát caregiver.suspended → dispatch thay các ca tương lai, payment giữ tiền đang chờ nếu có tranh chấp
-• Nhân viên gửi kháng nghị 1 lần trong 14 ngày, người khác người quyết định ban đầu xem xét",,"SC-014, SC-013, SC-010",,,Must,,US-03-011,caregiver-service,WF-A-02,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên gửi kháng nghị 1 lần trong 14 ngày, người khác người quyết định ban đầu xem xét",,"SC-014, SC-013, SC-010",,,Must,,US-03-011,caregiver-service,WF-A-02,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-015,EP03,Tuyển chọn & xác minh nhân viên,Hồ sơ năng lực hiển thị cho khách,R01 Khách hàng (người đặt/người thân),"xem hồ sơ nhân viên: ảnh, tên, cấp độ, badge đã xác minh, năm kinh nghiệm đã xác minh, kỹ năng, đánh giá, số ca",yên tâm về người sẽ vào nhà chăm sóc bố mẹ mình,"• Badge: 'Đã xác minh danh tính', 'GPHN đã đối chiếu', 'Lý lịch sạch', 'Kinh nghiệm đã xác minh X năm'
 • Hiển thị tên dạng 'Nguyễn Thị H.'
 • KHÔNG hiển thị: SĐT, địa chỉ, số CCCD, số GPHN đầy đủ (chỉ 4 số cuối)
-• Chỉ xem được hồ sơ nhân viên được gợi ý/đã ghép cho đơn của mình",,SC-013,,Bảo vệ dữ liệu cá nhân của nhân viên,Must,,US-03-012,caregiver-service,WF-C-14,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Chỉ xem được hồ sơ nhân viên được gợi ý/đã ghép cho đơn của mình",,SC-013,,Bảo vệ dữ liệu cá nhân của nhân viên,Must,,US-03-012,caregiver-service,WF-C-14,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-03-016,EP03,Tuyển chọn & xác minh nhân viên,Bệnh viện / cơ sở đối tác duyệt nhân viên,R10 Đối tác tổ chức (bệnh viện/phòng khám),"xác nhận người nộp đang công tác tại bệnh viện mình đúng chức danh, rồi duyệt hoặc từ chối; quản lý danh sách nhân viên đang liên kết",chỉ người thật sự là nhân viên của bệnh viện mới được nhận ca y tế qua nền tảng,"• Bệnh viện đăng ký làm đối tác và được Admin xác minh, cấp tài khoản người duyệt (US-03-018, WF-A-10); mỗi bệnh viện tối thiểu 2 người duyệt (MFA) để luôn có người trực
 • Hàng đợi chỉ gồm hồ sơ AWAITING_PARTNER_APPROVAL đã chọn ĐÚNG bệnh viện này (server lọc theo partnerOrgId trong token, không theo tham số client gửi)
 • Nhân viên y tế: bệnh viện xác nhận đang công tác, đúng chức danh, GPHN còn hiệu lực. Người chăm sóc không chuyên: bệnh viện đánh giá đủ khả năng (kiểm tra thực hành/phỏng vấn), ghi kết quả và các kỹ năng được xác nhận (OQ-039)
@@ -168,219 +168,219 @@ US-03-016,EP03,Tuyển chọn & xác minh nhân viên,Bệnh viện / cơ sở �
 • Bệnh viện chấm dứt liên kết (nhân viên nghỉ việc) → gỡ role CAREGIVER, thu hồi phiên, ca tương lai chuyển tìm người thay (US-06-007)
 • SLA duyệt ≤ 2 ngày làm việc; quá hạn → nhắc bệnh viện + báo Admin
 • Tiền ca chia 3: nhân viên / bệnh viện (phí trung gian duyệt & đảm bảo chất lượng) / nền tảng – chi tiết US-10-003, US-10-015, tỷ lệ OQ-041. Bệnh viện chịu trách nhiệm chất lượng nhân viên mình duyệt: khiếu nại nghiêm trọng được báo cho bệnh viện","• Không nhận nhân viên tự do: MỌI nhân viên (y tế và người chăm sóc) phải có 1 liên kết ACTIVE với 1 bệnh viện đối tác (OQ-037 b, OQ-039)
-• Tài khoản bệnh viện bị chiếm → Admin tạm khóa đối tác, các duyệt trong 7 ngày gần nhất chuyển về chờ xem lại","SC-001, SC-012, SC-047","OQ-002, OQ-004, OQ-037, OQ-039",Luật KBCB 2023: dịch vụ KBCB tại nhà gắn với cơ sở được cấp phép (cần xác minh),Must,,US-03-011,caregiver-service,WF-P-01,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,"Đã chốt OQ-002, OQ-004 (2026-11-22)"
+• Tài khoản bệnh viện bị chiếm → Admin tạm khóa đối tác, các duyệt trong 7 ngày gần nhất chuyển về chờ xem lại","SC-001, SC-012, SC-047","OQ-002, OQ-004, OQ-037, OQ-039",Luật KBCB 2023: dịch vụ KBCB tại nhà gắn với cơ sở được cấp phép (cần xác minh),Must,,US-03-011,caregiver-service,WF-P-01,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,"Đã chốt OQ-002, OQ-004 (2026-11-22)"
 US-04-001,EP04,"Danh mục dịch vụ, giá & khu vực",Danh mục dịch vụ & yêu cầu năng lực,R06 Quản trị viên (Admin),"quản lý danh mục dịch vụ gồm mô tả, công việc bao gồm/không bao gồm, thời lượng tối thiểu và yêu cầu năng lực bắt buộc",hệ thống không bao giờ ghép người không đủ năng lực/pháp lý cho một dịch vụ,"• Nhóm: Chăm sóc sinh hoạt, Chăm sóc y tế tại nhà, Phục hồi chức năng, Mẹ & bé, Chăm sóc giảm nhẹ, Trông bệnh viện (nếu có)
 • Mỗi dịch vụ: loại nhân viên yêu cầu (CAREGIVER / NURSE_MEDICAL), cấp độ tối thiểu, kỹ năng bắt buộc, cần y lệnh bác sĩ (có/không), vật tư do ai chuẩn bị, số nhân viên cần (1/2)
 • Danh sách việc KHÔNG làm (ví dụ người chăm sóc không tiêm, không truyền dịch, không dọn cả nhà)
-• Ẩn/hiện dịch vụ; không xóa dịch vụ đã có đơn","• Thủ thuật y tế (tiêm, truyền dịch, đặt sonde, thông tiểu...) bắt buộc NURSE_MEDICAL + y lệnh","SC-012, SC-031","OQ-019, OQ-023",Phạm vi hành nghề theo Luật KBCB 2023,Must,,,catalog-service,WF-A-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Ẩn/hiện dịch vụ; không xóa dịch vụ đã có đơn","• Thủ thuật y tế (tiêm, truyền dịch, đặt sonde, thông tiểu...) bắt buộc NURSE_MEDICAL + y lệnh","SC-012, SC-031","OQ-019, OQ-023",Phạm vi hành nghề theo Luật KBCB 2023,Must,,,catalog-service,WF-A-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-04-002,EP04,"Danh mục dịch vụ, giá & khu vực",Khách xem danh mục & chi tiết dịch vụ,R01 Khách hàng (người đặt/người thân),"xem danh mục dịch vụ, giá từ bao nhiêu, việc gì được làm/không được làm, cần chuẩn bị gì",chọn đúng dịch vụ và không bị bất ngờ khi nhân viên đến,"• Lọc theo nhóm, theo người được chăm sóc (gợi ý dựa trên hồ sơ sức khỏe)
 • Chỉ hiển thị dịch vụ có ở khu vực địa chỉ đã chọn
 • Hiển thị 'Giá từ ... /giờ', phụ phí có thể áp dụng
 • Cảnh báo dịch vụ cần y lệnh bác sĩ
-• Banner cố định: 'Không phải dịch vụ cấp cứu – cấp cứu gọi 115'",,SC-005,,,Must,,US-04-001,catalog-service,WF-C-04,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Banner cố định: 'Không phải dịch vụ cấp cứu – cấp cứu gọi 115'",,SC-005,,,Must,,US-04-001,catalog-service,WF-C-04,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-04-003,EP04,"Danh mục dịch vụ, giá & khu vực",Bảng giá & phụ phí,R06 Quản trị viên (Admin),"cấu hình giá theo dịch vụ × cấp độ nhân viên × khu vực và các phụ phí (đêm, cuối tuần, lễ Tết, đặt gấp, ca 24h, 2 nhân viên)","giá minh bạch, đủ hấp dẫn nhân viên lúc cao điểm và nền tảng có lãi","• Giá cơ bản theo giờ hoặc theo lượt (VND, số nguyên)
 • Phụ phí dạng % hoặc số tiền: đêm 22h–6h, cuối tuần, ngày lễ (lịch lễ cấu hình theo năm, gồm Tết âm lịch), đặt gấp < 4h
 • Giá có ngày hiệu lực; đơn đã đặt giữ giá lúc đặt
 • Phát catalog.price-changed
 • Ghi audit log mọi thay đổi giá","• Giá do nền tảng quy định, nhân viên không tự đặt giá (xem OQ-028)
-• Phụ phí cộng dồn tối đa +100% giá cơ bản","SC-023, SC-037","OQ-005, OQ-028",,Must,,US-04-001,catalog-service,WF-A-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Đã chốt OQ-028 (2026-11-22)
+• Phụ phí cộng dồn tối đa +100% giá cơ bản","SC-023, SC-037","OQ-005, OQ-028",,Must,,US-04-001,catalog-service,WF-A-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Đã chốt OQ-028 (2026-11-22)
 US-04-004,EP04,"Danh mục dịch vụ, giá & khu vực",Khu vực phục vụ,R06 Quản trị viên (Admin),"khai báo tỉnh/thành và phường/xã đang hoạt động, sắp mở, tạm ngưng","khách chỉ đặt được nơi có nhân viên, nơi chưa có thì ghi nhận nhu cầu","• Trạng thái khu vực: Hoạt động / Sắp mở / Tạm ngưng (có lý do và thời hạn)
 • Khu vực Sắp mở: khách đăng ký 'báo tôi khi mở' → lưu nhu cầu cho báo cáo (US-13-002)
 • Polygon bản đồ (PostGIS) cho từng khu vực
 • Dữ liệu đơn vị hành chính theo danh mục mới (2 cấp)","• Khu vực thí điểm: phường Quy Nhơn Nam, tỉnh Gia Lai (OQ-018). Các phường lân cận ở trạng thái 'Sắp mở'
 • Khu vực phục vụ tính theo ĐỊA CHỈ CHĂM SÓC (nhà hoặc bệnh viện); nơi ở của nhân viên được phép nằm ngoài khu vực (ghép theo bán kính)
-• Mở khu vực mới chỉ cần cấu hình, không sửa code","SC-001, SC-024",OQ-018,,Must,,,catalog-service,WF-A-04,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Mở khu vực mới chỉ cần cấu hình, không sửa code","SC-001, SC-024",OQ-018,,Must,,,catalog-service,WF-A-04,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-04-005,EP04,"Danh mục dịch vụ, giá & khu vực",Gói dịch vụ dài hạn,R06 Quản trị viên (Admin),"tạo gói dài hạn (ví dụ 10 buổi/tháng, ca 24h × 7 ngày, chăm sóc sau sinh 30 ngày) có giảm giá","khách có nhu cầu lâu dài tiết kiệm hơn, nền tảng giữ chân khách và có dòng tiền trước","• Gói: dịch vụ, số buổi/số giờ, thời hạn sử dụng, % giảm, hình thức thanh toán (trả trước / theo tuần)
 • Chính sách hoàn phần chưa dùng khi hủy gói
-• Hiển thị số buổi còn lại cho khách",,SC-022,OQ-014,,Should,,US-04-003,catalog-service,"WF-A-03, WF-C-04",Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Hiển thị số buổi còn lại cho khách",,SC-022,OQ-014,,Should,,US-04-003,catalog-service,"WF-A-03, WF-C-04",Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-04-006,EP04,"Danh mục dịch vụ, giá & khu vực","Chính sách hủy, hoa hồng, phí phạt (có version)",R06 Quản trị viên (Admin),"cấu hình chính sách hủy/hoàn tiền theo mốc thời gian, % hoa hồng nền tảng theo cấp độ, % mặc định chia cho bệnh viện đối tác, phí no-show, thời gian giữ tiền, có phiên bản và ngày hiệu lực",đổi chính sách mà không ảnh hưởng các đơn đã đặt theo chính sách cũ,"• Mỗi lần sửa tạo version mới, không sửa version cũ
 • Booking lưu policyVersion lúc đặt
 • Mặc định theo OQ-005, OQ-008; % bệnh viện mặc định theo OQ-041, hợp đồng từng bệnh viện có thể ghi đè (US-03-018)
-• Phát catalog.policy-changed",,"SC-003, SC-004","OQ-005, OQ-008",Luật Bảo vệ quyền lợi người tiêu dùng: điều khoản phải công khai trước khi giao dịch,Must,,,catalog-service,WF-A-05,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,"Đã chốt OQ-005, OQ-008 (2026-11-22)"
+• Phát catalog.policy-changed",,"SC-003, SC-004","OQ-005, OQ-008",Luật Bảo vệ quyền lợi người tiêu dùng: điều khoản phải công khai trước khi giao dịch,Must,,,catalog-service,WF-A-05,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,"Đã chốt OQ-005, OQ-008 (2026-11-22)"
 US-04-007,EP04,"Danh mục dịch vụ, giá & khu vực",Mã giảm giá / khuyến mãi,R06 Quản trị viên (Admin),"tạo mã giảm giá (số lần dùng, hạn, điều kiện) và voucher bồi thường",thu hút khách mới và xoa dịu khách khi dịch vụ có lỗi,"• Loại: % hoặc số tiền, trần tối đa
 • Giới hạn 1 lần/tài khoản/SĐT
 • Phần giảm do nền tảng chịu, không trừ vào thu nhập nhân viên
-• Voucher bồi thường sinh tự động khi no-show (US-10-002)",,SC-002,,,Could,,US-04-003,catalog-service,WF-A-05,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Voucher bồi thường sinh tự động khi no-show (US-10-002)",,SC-002,,,Could,,US-04-003,catalog-service,WF-A-05,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-05-001,EP05,Đặt lịch,Đặt ca chăm sóc 1 lần,R01 Khách hàng (người đặt/người thân),"chọn người được chăm sóc, dịch vụ, ngày giờ, thời lượng, ghi chú để đặt 1 ca",người thân được chăm sóc đúng lúc tôi cần,"• Wizard: Người được chăm sóc → Dịch vụ → Thời gian → Nhân viên (tự động / chọn) → Báo giá → Thanh toán
 • Kiểm tra: địa chỉ trong khu vực phục vụ; thời lượng ≥ tối thiểu; đặt trước tối thiểu 4h (dưới 4h → luồng đặt gấp US-05-005); không đặt quá 60 ngày
 • Hồ sơ thiếu liên hệ khẩn cấp/đồng ý → chặn và dẫn đi bổ sung
 • Dịch vụ cần y lệnh → bắt buộc tải y lệnh (US-05-015)
-• Tạo booking trạng thái PENDING_PAYMENT, phát booking.created","• Thời gian lưu UTC, hiển thị giờ VN","SC-012, SC-035",,,Must,,"US-02-004, US-04-002",booking-service,WF-C-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Tạo booking trạng thái PENDING_PAYMENT, phát booking.created","• Thời gian lưu UTC, hiển thị giờ VN","SC-012, SC-035",,,Must,,"US-02-004, US-04-002",booking-service,WF-C-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-002,EP05,Đặt lịch,Báo giá chi tiết & xác nhận đặt,R01 Khách hàng (người đặt/người thân),xem báo giá chi tiết từng dòng và chính sách hủy trước khi xác nhận,biết chính xác mình trả bao nhiêu và hủy thì mất bao nhiêu,"• Dòng: giá cơ bản × số giờ, từng phụ phí, giảm giá, tổng
 • Báo giá hiệu lực 15 phút (quoteId), hết hạn phải tính lại
 • Hiển thị bảng hủy/hoàn theo policyVersion hiện hành, bắt buộc tick 'Đã đọc'
-• booking-service gọi catalog-service để tính giá (không tự tính)",,SC-037,,Công khai giá và điều kiện giao dịch,Must,,"US-04-003, US-04-006",booking-service,WF-C-06,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• booking-service gọi catalog-service để tính giá (không tự tính)",,SC-037,,Công khai giá và điều kiện giao dịch,Must,,"US-04-003, US-04-006",booking-service,WF-C-06,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-003,EP05,Đặt lịch,Đặt lịch định kỳ,R01 Khách hàng (người đặt/người thân),"đặt lịch lặp lại (ví dụ T2-T4-T6, 8h–12h, trong 4 tuần)",không phải đặt từng ca và bố mẹ được cùng 1 người chăm sóc quen,"• Chọn quy tắc lặp: ngày trong tuần, giờ, ngày bắt đầu–kết thúc (tối đa 12 tuần)
 • Sinh danh sách ca (shift) cụ thể, hiển thị trước khi xác nhận; ngày lễ hiển thị phụ phí
 • Ưu tiên 1 nhân viên chính cho cả chuỗi (US-06-009); ca nào nhân viên chính bận → ghép riêng
-• Hủy 1 ca không ảnh hưởng các ca còn lại",,"SC-022, SC-036",,,Must,,US-05-001,booking-service,WF-C-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Hủy 1 ca không ảnh hưởng các ca còn lại",,"SC-022, SC-036",,,Must,,US-05-001,booking-service,WF-C-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-004,EP05,Đặt lịch,Đặt chăm sóc 24/7 hoặc dài ngày,R01 Khách hàng (người đặt/người thân),đặt chăm sóc liên tục 24 giờ trong nhiều ngày,người bệnh nặng/sau mổ luôn có người bên cạnh,"• Hệ thống tự chia thành ca ≤ 12h/nhân viên (ví dụ 7h–19h, 19h–7h)
 • Mỗi lượt đổi ca có bàn giao (US-08-011)
 • Hiển thị tổng chi phí theo ngày và cả đợt, thanh toán theo tuần
-• Kiểm tra chỗ nghỉ cho nhân viên ca đêm (khai báo có/không)",• Không cho 1 nhân viên làm 24h liên tục (US-07-005),"SC-022, SC-026",OQ-014,,Should,,US-05-003,booking-service,WF-C-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Đã chốt OQ-014 (2026-11-22)
+• Kiểm tra chỗ nghỉ cho nhân viên ca đêm (khai báo có/không)",• Không cho 1 nhân viên làm 24h liên tục (US-07-005),"SC-022, SC-026",OQ-014,,Should,,US-05-003,booking-service,WF-C-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Đã chốt OQ-014 (2026-11-22)
 US-05-005,EP05,Đặt lịch,Đặt gấp (trong vòng 4 giờ),R01 Khách hàng (người đặt/người thân),đặt ca bắt đầu trong vòng 4 giờ (ví dụ bố vừa xuất viện chiều nay),có người chăm sóc ngay cả khi không lên kế hoạch trước,"• Hiển thị rõ phụ phí đặt gấp và xác suất có người (dựa trên số nhân viên đang bật 'sẵn sàng ca gấp' gần đó)
 • Ghép song song top 5 (US-06-002)
 • Không ghép được trong 30 phút → báo khách + hoàn 100% tự động + gợi ý giờ khác
-• Banner: 'Nếu người bệnh đang nguy kịch, gọi 115'",• Chỉ nhân viên chính thức (không thử việc) nhận ca gấp,"SC-030, SC-001",OQ-009,,Must,,"US-05-001, US-07-006",booking-service,WF-C-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Banner: 'Nếu người bệnh đang nguy kịch, gọi 115'",• Chỉ nhân viên chính thức (không thử việc) nhận ca gấp,"SC-030, SC-001",OQ-009,,Must,,"US-05-001, US-07-006",booking-service,WF-C-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-006,EP05,Đặt lịch,Không có nhân viên: gợi ý giờ khác & danh sách chờ,R01 Khách hàng (người đặt/người thân),"khi khu vực/khung giờ hết nhân viên, được gợi ý khung giờ gần nhất còn người hoặc vào danh sách chờ",không bị bỏ rơi và vẫn có phương án chăm sóc,"• Trước khi thanh toán, hệ thống kiểm tra sơ bộ số nhân viên khả dụng; = 0 → không cho thanh toán, hiện 3 khung giờ gần nhất có người
 • Vào danh sách chờ: khi có nhân viên phù hợp mở lịch → push thông báo, khách có 15 phút để đặt
 • Gợi ý nới tiêu chí (bỏ yêu cầu giới tính ưu tiên, nhận nhân viên mới)
 • Gợi ý liên hệ điều phối viên để tìm thủ công
-• Ghi nhận 'nhu cầu không đáp ứng' cho báo cáo thiếu hụt (US-13-002)",,"SC-001, SC-023",OQ-009,,Must,,US-06-001,booking-service,WF-C-16,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,"Trả lời câu: 'Thành phố A không có/hết nhân viên thì sao?' (cùng US-06-004, US-06-005, US-13-002)"
+• Ghi nhận 'nhu cầu không đáp ứng' cho báo cáo thiếu hụt (US-13-002)",,"SC-001, SC-023",OQ-009,,Must,,US-06-001,booking-service,WF-C-16,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,"Trả lời câu: 'Thành phố A không có/hết nhân viên thì sao?' (cùng US-06-004, US-06-005, US-13-002)"
 US-05-007,EP05,Đặt lịch,Danh sách đơn & chi tiết đơn,R01 Khách hàng (người đặt/người thân),"xem danh sách đơn, chi tiết từng ca và trạng thái theo thời gian thực",biết đơn đang ở bước nào và ai sẽ đến,"• Trạng thái booking: PENDING_PAYMENT, SEARCHING, CONFIRMED, IN_PROGRESS, COMPLETED, CANCELLED, NO_MATCH
 • Trạng thái shift: SCHEDULED, ASSIGNED, EN_ROUTE, CHECKED_IN, CHECKED_OUT, COMPLETED, CANCELLED, NO_SHOW, REPLACED
 • Timeline các mốc (đặt, thanh toán, ghép, check-in...)
-• Lọc: sắp tới / đã qua / đã hủy; theo người được chăm sóc",• Người thân được mời (US-02-006) thấy đơn của người được chăm sóc chung,,,,Must,,US-05-001,booking-service,"WF-C-08, WF-C-01",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Lọc: sắp tới / đã qua / đã hủy; theo người được chăm sóc",• Người thân được mời (US-02-006) thấy đơn của người được chăm sóc chung,,,,Must,,US-05-001,booking-service,"WF-C-08, WF-C-01",Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-008,EP05,Đặt lịch,Khách hủy đơn / hủy ca,R01 Khách hàng (người đặt/người thân),hủy cả đơn hoặc từng ca và biết trước số tiền được hoàn,chủ động khi kế hoạch thay đổi (ví dụ bố phải nhập viện lại),"• Trước khi xác nhận hiển thị: số tiền hoàn, phí hủy, lý do tính (theo policyVersion lúc đặt)
 • Bắt buộc chọn lý do hủy
 • Phát booking.cancelled → dispatch giải phóng nhân viên, payment hoàn tiền, nhân viên nhận thông báo
-• Lý do 'Người được chăm sóc nhập viện / qua đời' → miễn phí hủy (có thể yêu cầu giấy tờ sau)",• Phí hủy muộn được chia cho nhân viên đã nhận ca (bù thu nhập bị mất),"SC-004, SC-009",OQ-008,,Must,,"US-05-007, US-04-006",booking-service,WF-C-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Lý do 'Người được chăm sóc nhập viện / qua đời' → miễn phí hủy (có thể yêu cầu giấy tờ sau)",• Phí hủy muộn được chia cho nhân viên đã nhận ca (bù thu nhập bị mất),"SC-004, SC-009",OQ-008,,Must,,"US-05-007, US-04-006",booking-service,WF-C-09,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-009,EP05,Đặt lịch,Dời lịch,R01 Khách hàng (người đặt/người thân),dời 1 ca sang thời gian khác,không mất tiền khi chỉ cần đổi giờ,"• Dời miễn phí nếu trước giờ bắt đầu > 24h, tối đa 1 lần/ca; sau đó = hủy + đặt mới
 • Hỏi nhân viên cũ trước (nếu rảnh và đồng ý), không thì ghép lại
 • Chênh lệch giá (ví dụ dời vào ngày lễ) → thanh toán thêm / hoàn phần thừa
-• Phát booking.rescheduled",,SC-004,,,Should,,US-05-008,booking-service,WF-C-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Phát booking.rescheduled",,SC-004,,,Should,,US-05-008,booking-service,WF-C-09,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-010,EP05,Đặt lịch,Gia hạn ca tại chỗ,R01 Khách hàng (người đặt/người thân),yêu cầu thêm giờ khi ca đang diễn ra,không bị bỏ lại khi chưa có người nhà về kịp,"• Chỉ khi shift IN_PROGRESS; thêm theo bội số 30 phút, tối đa tổng 12h
 • Nhân viên phải chấp nhận trong 10 phút; hệ thống kiểm tra ca kế tiếp của nhân viên và giới hạn giờ làm
 • Thanh toán bổ sung ngay (US-10-009); chưa thanh toán → không gia hạn
-• Nhân viên không thể ở lại + người phụ thuộc cao ở một mình → báo điều phối tìm người nối ca",• Nhân viên ở lại quá giờ không qua app → không được tính tiền (chống giao dịch ngoài),"SC-016, SC-013",,,Should,,US-08-002,booking-service,"WF-C-10, WF-N-09",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên không thể ở lại + người phụ thuộc cao ở một mình → báo điều phối tìm người nối ca",• Nhân viên ở lại quá giờ không qua app → không được tính tiền (chống giao dịch ngoài),"SC-016, SC-013",,,Should,,US-08-002,booking-service,"WF-C-10, WF-N-09",Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-011,EP05,Đặt lịch,Điều phối viên đặt hộ qua điện thoại,R05 Điều phối viên / CSKH,tạo khách hàng + hồ sơ + đơn thay cho người gọi điện và gửi link thanh toán,người cao tuổi hoặc người không rành công nghệ vẫn dùng được dịch vụ,"• Tìm khách theo SĐT, chưa có thì tạo (gửi SMS xác nhận + đồng ý điều khoản qua link)
 • Đơn ghi nguồn = CALL_CENTER, người tạo = điều phối viên
 • Gửi link thanh toán VNPay qua SMS/Zalo (mock), hết hạn 30 phút
-• Đồng ý xử lý dữ liệu sức khỏe phải do khách tự xác nhận qua link",,SC-020,OQ-027,Đồng ý phải do chủ thể dữ liệu xác nhận,Should,,US-05-001,booking-service,WF-D-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Đồng ý xử lý dữ liệu sức khỏe phải do khách tự xác nhận qua link",,SC-020,OQ-027,Đồng ý phải do chủ thể dữ liệu xác nhận,Should,,US-05-001,booking-service,WF-D-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-012,EP05,Đặt lịch,Tự động nhắc lịch & dọn đơn treo,R08 Hệ thống (tác vụ tự động),"nhắc lịch trước 24h và 2h, tự hủy đơn chưa thanh toán sau 15 phút","giảm quên lịch, không giữ chỗ nhân viên vô ích","• Nhắc khách + nhân viên trước 24h và 2h (push); nhân viên phải bấm 'Xác nhận sẽ đến' khi nhắc 2h, không xác nhận trong 30 phút → cảnh báo điều phối
 • PENDING_PAYMENT quá 15 phút → CANCELLED (không phí)
-• Job chạy bằng @Scheduled + ShedLock, idempotent",,SC-002,,,Must,,US-05-001,booking-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Job chạy bằng @Scheduled + ShedLock, idempotent",,SC-002,,,Must,,US-05-001,booking-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-013,EP05,Đặt lịch,Chống đặt trùng & giữ chỗ tạm,R08 Hệ thống (tác vụ tự động),ngăn một người được chăm sóc có 2 ca chồng giờ và một nhân viên bị 2 khách cùng giữ,"không xảy ra xung đột lịch, không ai bị hủy vì lỗi hệ thống","• Ca chồng giờ cùng người được chăm sóc → cảnh báo (cho phép nếu khác loại dịch vụ và cần 2 người)
 • Khi khách chọn nhân viên cụ thể → giữ slot 10 phút (Redis TTL)
-• Ràng buộc DB (exclusion constraint trên khoảng thời gian) ở dispatch-service đảm bảo nhân viên không có 2 ca chồng nhau kể cả khi race condition",• Tính thêm thời gian di chuyển tối thiểu 30 phút giữa 2 ca của nhân viên,SC-035,,,Must,,US-05-001,booking-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Phối hợp dispatch-service
+• Ràng buộc DB (exclusion constraint trên khoảng thời gian) ở dispatch-service đảm bảo nhân viên không có 2 ca chồng nhau kể cả khi race condition",• Tính thêm thời gian di chuyển tối thiểu 30 phút giữa 2 ca của nhân viên,SC-035,,,Must,,US-05-001,booking-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Phối hợp dispatch-service
 US-05-014,EP05,Đặt lịch,Đặt lại nhanh,R01 Khách hàng (người đặt/người thân),đặt lại 1 đơn cũ với cùng dịch vụ và cùng nhân viên,tiết kiệm thời gian và giữ người quen,"• Nút 'Đặt lại' trên đơn đã hoàn thành
 • Tự điền mọi thông tin, chỉ chọn lại thời gian
-• Nhân viên cũ bận → hỏi khách có muốn ghép người khác",,SC-036,,,Could,,"US-05-001, US-02-009",booking-service,"WF-C-08, WF-C-01",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên cũ bận → hỏi khách có muốn ghép người khác",,SC-036,,,Could,,"US-05-001, US-02-009",booking-service,"WF-C-08, WF-C-01",Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-05-015,EP05,Đặt lịch,Tải y lệnh / đơn thuốc khi đặt dịch vụ y tế,R01 Khách hàng (người đặt/người thân),"tải lên y lệnh/chỉ định của bác sĩ khi đặt dịch vụ cần y lệnh (tiêm, truyền, thay băng vết mổ...)",nhân viên y tế thực hiện thủ thuật đúng chỉ định và đúng pháp luật,"• Ảnh/PDF y lệnh: bác sĩ, cơ sở, ngày kê, nội dung (thuốc, liều, đường dùng, số ngày)
 • Y lệnh quá hạn (> 30 ngày hoặc hết số ngày điều trị) → cảnh báo, không đặt được
 • Nhân viên xem được y lệnh trước khi nhận ca, có quyền từ chối nếu y lệnh không rõ
-• Nhân viên xác nhận đã đối chiếu y lệnh khi check-in","• Nền tảng không kê đơn, không chẩn đoán",SC-012,"OQ-003, OQ-023",Thủ thuật chuyên môn thực hiện theo chỉ định của người có thẩm quyền (cần xác minh),Must,,US-05-001,booking-service,WF-C-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Đã chốt OQ-023 (2026-11-22)
+• Nhân viên xác nhận đã đối chiếu y lệnh khi check-in","• Nền tảng không kê đơn, không chẩn đoán",SC-012,"OQ-003, OQ-023",Thủ thuật chuyên môn thực hiện theo chỉ định của người có thẩm quyền (cần xác minh),Must,,US-05-001,booking-service,WF-C-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Đã chốt OQ-023 (2026-11-22)
 US-06-001,EP06,Ghép & điều phối nhân viên,Ghép nhân viên tự động,R08 Hệ thống (tác vụ tự động),lọc nhân viên đủ điều kiện rồi chấm điểm để chọn người phù hợp nhất cho mỗi ca,"khách được người đúng năng lực, gần nhất, đáng tin nhất mà không phải tự tìm","• BỘ LỌC CỨNG (không bao giờ bỏ qua): đã xác minh & không bị tạm ngưng; loại + cấp độ + kỹ năng đúng yêu cầu dịch vụ; GPHN còn hạn tới hết ca; phạm vi hành nghề phù hợp; rảnh và không trùng ca (có 30 phút di chuyển); trong bán kính nhân viên chấp nhận; không vượt giới hạn giờ làm; không bị khách chặn; khớp tiêu chí BẮT BUỘC của khách; quy tắc thử việc / sống một mình
 • CHẤM ĐIỂM (trọng số cấu hình): khoảng cách/ETA, điểm đánh giá, đã từng chăm người này, yêu thích, tỷ lệ nhận ca, tỷ lệ hủy, tải công việc tuần (chia đều cơ hội)
 • Chạy khi nhận booking.confirmed (sau thanh toán)
-• Lưu log lý do chọn/loại từng ứng viên (giải thích được khi tranh chấp)",• dispatch-service chỉ đọc danh sách ứng viên qua API caregiver-service (không đọc DB),"SC-027, SC-036, SC-011",OQ-010,,Must,,"US-03-012, US-04-001, US-07-001",dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Lưu log lý do chọn/loại từng ứng viên (giải thích được khi tranh chấp)",• dispatch-service chỉ đọc danh sách ứng viên qua API caregiver-service (không đọc DB),"SC-027, SC-036, SC-011",OQ-010,,Must,,"US-03-012, US-04-001, US-07-001",dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-002,EP06,Ghép & điều phối nhân viên,Gửi lời mời nhận ca (offer),R08 Hệ thống (tác vụ tự động),"gửi lời mời tới nhân viên theo thứ tự điểm, có hạn trả lời; ca gấp gửi song song",ca được nhận nhanh và không bao giờ có 2 người cùng nhận 1 ca,"• Đơn thường: gửi tuần tự từng người, hạn 10 phút/người
 • Đơn gấp: gửi song song top 5, hạn 3 phút, ai nhận trước được
 • Chống 2 người cùng nhận: optimistic lock (version) + unique constraint (shift_id) → người sau nhận thông báo 'Ca đã có người nhận'
 • Nhận thành công → phát dispatch.assigned
-• Lời mời hết hạn không trả lời → giảm nhẹ tỷ lệ phản hồi",,SC-035,OQ-009,,Must,,US-06-001,dispatch-service,WF-N-06,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Lời mời hết hạn không trả lời → giảm nhẹ tỷ lệ phản hồi",,SC-035,OQ-009,,Must,,US-06-001,dispatch-service,WF-N-06,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-003,EP06,Ghép & điều phối nhân viên,Nhân viên xem & nhận/từ chối lời mời,R11 Nhân viên (cả R03 và R04),"xem thông tin ca (dịch vụ, thời gian, khoảng cách, phường/xã, thu nhập dự kiến, tóm tắt tình trạng, cảnh báo) rồi Nhận hoặc Từ chối",quyết định nhận ca phù hợp với khả năng và an toàn của mình,"• TRƯỚC khi nhận: không thấy họ tên đầy đủ, địa chỉ chính xác, SĐT khách; thấy tuổi, giới tính, mức độ vận động, cảnh báo (bệnh truyền nhiễm cần PPE, có camera, có thú nuôi, người sống một mình)
 • SAU khi nhận: thấy đầy đủ hồ sơ cần cho ca (US-14-005)
 • Từ chối: chọn lý do (bận, xa, ngoài chuyên môn, lý do an toàn...)
-• Thu nhập dự kiến = giá ca − hoa hồng (− thuế khấu trừ nếu có)",• Từ chối vì lý do an toàn/bệnh truyền nhiễm không bị tính vào tỷ lệ nhận ca,"SC-018, SC-008",OQ-011,Tối thiểu hóa dữ liệu,Must,,US-06-002,dispatch-service,"WF-N-05, WF-N-06",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Thu nhập dự kiến = giá ca − hoa hồng (− thuế khấu trừ nếu có)",• Từ chối vì lý do an toàn/bệnh truyền nhiễm không bị tính vào tỷ lệ nhận ca,"SC-018, SC-008",OQ-011,Tối thiểu hóa dữ liệu,Must,,US-06-002,dispatch-service,"WF-N-05, WF-N-06",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-004,EP06,Ghép & điều phối nhân viên,Mở rộng tìm kiếm khi thiếu người,R08 Hệ thống (tác vụ tự động),"tự mở rộng bán kính, nới tiêu chí mềm, thêm thưởng ca khó và đẩy sang điều phối viên khi không tìm được người",tăng tối đa cơ hội có người trước khi phải báo khách là không có,"• Bậc 1: bán kính 5km → Bậc 2: 10km → Bậc 3: 20km (mỗi bậc chờ theo OQ-009)
 • Bậc 4: nới tiêu chí 'Ưu tiên' (không nới tiêu chí Bắt buộc và bộ lọc cứng)
 • Bậc 5: thêm thưởng ca khó (incentive do nền tảng trả, cấu hình) và gửi lại
 • Bậc 6: vào hàng đợi điều phối (US-06-006) + gửi cho đối tác tổ chức (nếu có)
-• Khách thấy trạng thái 'Đang tìm nhân viên' + cập nhật",• Phụ phí di chuyển xa (> 10km) do nền tảng chịu hoặc hỏi khách đồng ý,"SC-001, SC-023",OQ-009,,Must,,US-06-002,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Trả lời câu: 'Thành phố A hết nhân viên thì sao?'
+• Khách thấy trạng thái 'Đang tìm nhân viên' + cập nhật",• Phụ phí di chuyển xa (> 10km) do nền tảng chịu hoặc hỏi khách đồng ý,"SC-001, SC-023",OQ-009,,Must,,US-06-002,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Trả lời câu: 'Thành phố A hết nhân viên thì sao?'
 US-06-005,EP06,Ghép & điều phối nhân viên,Không ghép được → báo khách & hoàn tiền,R08 Hệ thống (tác vụ tự động),"khi đến hạn chót mà vẫn không có người, báo khách, hoàn tiền 100% và đưa phương án khác","khách có đủ thời gian tự thu xếp, không mất tiền","• Hạn chót: đơn thường trước giờ bắt đầu 2h, đơn gấp sau 30 phút tìm
 • Phát dispatch.no-match → booking NO_MATCH, payment hoàn 100%, notification báo khách (push + SMS)
 • Gợi ý: khung giờ khác có người, vào danh sách chờ, gọi điều phối
 • Ghi dữ liệu thiếu hụt (khu vực, dịch vụ, khung giờ) cho report-service
-• Ca trong chuỗi định kỳ: chỉ ca đó NO_MATCH, không hủy cả chuỗi",,SC-001,"OQ-007, OQ-009",,Must,,US-06-004,dispatch-service,WF-C-16,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Ca trong chuỗi định kỳ: chỉ ca đó NO_MATCH, không hủy cả chuỗi",,SC-001,"OQ-007, OQ-009",,Must,,US-06-004,dispatch-service,WF-C-16,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-006,EP06,Ghép & điều phối nhân viên,Hàng đợi & ghép thủ công cho điều phối viên,R05 Điều phối viên / CSKH,"xem hàng đợi đơn khó/chưa ghép, bản đồ nhân viên khả dụng và ghép thủ công",xử lý được các ca mà thuật toán không tự giải quyết,"• Hàng đợi sắp theo thời gian bắt đầu, màu theo mức khẩn
 • Bản đồ nhân viên đủ điều kiện cứng, kèm lý do từng người bị loại
 • Ghép thủ công = gửi lời mời đích danh hoặc gán sau khi nhân viên đồng ý qua điện thoại (ghi chú bắt buộc)
 • KHÔNG được override bộ lọc cứng (GPHN, phạm vi, xác minh)
-• Ghi audit mọi thao tác",,"SC-001, SC-002, SC-023",,,Must,,US-06-004,dispatch-service,"WF-D-01, WF-D-02",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Ghi audit mọi thao tác",,"SC-001, SC-002, SC-023",,,Must,,US-06-004,dispatch-service,"WF-D-01, WF-D-02",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-007,EP06,Ghép & điều phối nhân viên,Tự động tìm người thay thế,R08 Hệ thống (tác vụ tự động),"tự tìm người thay khi nhân viên hủy, không đến, bị tạm ngưng hoặc giấy tờ hết hạn",khách không bị bỏ lại vì lỗi của phía nhân viên,"• Nhận event: shift hủy bởi nhân viên, care.no-show-detected, caregiver.suspended, caregiver.license-expiring
 • Ghép lại với ưu tiên cao (như đơn gấp), ưu tiên nhân viên dự phòng của chuỗi
 • Báo khách ngay: tên người mới hoặc 'đang tìm'
 • Không tìm được → US-06-005 + voucher bồi thường
-• Shift cũ đánh dấu REPLACED, giữ lịch sử",,"SC-002, SC-003, SC-011",,,Must,,US-06-002,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Shift cũ đánh dấu REPLACED, giữ lịch sử",,"SC-002, SC-003, SC-011",,,Must,,US-06-002,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-008,EP06,Ghép & điều phối nhân viên,Khách tự chọn nhân viên từ danh sách gợi ý,R01 Khách hàng (người đặt/người thân),xem top 5 nhân viên phù hợp (hoặc nhân viên yêu thích) và chọn người mình muốn,chủ động chọn người hợp với gia đình mình,"• Danh sách lấy từ cùng thuật toán US-06-001
 • Chọn → giữ slot 10 phút, lời mời đích danh gửi tới nhân viên
-• Nhân viên từ chối/hết hạn → hỏi khách chọn người khác hoặc để hệ thống tự ghép",,SC-036,OQ-010,,Should,,"US-06-001, US-03-015",dispatch-service,"WF-C-05, WF-C-14",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Đã chốt OQ-010 (2026-11-22)
+• Nhân viên từ chối/hết hạn → hỏi khách chọn người khác hoặc để hệ thống tự ghép",,SC-036,OQ-010,,Should,,"US-06-001, US-03-015",dispatch-service,"WF-C-05, WF-C-14",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Đã chốt OQ-010 (2026-11-22)
 US-06-009,EP06,Ghép & điều phối nhân viên,Nhân viên chính & dự phòng cho chuỗi ca,R08 Hệ thống (tác vụ tự động),gán 1 nhân viên chính và 1 nhân viên dự phòng cho chuỗi ca định kỳ,"người được chăm sóc luôn gặp người quen, kể cả khi người chính nghỉ","• Nhân viên chính nhận cả chuỗi (có thể trừ một số ca)
 • Nhân viên dự phòng được giới thiệu từ ca đầu (nếu khách đồng ý), ưu tiên khi thay thế
-• Nhân viên chính bỏ chuỗi → báo trước ≥ 7 ngày",,"SC-022, SC-036",,,Should,,US-05-003,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên chính bỏ chuỗi → báo trước ≥ 7 ngày",,"SC-022, SC-036",,,Should,,US-05-003,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-06-010,EP06,Ghép & điều phối nhân viên,Nhân viên hủy ca đã nhận,R11 Nhân viên (cả R03 và R04),hủy ca đã nhận kèm lý do,xử lý việc đột xuất mà vẫn để hệ thống kịp tìm người thay,"• Hủy > 24h trước ca: không phạt
 • Hủy < 24h: trừ điểm uy tín; 3 lần trong 30 ngày → tạm khóa nhận ca 7 ngày
 • Lý do bất khả kháng (ốm có giấy, tang gia, tai nạn) → gửi minh chứng, admin miễn phạt
 • Hủy < 2h → bắt buộc gọi điều phối (không hủy được trên app)
-• Phát event → US-06-007",,SC-003,OQ-008,,Must,,US-06-003,dispatch-service,WF-N-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Phát event → US-06-007",,SC-003,OQ-008,,Must,,US-06-003,dispatch-service,WF-N-07,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-001,EP07,Lịch làm việc nhân viên,Đặt giờ rảnh hàng tuần,R11 Nhân viên (cả R03 và R04),khai báo khung giờ rảnh lặp lại hàng tuần và ngoại lệ theo ngày,chỉ nhận lời mời trong lúc mình thực sự rảnh,"• Mẫu tuần: mỗi ngày nhiều khung giờ
 • Ngoại lệ ngày: thêm giờ hoặc bận
 • Thay đổi giờ rảnh không ảnh hưởng ca đã nhận (cảnh báo nếu xung đột)
-• Phát caregiver.availability-changed",,,,,Must,,US-03-011,caregiver-service,WF-N-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Phát caregiver.availability-changed",,,,,Must,,US-03-011,caregiver-service,WF-N-07,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-002,EP07,Lịch làm việc nhân viên,Xem lịch ca đã nhận,R11 Nhân viên (cả R03 và R04),"xem lịch ca theo ngày/tuần, chi tiết ca và chỉ đường tới nhà khách",chuẩn bị và đến đúng giờ,"• Chế độ ngày / tuần / danh sách
 • Chi tiết ca: dịch vụ, care plan, cảnh báo dị ứng/nguy cơ, hướng dẫn lối vào
 • Chỉ đường: mở Google Maps/Apple Maps bằng link, hoặc tuyến OSRM ngay trên trang
-• Xem được khi mất mạng cho ca hôm nay và ngày mai (PWA: service worker + cache, US-15-014); hiển thị 'Dữ liệu lúc HH:mm'",,SC-025,,,Must,,US-06-003,dispatch-service,"WF-N-05, WF-N-07",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Xem được khi mất mạng cho ca hôm nay và ngày mai (PWA: service worker + cache, US-15-014); hiển thị 'Dữ liệu lúc HH:mm'",,SC-025,,,Must,,US-06-003,dispatch-service,"WF-N-05, WF-N-07",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-003,EP07,Lịch làm việc nhân viên,Đăng ký nghỉ,R11 Nhân viên (cả R03 và R04),đăng ký nghỉ theo ngày hoặc khoảng thời gian,không nhận lời mời khi nghỉ và bàn giao ca đã nhận đúng cách,"• Có ca đã nhận trong khoảng nghỉ → hiển thị danh sách, phải xác nhận chuyển ca (áp quy tắc hủy US-06-010)
-• Nghỉ dài (> 14 ngày) với chuỗi định kỳ → báo khách và chuyển nhân viên dự phòng",,SC-003,,,Should,,US-07-001,caregiver-service,WF-N-08,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nghỉ dài (> 14 ngày) với chuỗi định kỳ → báo khách và chuyển nhân viên dự phòng",,SC-003,,,Should,,US-07-001,caregiver-service,WF-N-08,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-004,EP07,Lịch làm việc nhân viên,Khu vực & dịch vụ nhận việc,R11 Nhân viên (cả R03 và R04),"chọn vị trí gốc, bán kính tối đa sẵn sàng di chuyển và các dịch vụ muốn nhận (trong phạm vi được phép)",chỉ nhận việc vừa sức và vừa quãng đường,"• Vị trí gốc (nhà/nơi làm) ghim trên bản đồ – lưu dạng geography
 • Bán kính 2–30km
-• Danh sách dịch vụ chỉ gồm dịch vụ nhân viên đủ điều kiện",• Vị trí gốc của nhân viên không bao giờ hiển thị cho khách,,,,Must,,US-03-012,caregiver-service,WF-N-13,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Danh sách dịch vụ chỉ gồm dịch vụ nhân viên đủ điều kiện",• Vị trí gốc của nhân viên không bao giờ hiển thị cho khách,,,,Must,,US-03-012,caregiver-service,WF-N-13,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-005,EP07,Lịch làm việc nhân viên,Giới hạn giờ làm chống kiệt sức,R08 Hệ thống (tác vụ tự động),chặn ghép ca khi nhân viên vượt giới hạn giờ làm hoặc không đủ thời gian nghỉ,nhân viên không kiệt sức dẫn tới sai sót nguy hiểm cho người bệnh,"• Mặc định (cấu hình): tối đa 12h/ca, 12h/ngày, 60h/tuần; nghỉ tối thiểu 8h giữa 2 ca
 • Kiểm tra khi ghép, khi gia hạn ca, khi ghép thủ công
-• Nhân viên thấy số giờ đã làm trong tuần",,SC-026,,,Must,,US-06-001,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên thấy số giờ đã làm trong tuần",,SC-026,,,Must,,US-06-001,dispatch-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-006,EP07,Lịch làm việc nhân viên,Chế độ sẵn sàng nhận ca gấp,R11 Nhân viên (cả R03 và R04),bật/tắt 'Sẵn sàng ca gấp' và chia sẻ vị trí hiện tại khi bật,kiếm thêm thu nhập (có phụ phí gấp) khi đang rảnh,"• Bật → gửi vị trí mỗi 5 phút CHỈ khi trang web đang mở (web không chạy nền); trang hiển thị rõ 'Đang chia sẻ vị trí'
 • Đóng tab/khóa màn hình quá 10 phút không có vị trí mới → tự coi là không sẵn sàng
 • Tự tắt sau 4h hoặc khi bắt đầu ca
 • Chỉ nhân viên chính thức bật được
-• Chưa cấp quyền vị trí → trạng thái 'Chưa cấp quyền' + hướng dẫn bật (UI-16)","• Vị trí chỉ dùng để ghép, xóa sau 24h",SC-030,,"Dữ liệu vị trí: thu thập khi có đồng ý, đúng mục đích",Should,,US-07-004,caregiver-service,WF-N-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Chưa cấp quyền vị trí → trạng thái 'Chưa cấp quyền' + hướng dẫn bật (UI-16)","• Vị trí chỉ dùng để ghép, xóa sau 24h",SC-030,,"Dữ liệu vị trí: thu thập khi có đồng ý, đúng mục đích",Should,,US-07-004,caregiver-service,WF-N-05,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-07-007,EP07,Lịch làm việc nhân viên,Đồng bộ lịch ra lịch cá nhân,R11 Nhân viên (cả R03 và R04),đồng bộ ca đã nhận sang Google Calendar / lịch điện thoại (link .ics),không quên ca khi dùng lịch cá nhân,"• Link .ics bí mật, có thể thu hồi
-• Sự kiện chỉ ghi dịch vụ + phường/xã, không ghi tên/địa chỉ/bệnh của khách",,,,Không đưa dữ liệu khách ra hệ thống bên ngoài,Could,,US-07-002,dispatch-service,WF-N-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Sự kiện chỉ ghi dịch vụ + phường/xã, không ghi tên/địa chỉ/bệnh của khách",,,,Không đưa dữ liệu khách ra hệ thống bên ngoài,Could,,US-07-002,dispatch-service,WF-N-07,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-001,EP08,Thực hiện ca chăm sóc,Báo 'Đang tới' & chia sẻ vị trí khi di chuyển,R11 Nhân viên (cả R03 và R04),bấm 'Đang tới' để gia đình thấy vị trí và thời gian dự kiến đến,gia đình yên tâm và chuẩn bị mở cửa,"• Shift chuyển EN_ROUTE, khách thấy vị trí (WebSocket) + ETA (OSRM)
 • Chỉ chia sẻ vị trí từ lúc bấm tới lúc check-in, tối đa 2h; vị trí chỉ gửi khi trang đang mở → nhắc nhân viên giữ trang mở; mất vị trí > 5 phút → khách thấy 'Vị trí cập nhật lần cuối HH:mm' (không báo lỗi)
-• Chưa bấm 'Đang tới' lúc T−30 phút → nhắc nhân viên (web push)",,SC-002,,"Dữ liệu vị trí nhân viên: giới hạn thời gian, xóa sau 7 ngày",Should,,US-07-002,care-record-service,"WF-N-09, WF-C-10",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Chưa bấm 'Đang tới' lúc T−30 phút → nhắc nhân viên (web push)",,SC-002,,"Dữ liệu vị trí nhân viên: giới hạn thời gian, xóa sau 7 ngày",Should,,US-07-002,care-record-service,"WF-N-09, WF-C-10",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-002,EP08,Thực hiện ca chăm sóc,Check-in có GPS + xác thực khuôn mặt,R11 Nhân viên (cả R03 và R04),check-in khi đến nơi bằng GPS và selfie xác thực khuôn mặt,"chứng minh đúng người, đúng nơi, đúng giờ (chống thuê người khác đi thay)","• Chỉ check-in khi trong bán kính 200m tọa độ địa chỉ và từ T−15 phút (Geolocation API của trình duyệt, yêu cầu độ chính xác ≤ 100m)
 • Selfie chụp trực tiếp bằng camera trình duyệt (getUserMedia), không cho chọn ảnh có sẵn; so khớp ảnh hồ sơ (EkycProvider); không khớp → cho chụp lại 2 lần rồi báo điều phối
 • Mất GPS/mạng (chung cư, hẻm sâu): check-in bằng mã xác nhận 6 số hiển thị trên trang của khách/người nhà hoặc gửi SMS cho liên hệ khẩn cấp; PWA lưu tạm (IndexedDB) và đồng bộ khi có mạng
 • Chưa cấp quyền vị trí/camera → trạng thái 'Chưa cấp quyền' + hướng dẫn (UI-16)
 • Trễ > 15 phút so với giờ bắt đầu → ghi nhận đến trễ (ảnh hưởng uy tín)
-• Phát care.checked-in → khách nhận web push",• Bắt buộc với người sống một mình (US-02-005),"SC-025, SC-007",,Ảnh khuôn mặt = dữ liệu sinh trắc học: chỉ lưu kết quả so khớp + ảnh 30 ngày,Must,,US-06-003,care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Phát care.checked-in → khách nhận web push",• Bắt buộc với người sống một mình (US-02-005),"SC-025, SC-007",,Ảnh khuôn mặt = dữ liệu sinh trắc học: chỉ lưu kết quả so khớp + ảnh 30 ngày,Must,,US-06-003,care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-003,EP08,Thực hiện ca chăm sóc,Kế hoạch chăm sóc (care plan),R01 Khách hàng (người đặt/người thân),"lập danh sách công việc cần làm mỗi ca (vệ sinh, cho ăn, thay băng, đo huyết áp, nhắc thuốc theo giờ...)","mọi nhân viên, kể cả người thay thế, làm đúng và đủ việc gia đình mong muốn","• Tạo từ mẫu theo dịch vụ + chỉnh sửa; mỗi nhiệm vụ: tên, giờ, bắt buộc/không, hướng dẫn
 • Nhân viên y tế ở ca đầu có thể đề xuất sửa (đánh giá ban đầu), khách duyệt
 • Có version, ca nào dùng version nào được lưu
-• Nhiệm vụ ngoài phạm vi dịch vụ (ví dụ người chăm sóc + 'tiêm insulin') → chặn",,"SC-012, SC-022",,,Must,,US-04-001,care-record-service,"WF-C-11, WF-N-09",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhiệm vụ ngoài phạm vi dịch vụ (ví dụ người chăm sóc + 'tiêm insulin') → chặn",,"SC-012, SC-022",,,Must,,US-04-001,care-record-service,"WF-C-11, WF-N-09",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-004,EP08,Thực hiện ca chăm sóc,Checklist công việc trong ca,R11 Nhân viên (cả R03 và R04),"tick từng công việc đã làm, ghi chú hoặc lý do không làm được","gia đình biết chính xác việc gì đã làm, có bằng chứng khi tranh chấp","• Mỗi nhiệm vụ: Hoàn thành (giờ thực tế) / Không làm (lý do: bệnh nhân từ chối, không đủ vật tư, ngoài chuyên môn...)
 • Ghi chú tự do + ảnh (US-08-007)
 • Cập nhật realtime cho gia đình
-• Không sửa được sau khi check-out (chỉ thêm ghi chú bổ sung có dấu thời gian)",,"SC-017, SC-014",,,Must,,US-08-003,care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Không sửa được sau khi check-out (chỉ thêm ghi chú bổ sung có dấu thời gian)",,"SC-017, SC-014",,,Must,,US-08-003,care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-005,EP08,Thực hiện ca chăm sóc,Ghi chỉ số sinh tồn & cảnh báo bất thường,R11 Nhân viên (cả R03 và R04),"ghi huyết áp, mạch, nhiệt độ, SpO2, đường huyết, nhịp thở, mức độ đau và nhận cảnh báo khi vượt ngưỡng",phát hiện sớm dấu hiệu nguy hiểm và báo gia đình kịp thời,"• Ngưỡng mặc định cấu hình (admin) + ngưỡng riêng cho từng người (theo dặn dò bác sĩ)
 • Vượt ngưỡng cảnh báo → nhân viên thấy hướng dẫn xử trí, gia đình nhận push, phát care.vital-alert
 • Vượt ngưỡng nguy hiểm (ví dụ SpO2 < 90%, HA tâm thu > 180 hoặc < 90) → màn hình đỏ gợi ý SOS + gọi 115
 • Validate giá trị hợp lý (chống nhập nhầm)
-• Dữ liệu mã hóa","• Hệ thống chỉ CẢNH BÁO, không chẩn đoán","SC-033, SC-005",,Dữ liệu sức khỏe,Must,,US-08-002,care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Dữ liệu mã hóa","• Hệ thống chỉ CẢNH BÁO, không chẩn đoán","SC-033, SC-005",,Dữ liệu sức khỏe,Must,,US-08-002,care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-006,EP08,Thực hiện ca chăm sóc,Ghi nhận dùng thuốc theo y lệnh,R11 Nhân viên (cả R03 và R04),"ghi lại đã cho/nhắc dùng thuốc nào, liều bao nhiêu, lúc nào","không quên hoặc uống trùng thuốc, gia đình và bác sĩ theo dõi được","• Lịch thuốc lấy từ y lệnh/đơn thuốc đã tải + care plan
 • Người chăm sóc không chuyên: chỉ 'nhắc/hỗ trợ uống thuốc đường miệng'
 • Tiêm/truyền: chỉ nhân viên y tế, có y lệnh còn hiệu lực, ghi số lô thuốc (tùy chọn)
-• Cảnh báo khi thuốc trùng với dị ứng đã khai báo",,SC-012,OQ-023,Phạm vi hành nghề,Should,,"US-05-015, US-08-003",care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Đã chốt OQ-023 (2026-11-22)
+• Cảnh báo khi thuốc trùng với dị ứng đã khai báo",,SC-012,OQ-023,Phạm vi hành nghề,Should,,"US-05-015, US-08-003",care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Đã chốt OQ-023 (2026-11-22)
 US-08-007,EP08,Thực hiện ca chăm sóc,Ảnh trong ca (có đồng ý),R11 Nhân viên (cả R03 và R04),chụp ảnh vết thương trước/sau khi thay băng hoặc ảnh bữa ăn khi gia đình đã đồng ý,gia đình và bác sĩ theo dõi tiến triển,"• Chỉ bật khi hồ sơ có đồng ý chụp ảnh (US-14-001)
 • Ảnh chụp trực tiếp bằng camera trình duyệt và tải thẳng lên server (presigned PUT), không tải file về máy, không lưu trong cache của PWA
-• Lưu bucket private, mã hóa, xem qua presigned URL",• Cấm chụp mặt/bộ phận nhạy cảm trừ khi phục vụ chăm sóc vết thương và có đồng ý,SC-029,,Dữ liệu hình ảnh sức khỏe,Should,,US-08-004,care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Lưu bucket private, mã hóa, xem qua presigned URL",• Cấm chụp mặt/bộ phận nhạy cảm trừ khi phục vụ chăm sóc vết thương và có đồng ý,SC-029,,Dữ liệu hình ảnh sức khỏe,Should,,US-08-004,care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-008,EP08,Thực hiện ca chăm sóc,Check-out & báo cáo cuối ca,R11 Nhân viên (cả R03 và R04),"check-out khi xong ca và gửi báo cáo (tình trạng chung, ăn uống, ngủ, đi vệ sinh, bất thường, đề xuất)","kết thúc ca hợp lệ, gia đình nắm tình hình và tôi được thanh toán","• Bắt buộc: mọi nhiệm vụ bắt buộc có trạng thái, báo cáo tóm tắt, GPS trong 200m
 • Check-out sớm hơn giờ kết thúc > 15 phút → phải có lý do + khách xác nhận, tiền tính theo thực tế
 • Người phụ thuộc cao ở một mình → phải ghi 'bàn giao cho ai' (người nhà / nhân viên ca sau)
 • Phát care.checked-out + care.report-ready → gia đình nhận báo cáo
-• Khách xác nhận hoàn thành hoặc tự xác nhận sau 24h → shift.completed","• Quên check-out → nhắc sau 15 phút, sau 2h điều phối xử lý","SC-016, SC-006",,,Must,,US-08-004,care-record-service,WF-N-10,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Khách xác nhận hoàn thành hoặc tự xác nhận sau 24h → shift.completed","• Quên check-out → nhắc sau 15 phút, sau 2h điều phối xử lý","SC-016, SC-006",,,Must,,US-08-004,care-record-service,WF-N-10,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-009,EP08,Thực hiện ca chăm sóc,Gia đình theo dõi ca từ xa,R01 Khách hàng (người đặt/người thân),"theo dõi ca đang diễn ra: đến lúc nào, đang làm gì, chỉ số ra sao, và nhận báo cáo cuối ca","yên tâm khi đi làm xa, đặc biệt khi bố mẹ ở nhà một mình","• Timeline realtime (WebSocket): đang tới → check-in (ảnh selfie) → từng nhiệm vụ → chỉ số → check-out
 • Báo cáo cuối ca qua push + email
-• Nút nhắn tin / gọi nhân viên qua app, nút báo sự cố",,"SC-006, SC-007",,,Must,,US-08-004,care-record-service,"WF-C-10, WF-C-11",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nút nhắn tin / gọi nhân viên qua app, nút báo sự cố",,"SC-006, SC-007",,,Must,,US-08-004,care-record-service,"WF-C-10, WF-C-11",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-010,EP08,Thực hiện ca chăm sóc,Nhật ký sức khỏe dài hạn,R01 Khách hàng (người đặt/người thân),xem biểu đồ chỉ số theo thời gian và xuất PDF nhật ký chăm sóc,mang theo khi tái khám để bác sĩ có dữ liệu,"• Biểu đồ theo từng chỉ số, chọn khoảng thời gian, đánh dấu lần vượt ngưỡng
 • Xuất PDF: thông tin người được chăm sóc, chỉ số, thuốc đã dùng, ghi chú ca
-• Ghi audit mỗi lần xuất",,,,Quyền truy cập dữ liệu của chủ thể,Should,,US-08-005,care-record-service,WF-C-11,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Ghi audit mỗi lần xuất",,,,Quyền truy cập dữ liệu của chủ thể,Should,,US-08-005,care-record-service,WF-C-11,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-011,EP08,Thực hiện ca chăm sóc,Bàn giao ca giữa nhân viên,R11 Nhân viên (cả R03 và R04),ghi nội dung bàn giao cho nhân viên ca sau và đọc bàn giao của ca trước,"chăm sóc liên tục, không sót thông tin quan trọng giữa các ca","• Bắt buộc khi có ca nối tiếp (24h/định kỳ)
 • Nhân viên ca sau phải bấm 'Đã đọc bàn giao' trước checklist
-• Ca 24h: nhân viên ca trước chỉ check-out được khi ca sau đã check-in (hoặc điều phối cho phép)",,SC-022,,,Should,,US-08-008,care-record-service,"WF-N-09, WF-N-10",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Ca 24h: nhân viên ca trước chỉ check-out được khi ca sau đã check-in (hoặc điều phối cho phép)",,SC-022,,,Should,,US-08-008,care-record-service,"WF-N-09, WF-N-10",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-012,EP08,Thực hiện ca chăm sóc,Phát hiện nhân viên không đến (no-show),R08 Hệ thống (tác vụ tự động),phát hiện ca đã tới giờ mà nhân viên chưa check-in và kích hoạt thay thế,"người được chăm sóc không bị bỏ rơi, đặc biệt người ở một mình","• T+10 phút: nhắc nhân viên (push + gọi tự động nếu có)
 • T+15 phút: báo khách 'nhân viên đến trễ'; nếu người được chăm sóc sống một mình → báo luôn liên hệ khẩn cấp
 • T+30 phút không check-in, không liên lạc được → care.no-show-detected → dispatch thay thế, payment hoàn/bồi thường, điều phối gọi khách
-• Nhân viên ghi nhận no-show (trừ uy tín nặng); 2 lần/30 ngày → tạm ngưng",,"SC-002, SC-006",,,Must,,US-08-002,care-record-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên ghi nhận no-show (trừ uy tín nặng); 2 lần/30 ngày → tạm ngưng",,"SC-002, SC-006",,,Must,,US-08-002,care-record-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-013,EP08,Thực hiện ca chăm sóc,Báo dấu hiệu bạo hành / bỏ bê,R11 Nhân viên (cả R03 và R04),"báo kín cho CSKH khi phát hiện dấu hiệu người được chăm sóc bị bạo hành, bỏ đói, bỏ bê",người yếu thế được bảo vệ,"• Kênh riêng, gia đình không thấy
 • Mô tả + ảnh (nếu phù hợp)
 • CSKH xử lý theo quy trình, có thể chuyển cơ quan chức năng
-• Nhân viên báo cáo không bị lộ danh tính với gia đình",,SC-039,,"Luật Người cao tuổi, Luật Trẻ em, Luật Phòng chống bạo lực gia đình",Should,,US-08-004,care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên báo cáo không bị lộ danh tính với gia đình",,SC-039,,"Luật Người cao tuổi, Luật Trẻ em, Luật Phòng chống bạo lực gia đình",Should,,US-08-004,care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-08-014,EP08,Thực hiện ca chăm sóc,Bệnh nhân/gia đình từ chối dịch vụ khi nhân viên đã đến,R11 Nhân viên (cả R03 và R04),ghi nhận việc bị từ chối phục vụ tại chỗ kèm GPS và lý do,được trả phí theo chính sách vì đã bỏ thời gian di chuyển,"• Nút 'Khách từ chối / không có ai nhận' tại địa chỉ (trong bán kính 200m)
 • Phân biệt: (a) từ chối chủ động → phí theo chính sách; (b) không ai mở cửa → chuyển quy trình welfare check (US-09-007)
-• Người sa sút trí tuệ từ chối → gọi người giám hộ trước khi rời đi",,"SC-017, SC-006, SC-019",OQ-022,,Should,,US-08-002,care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Người sa sút trí tuệ từ chối → gọi người giám hộ trước khi rời đi",,"SC-017, SC-006, SC-019",OQ-022,,Should,,US-08-002,care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-001,EP09,Khẩn cấp & sự cố,Nút SOS cho nhân viên khi bệnh nhân gặp nguy,R11 Nhân viên (cả R03 và R04),"bấm SOS khi người được chăm sóc gặp nguy (ngã, khó thở, bất tỉnh, đau ngực, co giật...)","được hướng dẫn ngay, 115 được gọi sớm nhất và gia đình + điều phối được báo cùng lúc","• Giữ nút SOS 3 giây (chống bấm nhầm), có trên mọi màn hình trong ca
 • Màn hình 1: nút GỌI 115 lớn (gọi trực tiếp từ điện thoại) + địa chỉ đầy đủ để đọc cho 115
 • Đồng thời gửi incident.sos-raised: điều phối viên (âm báo) + liên hệ khẩn cấp (push + SMS), kèm vị trí, tóm tắt bệnh nền/dị ứng/thuốc, bệnh viện ưu tiên
@@ -388,185 +388,185 @@ US-09-001,EP09,Khẩn cấp & sự cố,Nút SOS cho nhân viên khi bệnh nhâ
 • Ghi dấu thời gian mọi bước
 • Hoạt động cả khi mất mạng: nút gọi 115 vẫn dùng được, sự cố gửi lại khi có mạng (SMS dự phòng)","• Quy tắc vàng: GỌI 115 TRƯỚC, báo nền tảng SAU
 • Nhân viên không tự đưa bệnh nhân đi viện bằng xe máy
-• Nhân viên ở lại tới khi 115 hoặc người nhà đến",SC-005,OQ-032,Nền tảng không thay thế cấp cứu 115,Must,,US-02-004,incident-service,WF-N-11,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Trả lời câu: 'Đang điều dưỡng mà người bệnh có chuyện thì sao?'
+• Nhân viên ở lại tới khi 115 hoặc người nhà đến",SC-005,OQ-032,Nền tảng không thay thế cấp cứu 115,Must,,US-02-004,incident-service,WF-N-11,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Trả lời câu: 'Đang điều dưỡng mà người bệnh có chuyện thì sao?'
 US-09-002,EP09,Khẩn cấp & sự cố,Phân loại sự cố & quy trình xử lý (playbook),R05 Điều phối viên / CSKH,có quy trình xử lý chuẩn cho từng loại sự cố với các bước và thời hạn,"mọi điều phối viên xử lý giống nhau, đúng và nhanh","• Loại: Y tế khẩn cấp / Y tế không khẩn cấp / An toàn nhân viên / Tài sản / Hành vi / Người đi lạc / Tử vong / Không liên lạc được (welfare)
 • Mức độ: P1 (tính mạng) – P2 – P3 – P4
 • Mỗi loại có checklist bước xử lý + SLA (P1: điều phối nhận trong 2 phút)
-• Admin chỉnh playbook, có version",,"SC-005, SC-008, SC-009, SC-006",,,Must,,,incident-service,WF-D-04,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Admin chỉnh playbook, có version",,"SC-005, SC-008, SC-009, SC-006",,,Must,,,incident-service,WF-D-04,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-003,EP09,Khẩn cấp & sự cố,Bảng điều khiển sự cố realtime,R05 Điều phối viên / CSKH,"nhận SOS realtime có âm báo, nhận xử lý, gọi các bên, chuyển cấp trên",không SOS nào bị bỏ lỡ,"• SOS mới hiện đầu danh sách, âm báo lặp tới khi có người nhận
 • P1 không ai nhận sau 2 phút → báo quản lý trực + toàn bộ điều phối
 • Chi tiết: bản đồ, thông tin y tế tóm tắt, liên hệ khẩn cấp, nút gọi nhanh, nhật ký thao tác
-• Phải có ít nhất 1 điều phối viên trực khi có ca đang diễn ra (cảnh báo nếu không)",,SC-005,,,Must,,US-09-001,incident-service,"WF-D-03, WF-D-04",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Phải có ít nhất 1 điều phối viên trực khi có ca đang diễn ra (cảnh báo nếu không)",,SC-005,,,Must,,US-09-001,incident-service,"WF-D-03, WF-D-04",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-004,EP09,Khẩn cấp & sự cố,Báo cáo sự cố (không sửa được sau khi đóng),R05 Điều phối viên / CSKH,"hoàn thiện báo cáo sự cố: diễn biến, mốc thời gian, người liên quan, đã chuyển viện nào, hành động khắc phục","có hồ sơ đầy đủ cho gia đình, bảo hiểm, cơ quan chức năng và cải tiến quy trình","• Nhân viên khai báo phiên bản của mình trong 24h
 • Điều phối bổ sung + kết luận (lỗi của ai / không lỗi)
 • Sau khi đóng: append-only (chỉ thêm ghi chú, không sửa/xóa)
 • Phát incident.closed → caregiver-service cập nhật uy tín nếu lỗi nhân viên
-• Xuất PDF",,"SC-005, SC-009, SC-014",,Bằng chứng pháp lý: lưu trữ tối thiểu theo chính sách (OQ-030),Must,,US-09-003,incident-service,"WF-D-04, WF-N-11",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Xuất PDF",,"SC-005, SC-009, SC-014",,Bằng chứng pháp lý: lưu trữ tối thiểu theo chính sách (OQ-030),Must,,US-09-003,incident-service,"WF-D-04, WF-N-11",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-005,EP09,Khẩn cấp & sự cố,SOS cho người được chăm sóc / gia đình,R02 Người được chăm sóc,bấm SOS trên app (chế độ người cao tuổi) hoặc gia đình báo sự cố khi thấy nhân viên có hành vi đáng ngờ,được bảo vệ khi ở một mình với người lạ,"• SOS → gọi người thân ưu tiên 1 + báo điều phối + lựa chọn gọi 115/113
 • Gia đình báo sự cố từ xa (ví dụ xem camera thấy bất thường) → điều phối gọi nhân viên kiểm tra ngay
-• Loại sự cố Hành vi/Tài sản → tạm khóa tiền ca + cân nhắc tạm ngưng nhân viên chờ điều tra",,SC-007,,,Should,,US-02-008,incident-service,"WF-C-17, WF-C-18",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Loại sự cố Hành vi/Tài sản → tạm khóa tiền ca + cân nhắc tạm ngưng nhân viên chờ điều tra",,SC-007,,,Should,,US-02-008,incident-service,"WF-C-17, WF-C-18",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-006,EP09,Khẩn cấp & sự cố,An toàn cho nhân viên (SOS kín),R11 Nhân viên (cả R03 và R04),"gửi SOS kín (không âm thanh, không hiển thị) khi bị quấy rối, đe dọa, bạo lực tại nhà khách và được rời ca an toàn",bản thân tôi được bảo vệ khi làm việc một mình trong nhà người lạ,"• SOS kín: nút ẩn trên trang ca (ví dụ giữ 3 giây vào logo hoặc nút 'Hỏi điều phối' trông như bình thường), không âm thanh, không đổi giao diện → điều phối nhận vị trí, gọi kiểm tra bằng câu mã an toàn. Web KHÔNG bắt được phím nguồn/âm lượng nên không dùng cách đó
 • Nhân viên được quyền dừng ca vì lý do an toàn: không bị phạt, vẫn được trả tiền phần đã làm (tối thiểu 50% ca)
 • Nếu người được chăm sóc phụ thuộc cao ở một mình → điều phối báo người thân đến ngay
-• Khách vi phạm → khóa tài khoản, chặn đặt lại",,SC-008,,"Bộ luật Lao động: quyền từ chối làm việc khi có nguy cơ đe dọa tính mạng, sức khỏe (tham chiếu)",Must,,US-09-001,incident-service,WF-N-11,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Khách vi phạm → khóa tài khoản, chặn đặt lại",,SC-008,,"Bộ luật Lao động: quyền từ chối làm việc khi có nguy cơ đe dọa tính mạng, sức khỏe (tham chiếu)",Must,,US-09-001,incident-service,WF-N-11,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-007,EP09,Khẩn cấp & sự cố,Quy trình kiểm tra an toàn (welfare check),R05 Điều phối viên / CSKH,xử lý khi nhân viên đến nhưng người được chăm sóc sống một mình không mở cửa / không trả lời,"phát hiện sớm trường hợp người già bị ngã, bất tỉnh một mình trong nhà","• Bước 1: nhân viên gõ cửa + gọi qua app 3 lần trong 5 phút
 • Bước 2: hệ thống tự gọi/gửi SMS cho liên hệ khẩn cấp theo thứ tự; hỏi người giữ chìa khóa
 • Bước 3 (sau 15 phút không ai xác nhận): điều phối quyết định đề nghị người thân/hàng xóm/công an phường hoặc 115 hỗ trợ mở cửa
 • Nhân viên KHÔNG tự phá cửa, chờ tại chỗ tối đa 30 phút (được trả phí chờ)
-• Mọi bước ghi lại trong incident loại 'Không liên lạc được'","• Người sống một mình + phụ thuộc cao: bỏ qua thời gian chờ, chuyển thẳng Bước 2 song song Bước 1",SC-006,OQ-022,,Must,,"US-02-005, US-09-002",incident-service,"WF-D-04, WF-N-11",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,"Trả lời câu: 'Người bệnh ở một mình thì sao?' (cùng US-02-005, US-08-012, US-09-005)"
+• Mọi bước ghi lại trong incident loại 'Không liên lạc được'","• Người sống một mình + phụ thuộc cao: bỏ qua thời gian chờ, chuyển thẳng Bước 2 song song Bước 1",SC-006,OQ-022,,Must,,"US-02-005, US-09-002",incident-service,"WF-D-04, WF-N-11",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,"Trả lời câu: 'Người bệnh ở một mình thì sao?' (cùng US-02-005, US-08-012, US-09-005)"
 US-09-008,EP09,Khẩn cấp & sự cố,Xử lý khi người được chăm sóc tử vong,R05 Điều phối viên / CSKH,có quy trình khi người được chăm sóc qua đời trong ca hoặc được phát hiện đã mất khi nhân viên đến,"xử lý đúng pháp luật, tôn trọng gia đình và bảo vệ nhân viên","• Hướng dẫn nhân viên: gọi 115, không di chuyển thi thể, không dọn dẹp hiện trường, báo gia đình; dấu hiệu bất thường → báo công an
 • Điều phối: gọi gia đình, ở lại trên điện thoại với nhân viên
 • Hệ thống: dừng mọi ca tương lai, hoàn tiền phần chưa dùng, tắt thông báo marketing cho gia đình, đánh dấu hồ sơ 'Đã mất'
-• Nhân viên được trả đủ ca + hỗ trợ tâm lý (liên hệ tư vấn)",,SC-009,,"Thủ tục khai tử/khám nghiệm (nền tảng chỉ hướng dẫn, không thay gia đình)",Should,,US-09-002,incident-service,"WF-D-04, WF-N-11",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên được trả đủ ca + hỗ trợ tâm lý (liên hệ tư vấn)",,SC-009,,"Thủ tục khai tử/khám nghiệm (nền tảng chỉ hướng dẫn, không thay gia đình)",Should,,US-09-002,incident-service,"WF-D-04, WF-N-11",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-009,EP09,Khẩn cấp & sự cố,Nhân viên gặp tai nạn / ốm đột xuất trong ca,R11 Nhân viên (cả R03 và R04),báo không thể tiếp tục ca do tai nạn trên đường hoặc ốm đột xuất,được hỗ trợ và người được chăm sóc vẫn có người thay,"• Trên đường: báo tai nạn → US-06-007 thay thế ngay, không tính no-show
 • Trong ca: người phụ thuộc cao ở một mình → nhân viên ở lại (nếu an toàn) tới khi người nhà/người thay đến
-• Tiền ca tính theo thời gian thực tế, khách được giảm phần còn lại",,SC-034,OQ-015,,Should,,US-06-007,incident-service,WF-N-11,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Tiền ca tính theo thời gian thực tế, khách được giảm phần còn lại",,SC-034,OQ-015,,Should,,US-06-007,incident-service,WF-N-11,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-010,EP09,Khẩn cấp & sự cố,Người được chăm sóc đi lạc,R11 Nhân viên (cả R03 và R04),báo sự cố 'Người đi lạc' kèm ảnh và mô tả gần nhất,gia đình và điều phối cùng tìm kịp thời (đặc biệt người sa sút trí tuệ),"• Chia sẻ ảnh hồ sơ + quần áo hôm nay + vị trí cuối cùng cho gia đình & điều phối
 • Gợi ý báo công an phường
-• Mức P1",,SC-019,,,Could,,US-09-002,incident-service,WF-N-11,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Mức P1",,SC-019,,,Could,,US-09-002,incident-service,WF-N-11,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-09-011,EP09,Khẩn cấp & sự cố,Cảnh báo bệnh truyền nhiễm,R11 Nhân viên (cả R03 và R04),được cảnh báo trước khi nhận ca có nguy cơ lây nhiễm và báo khi phát hiện triệu chứng mới trong ca,chuẩn bị đồ bảo hộ và không mang bệnh sang người khác,"• Lời mời hiển thị 'Cần PPE' (không nêu tên bệnh nếu khách chọn ẩn), từ chối không bị phạt
 • Nhân viên phát hiện sốt/ho kéo dài → ghi nhận, gia đình được khuyên đi khám
-• Nhân viên tự khai đang mắc bệnh truyền nhiễm → tạm ngưng nhận ca, thay các ca sắp tới",,SC-018,,"Luật Phòng, chống bệnh truyền nhiễm (tham chiếu)",Should,,US-02-002,incident-service,"WF-N-06, WF-N-09",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Nhân viên tự khai đang mắc bệnh truyền nhiễm → tạm ngưng nhận ca, thay các ca sắp tới",,SC-018,,"Luật Phòng, chống bệnh truyền nhiễm (tham chiếu)",Should,,US-02-002,incident-service,"WF-N-06, WF-N-09",Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-001,EP10,"Thanh toán, hoa hồng & đối soát",Thanh toán online & giữ tiền tạm (escrow),R01 Khách hàng (người đặt/người thân),"thanh toán qua VNPay (QR, ATM, thẻ quốc tế) khi đặt; tiền được nền tảng giữ tạm tới khi ca hoàn thành",tiền của tôi được bảo vệ: không có dịch vụ thì được hoàn,"• Tạo payment từ booking (số tiền lấy từ booking/quote, không từ client)
 • Redirect VNPay, return URL + IPN; xác minh chữ ký HMAC-SHA512
 • IPN idempotent theo mã giao dịch (gọi trùng không ghi trùng)
 • Thành công → bút toán vào tài khoản 'Tiền giữ của khách' + phát payment.succeeded → booking SEARCHING
 • Thất bại/hủy → payment.failed, cho thử lại trong thời hạn giữ đơn
 • Code qua interface PaymentGateway (VnpayGateway, sau này MomoGateway)","• Không nhận tiền mặt (xem OQ-006)
-• Không lưu số thẻ (cổng thanh toán xử lý)","SC-015, SC-041","OQ-006, OQ-007",Không lưu dữ liệu thẻ → tránh phạm vi PCI DSS,Must,,US-05-002,payment-service,WF-C-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Không lưu số thẻ (cổng thanh toán xử lý)","SC-015, SC-041","OQ-006, OQ-007",Không lưu dữ liệu thẻ → tránh phạm vi PCI DSS,Must,,US-05-002,payment-service,WF-C-07,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-002,EP10,"Thanh toán, hoa hồng & đối soát",Hoàn tiền tự động theo sự kiện,R08 Hệ thống (tác vụ tự động),"tự hoàn tiền đúng số khi không ghép được, khách hủy, nhân viên không đến, tranh chấp được giải quyết","khách không phải đòi tiền, giảm tải cho kế toán","• dispatch.no-match → 100%
 • booking.cancelled → theo policyVersion
 • care.no-show-detected (không tìm được người thay) → 100% + voucher
 • dispute.resolved → theo quyết định
 • Gọi API hoàn tiền VNPay, theo dõi trạng thái; lỗi → retry + chuyển kế toán (US-10-009)
-• Phát payment.refunded, khách thấy thời gian tiền về dự kiến",• Tổng hoàn không bao giờ vượt số đã thu (kiểm tra ở ledger),"SC-001, SC-002, SC-004, SC-015",OQ-008,,Must,,US-10-001,payment-service,WF-C-15,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Phát payment.refunded, khách thấy thời gian tiền về dự kiến",• Tổng hoàn không bao giờ vượt số đã thu (kiểm tra ở ledger),"SC-001, SC-002, SC-004, SC-015",OQ-008,,Must,,US-10-001,payment-service,WF-C-15,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-003,EP10,"Thanh toán, hoa hồng & đối soát",Ghi nhận doanh thu & chia tiền khi ca hoàn thành,R08 Hệ thống (tác vụ tự động),"khi ca hoàn thành, chia tiền thành 3 phần: thu nhập nhân viên + phần của bệnh viện đối tác + hoa hồng nền tảng (+ thuế khấu trừ nếu có) bằng sổ cái kép","nền tảng có doanh thu, bệnh viện được trả công duyệt & đảm bảo chất lượng, mọi đồng tiền đều truy vết được","• Nhận shift.completed → bút toán: Tiền giữ của khách → Ví chờ nhân viên + Ví chờ bệnh viện (theo hợp đồng đối tác của nhân viên lúc đặt) + Doanh thu hoa hồng + Thuế phải nộp hộ
 • % hoa hồng nền tảng theo policyVersion và cấp độ nhân viên lúc đặt. Phần bệnh viện TRÍCH TỪ hoa hồng nền tảng (OQ-041 b): mặc định 5% giá ca, hợp đồng từng bệnh viện có thể ghi đè (US-03-018); giá khách và thu nhập nhân viên không đổi
 • Ví dụ ca 500.000 ₫, hoa hồng 20%: nhân viên 400.000 ₫, bệnh viện 25.000 ₫, nền tảng giữ 75.000 ₫
 • Validate: % bệnh viện ≤ % hoa hồng nền tảng (không bao giờ làm nền tảng âm tiền)
 • Phụ phí gấp/lễ: tỷ lệ chia riêng (cấu hình)
 • Thưởng ca khó (incentive) do nền tảng chi; tip 100% cho nhân viên
-• Mọi bút toán cân (tổng Nợ = tổng Có), không sửa/xóa, chỉ bút toán đảo",• Tiền: BIGINT VND,,"OQ-005, OQ-016",Luật Kế toán: chứng từ lưu trữ,Must,,"US-10-001, US-08-008",payment-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,"Trả lời câu: 'Bên trung gian ăn tiền thế nào?' (cùng US-04-003, US-04-005, OQ-005)"
+• Mọi bút toán cân (tổng Nợ = tổng Có), không sửa/xóa, chỉ bút toán đảo",• Tiền: BIGINT VND,,"OQ-005, OQ-016",Luật Kế toán: chứng từ lưu trữ,Must,,"US-10-001, US-08-008",payment-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,"Trả lời câu: 'Bên trung gian ăn tiền thế nào?' (cùng US-04-003, US-04-005, OQ-005)"
 US-10-004,EP10,"Thanh toán, hoa hồng & đối soát",Ví thu nhập nhân viên,R11 Nhân viên (cả R03 và R04),"xem số dư chờ/khả dụng và chi tiết thu nhập từng ca (giá, hoa hồng nền tảng, phần bệnh viện, thuế, thưởng, tip, phạt)",biết chính xác mình kiếm được bao nhiêu và tin tưởng nền tảng,"• Số dư Chờ → Khả dụng sau 24h nếu không có khiếu nại (OQ-029)
 • Có khiếu nại → bị giữ tới khi giải quyết
 • Mỗi ca hiển thị rõ: Giá ca → trừ hoa hồng nền tảng → trừ phần bệnh viện (tên bệnh viện) → trừ thuế → Thực nhận
-• Lọc theo tháng, tổng thu nhập, số thuế đã khấu trừ",,,OQ-029,,Must,,US-10-003,payment-service,WF-N-12,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Lọc theo tháng, tổng thu nhập, số thuế đã khấu trừ",,,OQ-029,,Must,,US-10-003,payment-service,WF-N-12,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-005,EP10,"Thanh toán, hoa hồng & đối soát",Tài khoản ngân hàng nhận tiền,R11 Nhân viên (cả R03 và R04),khai báo tài khoản ngân hàng chính chủ để nhận tiền,"rút tiền an toàn, không bị chuyển nhầm người","• Tên chủ tài khoản phải khớp tên trên CCCD đã eKYC (so không dấu)
 • Đổi tài khoản → xác thực OTP + khóa rút tiền 24h
-• Số tài khoản mã hóa, hiển thị 4 số cuối",,,,,Must,,US-03-002,payment-service,WF-N-12,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Số tài khoản mã hóa, hiển thị 4 số cuối",,,,,Must,,US-03-002,payment-service,WF-N-12,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-006,EP10,"Thanh toán, hoa hồng & đối soát",Rút tiền (payout),R11 Nhân viên (cả R03 và R04),yêu cầu rút số dư khả dụng về tài khoản ngân hàng,nhận thu nhập nhanh,"• Tối thiểu 100.000đ, tối đa 1 lần/ngày (cấu hình)
 • Trạng thái: Chờ duyệt → Đang chuyển → Hoàn thành / Thất bại
 • Kế toán duyệt theo lô và xuất file chuyển khoản hàng loạt (mock), đánh dấu đã chuyển → payout.completed
-• Thất bại → tiền quay lại ví + thông báo",• Khóa rút tiền khi nhân viên bị tạm ngưng do gian lận/tranh chấp,,OQ-029,,Must,,"US-10-004, US-10-005",payment-service,"WF-N-12, WF-K-02",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Thất bại → tiền quay lại ví + thông báo",• Khóa rút tiền khi nhân viên bị tạm ngưng do gian lận/tranh chấp,,OQ-029,,Must,,"US-10-004, US-10-005",payment-service,"WF-N-12, WF-K-02",Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-007,EP10,"Thanh toán, hoa hồng & đối soát",Hóa đơn / biên nhận,R01 Khách hàng (người đặt/người thân),tải biên nhận PDF và yêu cầu hóa đơn công ty,thanh toán bảo hiểm hoặc quyết toán công ty,"• Biên nhận PDF mỗi giao dịch
 • Thông tin xuất hóa đơn: tên công ty, MST, địa chỉ, email
-• Hóa đơn điện tử qua interface EInvoiceProvider (mock)",,,OQ-017,Nghị định 123/2020 về hóa đơn điện tử (và sửa đổi) – mock trong đồ án,Should,,US-10-001,payment-service,WF-C-15,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Hóa đơn điện tử qua interface EInvoiceProvider (mock)",,,OQ-017,Nghị định 123/2020 về hóa đơn điện tử (và sửa đổi) – mock trong đồ án,Should,,US-10-001,payment-service,WF-C-15,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-008,EP10,"Thanh toán, hoa hồng & đối soát",Đối soát hằng ngày với cổng thanh toán,R07 Kế toán,đối chiếu giao dịch hệ thống với cổng thanh toán và xem danh sách ngoại lệ,"phát hiện sớm tiền lệch, mất giao dịch","• Job hằng ngày: gọi API truy vấn giao dịch VNPay (querydr) cho giao dịch chưa chắc chắn
 • Ngoại lệ: cổng báo thành công mà hệ thống chưa ghi, số tiền lệch, hoàn tiền treo
-• Kế toán xử lý từng ngoại lệ có ghi chú, audit",,SC-015,,,Must,,US-10-001,payment-service,WF-K-01,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Kế toán xử lý từng ngoại lệ có ghi chú, audit",,SC-015,,,Must,,US-10-001,payment-service,WF-K-01,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-009,EP10,"Thanh toán, hoa hồng & đối soát",Hoàn tiền thủ công / ngoại lệ,R07 Kế toán,"tạo hoàn tiền thủ công cho trường hợp đặc biệt, cần 2 người duyệt khi vượt ngưỡng",xử lý được ngoại lệ mà không tạo kẽ hở gian lận,"• Bắt buộc liên kết booking/dispute + lý do
 • > 2.000.000đ (cấu hình) → người thứ 2 duyệt
-• Ghi audit + bút toán đảo",,"SC-015, SC-014",,,Should,,US-10-002,payment-service,WF-K-03,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Ghi audit + bút toán đảo",,"SC-015, SC-014",,,Should,,US-10-002,payment-service,WF-K-03,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-010,EP10,"Thanh toán, hoa hồng & đối soát",Thanh toán theo kỳ & thanh toán bổ sung,R01 Khách hàng (người đặt/người thân),trả tiền gói dài hạn theo tuần và trả thêm khi gia hạn ca / dời sang ngày giá cao hơn,không phải trả một lần số tiền lớn,"• Kỳ thanh toán tuần: nhắc trước 2 ngày, chưa trả trước kỳ 24h → các ca của kỳ đó tạm treo + báo khách
-• Thanh toán bổ sung tạo payment con liên kết booking gốc",• Không dùng thanh toán tự động trừ thẻ (tokenization) trong phạm vi đồ án,"SC-016, SC-022",,,Should,,"US-10-001, US-04-005",payment-service,WF-C-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Thanh toán bổ sung tạo payment con liên kết booking gốc",• Không dùng thanh toán tự động trừ thẻ (tokenization) trong phạm vi đồ án,"SC-016, SC-022",,,Should,,"US-10-001, US-04-005",payment-service,WF-C-07,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-011,EP10,"Thanh toán, hoa hồng & đối soát",Tip cho nhân viên,R01 Khách hàng (người đặt/người thân),gửi tiền tip cho nhân viên sau ca qua app,cảm ơn nhân viên mà không cần đưa tiền mặt,"• Gợi ý mức 20k/50k/100k hoặc tùy chọn, trong 7 ngày sau ca
-• 100% về ví nhân viên (không hoa hồng)",,"SC-038, SC-013",OQ-020,,Could,,US-10-004,payment-service,WF-C-12,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• 100% về ví nhân viên (không hoa hồng)",,"SC-038, SC-013",OQ-020,,Could,,US-10-004,payment-service,WF-C-12,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-012,EP10,"Thanh toán, hoa hồng & đối soát",Phí phạt & bồi thường,R08 Hệ thống (tác vụ tự động),"tính phí hủy muộn / khách vắng nhà và chuyển khoản bù cho nhân viên, voucher bồi thường cho khách khi lỗi nhân viên",công bằng cho cả hai bên khi có bên vi phạm,"• Phí khách hủy muộn/vắng nhà: chia nhân viên / nền tảng theo tỷ lệ chính sách
 • Lỗi nhân viên (no-show, hủy muộn): không trừ tiền nhân viên trong phạm vi đồ án, chỉ trừ uy tín; khách nhận voucher
-• Mọi khoản có bút toán riêng",,"SC-003, SC-004, SC-017",OQ-008,,Should,,US-10-003,payment-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Mọi khoản có bút toán riêng",,"SC-003, SC-004, SC-017",OQ-008,,Should,,US-10-003,payment-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-10-013,EP10,"Thanh toán, hoa hồng & đối soát",Khấu trừ & báo cáo thuế thay nhân viên,R07 Kế toán,"tính và khấu trừ thuế (GTGT + TNCN) trên thu nhập của nhân viên cá nhân, xuất báo cáo để kê khai",nền tảng tuân thủ nghĩa vụ thuế của sàn có chức năng thanh toán,"• Tỷ lệ cấu hình theo ngành nghề + ngày hiệu lực
 • Khấu trừ khi ghi nhận thu nhập (US-10-003)
 • Báo cáo theo tháng/quý: từng nhân viên, doanh thu, số thuế
-• Nhân viên tải chứng từ khấu trừ",,SC-040,OQ-016,Nghị định 117/2025/NĐ-CP về quản lý thuế với hoạt động kinh doanh trên nền tảng TMĐT (cần xác minh phạm vi áp dụng với dịch vụ chăm sóc),Should,,US-10-003,payment-service,"WF-K-04, WF-N-12",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Đã chốt OQ-016 (2026-11-22)
+• Nhân viên tải chứng từ khấu trừ",,SC-040,OQ-016,Nghị định 117/2025/NĐ-CP về quản lý thuế với hoạt động kinh doanh trên nền tảng TMĐT (cần xác minh phạm vi áp dụng với dịch vụ chăm sóc),Should,,US-10-003,payment-service,"WF-K-04, WF-N-12",Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Đã chốt OQ-016 (2026-11-22)
 US-10-014,EP10,"Thanh toán, hoa hồng & đối soát",Báo cáo doanh thu nền tảng,R07 Kế toán,"xem doanh thu hoa hồng, phụ phí, hoàn tiền, chi thưởng theo ngày/tháng/khu vực/dịch vụ",biết nền tảng lãi/lỗ ở đâu,"• Số liệu lấy từ ledger (không tính lại từ booking)
 • Xuất Excel/CSV
-• Chỉ R07, R06 xem được",,,OQ-005,,Must,,US-10-003,payment-service,WF-K-04,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Chỉ R07, R06 xem được",,,OQ-005,,Must,,US-10-003,payment-service,WF-K-04,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-001,EP11,Thông báo & liên lạc,Thông báo push & trung tâm thông báo,R00 Mọi người dùng,"nhận thông báo web push và thông báo trong web cho mọi sự kiện quan trọng, xem lại trong trung tâm thông báo",không bỏ lỡ việc gì liên quan tới ca chăm sóc,"• Sự kiện: đặt thành công, đã ghép, đang tới, check-in/out, báo cáo ca, cảnh báo chỉ số, thanh toán/hoàn tiền, lời mời ca, SOS, duyệt hồ sơ...
 • Web Push (VAPID, service worker): Android/PC nhận cả khi đóng tab; iPhone/iPad CHỈ nhận khi đã cài PWA lên màn hình chính (iOS ≥ 16.4) → trang hướng dẫn cài (UI-16)
 • Chưa cho phép thông báo → banner nhắc bật; việc quan trọng (lời mời ca, SOS) có dự phòng SMS/email (mock)
 • Trung tâm thông báo: đã đọc/chưa đọc, bấm mở đúng trang (URL)
 • Người dùng tắt được loại không quan trọng; SOS và an toàn KHÔNG tắt được
-• Không đưa dữ liệu sức khỏe vào nội dung push (hiện trên màn hình khóa)",,,,Nội dung push không chứa dữ liệu nhạy cảm,Must,,US-01-006,notification-service,WF-S-06,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Không đưa dữ liệu sức khỏe vào nội dung push (hiện trên màn hình khóa)",,,,Nội dung push không chứa dữ liệu nhạy cảm,Must,,US-01-006,notification-service,WF-S-06,Đã duyệt,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-002,EP11,Thông báo & liên lạc,Email giao dịch,R00 Mọi người dùng,"nhận email OTP dự phòng, biên nhận, báo cáo ca, tổng kết tuần",có bản lưu ngoài app,"• Template HTML tiếng Việt
 • Gửi qua Spring Mail + SMTP, hàng đợi riêng
-• Link hủy đăng ký cho email không bắt buộc",,,,,Should,,US-11-007,notification-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Link hủy đăng ký cho email không bắt buộc",,,,,Should,,US-11-007,notification-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-003,EP11,Thông báo & liên lạc,Chat trong app (che thông tin liên lạc),R00 Mọi người dùng,nhắn tin giữa khách và nhân viên của 1 đơn ngay trong app,"trao đổi chi tiết mà không phải lộ số điện thoại, có lịch sử khi tranh chấp","• Mở từ lúc ghép đến 24h sau ca, sau đó chỉ đọc
 • Tự che SĐT, email, số tài khoản, link ngoài (regex) + cảnh báo 'không giao dịch ngoài nền tảng'
 • Gửi ảnh (lưu private)
 • Realtime qua WebSocket/STOMP, offline → push
-• CSKH được xem khi xử lý tranh chấp (có audit)",,"SC-013, SC-014",,Thông báo rõ tin nhắn có thể được xem khi tranh chấp,Must,,US-06-002,notification-service,WF-S-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• CSKH được xem khi xử lý tranh chấp (có audit)",,"SC-013, SC-014",,Thông báo rõ tin nhắn có thể được xem khi tranh chấp,Must,,US-06-002,notification-service,WF-S-07,Đã duyệt,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-004,EP11,Thông báo & liên lạc,Gọi điện ẩn số,R00 Mọi người dùng,gọi cho nhân viên/khách qua app mà không thấy số thật,liên lạc gấp (ví dụ không tìm thấy nhà) mà vẫn giữ riêng tư,"• Interface MaskedCallProvider, bản mock = gọi qua số tổng đài điều phối
-• Chỉ trong thời gian có ca (T−2h → T+2h)",,SC-013,,,Could,,US-11-003,notification-service,WF-S-07,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Chỉ trong thời gian có ca (T−2h → T+2h)",,SC-013,,,Could,,US-11-003,notification-service,WF-S-07,Đã duyệt,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-005,EP11,Thông báo & liên lạc,Quản lý mẫu thông báo & đa ngôn ngữ,R06 Quản trị viên (Admin),sửa nội dung mẫu thông báo (vi/en) mà không cần deploy lại,thay đổi cách diễn đạt nhanh,"• Mẫu theo mã sự kiện + kênh + ngôn ngữ, có biến {{tên}}
-• Xem trước trước khi lưu, có version",,,OQ-026,,Could,,US-11-001,notification-service,WF-A-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Xem trước trước khi lưu, có version",,,OQ-026,,Could,,US-11-001,notification-service,WF-A-05,Đã duyệt,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-006,EP11,Thông báo & liên lạc,Thông báo cho liên hệ khẩn cấp không có app,R08 Hệ thống (tác vụ tự động),gửi SMS cho liên hệ khẩn cấp kèm link xem tình trạng có thời hạn,người thân không dùng app vẫn biết khi có chuyện,"• Gửi khi: SOS, no-show với người sống một mình, welfare check
 • Link dùng 1 lần, hết hạn 24h, chỉ hiện thông tin cần thiết
-• SmsSender mock trong đồ án",,"SC-006, SC-005",,Tối thiểu hóa dữ liệu,Should,,US-02-004,notification-service,WF-S-06,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• SmsSender mock trong đồ án",,"SC-006, SC-005",,Tối thiểu hóa dữ liệu,Should,,US-02-004,notification-service,WF-S-06,Đã duyệt,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-11-007,EP11,Thông báo & liên lạc,Đảm bảo gửi thông báo tin cậy,R09 Lập trình viên / DevOps,"có retry, dead-letter queue, chống gửi trùng và theo dõi trạng thái gửi",thông báo quan trọng (SOS) không bao giờ bị mất và không spam người dùng,"• Consumer idempotent theo eventId (processed_events)
 • Retry 3 lần backoff → DLQ → cảnh báo
 • Lưu trạng thái: queued/sent/failed theo kênh
-• SOS gửi qua nhiều kênh song song (push + SMS + WebSocket)",,,,,Must,,US-15-004,notification-service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• SOS gửi qua nhiều kênh song song (push + SMS + WebSocket)",,,,,Must,,US-15-004,notification-service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-12-001,EP12,"Đánh giá, chất lượng & tranh chấp",Khách đánh giá nhân viên,R01 Khách hàng (người đặt/người thân),"đánh giá 1–5 sao theo tiêu chí (đúng giờ, chuyên môn, thái độ, vệ sinh) và bình luận sau ca",người làm tốt được ưu tiên và khách khác có thông tin tham khảo,"• Chỉ đánh giá được ca COMPLETED của mình, trong 7 ngày, 1 lần/ca (sửa được trong 24h)
 • ≤ 3 sao → bắt buộc chọn lý do + gợi ý mở khiếu nại
 • Phát review.submitted
-• Hiển thị công khai: sao + bình luận ẩn danh tên khách",,SC-028,,,Must,,US-08-008,review-service,WF-C-12,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Hiển thị công khai: sao + bình luận ẩn danh tên khách",,SC-028,,,Must,,US-08-008,review-service,WF-C-12,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-12-002,EP12,"Đánh giá, chất lượng & tranh chấp",Nhân viên đánh giá khách / môi trường,R11 Nhân viên (cả R03 và R04),"đánh giá khách và môi trường làm việc (an toàn, tôn trọng, mô tả đúng tình trạng)",nhân viên khác được cảnh báo và điều phối biết khách có vấn đề,"• Không công khai với khách
 • 'Mô tả không đúng tình trạng' (ví dụ khai tự đi nhưng thực tế nằm liệt) → đề nghị khách cập nhật hồ sơ + điều chỉnh dịch vụ
-• Nhiều cờ an toàn → điều phối xem xét khách",,SC-008,,,Should,,US-08-008,review-service,WF-N-10,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Nhiều cờ an toàn → điều phối xem xét khách",,SC-008,,,Should,,US-08-008,review-service,WF-N-10,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-12-003,EP12,"Đánh giá, chất lượng & tranh chấp",Điểm uy tín nhân viên,R08 Hệ thống (tác vụ tự động),"tính điểm uy tín từ đánh giá (trọng số gần đây), tỷ lệ hủy, no-show, đến trễ, khiếu nại được xác nhận",xếp hạng ghép và cấp độ phản ánh đúng chất lượng thực tế,"• Công thức cấu hình, tính lại khi có event
 • Nhân viên xem điểm + lý do tăng/giảm
-• Dưới ngưỡng → cảnh báo → tạm ngưng xem xét",• Đánh giá bị gỡ bởi kiểm duyệt không tính vào điểm,"SC-028, SC-002, SC-003",,,Must,,US-12-001,review-service,WF-N-14,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Dưới ngưỡng → cảnh báo → tạm ngưng xem xét",• Đánh giá bị gỡ bởi kiểm duyệt không tính vào điểm,"SC-028, SC-002, SC-003",,,Must,,US-12-001,review-service,WF-N-14,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-12-004,EP12,"Đánh giá, chất lượng & tranh chấp",Khiếu nại,R01 Khách hàng (người đặt/người thân),"gửi khiếu nại theo loại (chất lượng, trễ giờ, thái độ, mất tài sản, an toàn, thu tiền ngoài) kèm bằng chứng",vấn đề được xử lý và được bồi hoàn nếu đúng,"• Gửi trong 72h sau ca
 • Đính kèm ảnh/video/mô tả
 • SLA phản hồi đầu tiên 24h
 • Tự động giữ tiền ca liên quan trong ví nhân viên
 • Loại 'An toàn' / 'Mất tài sản' → ưu tiên cao, có thể tạm ngưng nhân viên
-• Phát dispute.opened",,"SC-014, SC-007",,Luật Bảo vệ quyền lợi người tiêu dùng: có kênh tiếp nhận khiếu nại,Must,,US-08-008,review-service,WF-C-13,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Phát dispute.opened",,"SC-014, SC-007",,Luật Bảo vệ quyền lợi người tiêu dùng: có kênh tiếp nhận khiếu nại,Must,,US-08-008,review-service,WF-C-13,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-12-005,EP12,"Đánh giá, chất lượng & tranh chấp",Xử lý tranh chấp,R05 Điều phối viên / CSKH,"xem toàn bộ bằng chứng, nghe hai bên và ra quyết định",giải quyết công bằng dựa trên dữ liệu,"• Màn hình gộp: GPS check-in/out, selfie, checklist + giờ, chỉ số, ghi chú, chat, báo cáo ca, sự cố liên quan
 • Nhân viên phản hồi trong 48h
 • Quyết định: bác / hoàn một phần / hoàn toàn bộ / cảnh cáo / tạm ngưng / thu hồi
 • Phát dispute.resolved → payment xử lý tiền
-• Mỗi bên có 1 lần khiếu nại lại quyết định","• Mất tài sản giá trị lớn / bạo hành → hướng dẫn khách trình báo công an, nền tảng cung cấp dữ liệu theo yêu cầu cơ quan có thẩm quyền",SC-014,OQ-015,,Must,,US-12-004,review-service,WF-D-06,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Mỗi bên có 1 lần khiếu nại lại quyết định","• Mất tài sản giá trị lớn / bạo hành → hướng dẫn khách trình báo công an, nền tảng cung cấp dữ liệu theo yêu cầu cơ quan có thẩm quyền",SC-014,OQ-015,,Must,,US-12-004,review-service,WF-D-06,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-12-006,EP12,"Đánh giá, chất lượng & tranh chấp",Kiểm duyệt đánh giá,R06 Quản trị viên (Admin),"lọc ngôn từ xấu, xử lý đánh giá bị báo sai sự thật hoặc trả đũa",đánh giá đáng tin cậy,"• Tự động ẩn từ ngữ cấm, chờ duyệt
 • Nhân viên báo cáo đánh giá → admin xem, gỡ/giữ có lý do
-• Phát hiện bất thường: nhiều 5 sao từ tài khoản mới / cùng thiết bị",,SC-028,,,Should,,US-12-001,review-service,WF-A-09,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Phát hiện bất thường: nhiều 5 sao từ tài khoản mới / cùng thiết bị",,SC-028,,,Should,,US-12-001,review-service,WF-A-09,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-12-007,EP12,"Đánh giá, chất lượng & tranh chấp",Báo cáo giao dịch ngoài nền tảng,R00 Mọi người dùng,báo cáo khi bên kia đề nghị trả tiền/liên lạc riêng ngoài nền tảng,"bảo vệ mình (ngoài nền tảng không có bảo hiểm, không có hỗ trợ SOS) và giữ công bằng cho nền tảng","• Báo cáo được thưởng (voucher) nếu xác minh đúng
 • Nhân viên vi phạm lần 1 cảnh cáo, lần 2 tạm ngưng 30 ngày, lần 3 thu hồi
-• Thống kê cặp khách–nhân viên ngừng đặt qua app đột ngột sau nhiều ca (dấu hiệu bypass)",,SC-013,,,Should,,US-11-003,review-service,WF-C-13,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
+• Thống kê cặp khách–nhân viên ngừng đặt qua app đột ngột sau nhiều ca (dấu hiệu bypass)",,SC-013,,,Should,,US-11-003,review-service,WF-C-13,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,
 US-13-001,EP13,"Quản trị, vận hành & báo cáo",Dashboard quản trị,R06 Quản trị viên (Admin),"xem số đơn, tỷ lệ ghép thành công, thời gian ghép trung bình, no-show, doanh thu, điểm đánh giá, sự cố theo ngày/khu vực",nắm sức khỏe vận hành của nền tảng,"• report-service xây read model từ event (không truy vấn DB service khác)
 • Lọc theo thời gian, tỉnh/thành, dịch vụ
-• Số liệu cập nhật trễ tối đa 5 phút",,,,,Must,,US-15-004,report-service,WF-A-01,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Số liệu cập nhật trễ tối đa 5 phút",,,,,Must,,US-15-004,report-service,WF-A-01,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-13-002,EP13,"Quản trị, vận hành & báo cáo",Báo cáo thiếu hụt nhân lực theo khu vực,R06 Quản trị viên (Admin),"xem nơi nào, dịch vụ nào, khung giờ nào đang thiếu nhân viên (từ đơn không ghép được, danh sách chờ, đăng ký khu vực sắp mở)","lên kế hoạch tuyển dụng, mở khu vực, điều chỉnh giá/thưởng","• Bản đồ nhiệt nhu cầu không đáp ứng vs số nhân viên hoạt động
 • Bảng: khu vực × dịch vụ × khung giờ → số đơn NO_MATCH, số người chờ
-• Gợi ý: tăng thưởng ca khó, broadcast tuyển dụng (US-13-007)",,"SC-001, SC-023",,,Must,,US-06-005,report-service,WF-A-08,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Gợi ý: tăng thưởng ca khó, broadcast tuyển dụng (US-13-007)",,"SC-001, SC-023",,,Must,,US-06-005,report-service,WF-A-08,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-13-003,EP13,"Quản trị, vận hành & báo cáo",Quản lý người dùng,R06 Quản trị viên (Admin),"tìm kiếm, xem tổng quan, khóa/mở người dùng",hỗ trợ và xử lý vi phạm nhanh,"• Tìm theo SĐT, tên, mã đơn
 • Xem tóm tắt (không xem hồ sơ sức khỏe nếu không có lý do + ghi audit)
-• Dùng chung chức năng khóa US-01-008",,,,,Must,,US-01-008,identity-service,WF-A-06,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Dùng chung chức năng khóa US-01-008",,,,,Must,,US-01-008,identity-service,WF-A-06,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-13-004,EP13,"Quản trị, vận hành & báo cáo",Nhật ký kiểm toán tập trung,R06 Quản trị viên (Admin),"xem ai đã xem/sửa hồ sơ sức khỏe, giấy tờ, giá, chính sách, tiền vào lúc nào",phát hiện truy cập trái phép và có bằng chứng khi cần,"• Mỗi service phát audit event (actor, action, resource, time, ip) → report-service lưu append-only
 • Lọc theo người, tài nguyên, thời gian; xuất CSV
-• Không ai xóa được audit log",,SC-029,,Nghị định 13/2023 & Luật BVDLCN: ghi nhật ký xử lý dữ liệu,Must,,US-15-004,report-service,WF-A-07,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Không ai xóa được audit log",,SC-029,,Nghị định 13/2023 & Luật BVDLCN: ghi nhật ký xử lý dữ liệu,Must,,US-15-004,report-service,WF-A-07,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-13-005,EP13,"Quản trị, vận hành & báo cáo",Báo cáo hiệu suất nhân viên,R06 Quản trị viên (Admin),"xem số ca, giờ làm, điểm, tỷ lệ hủy/no-show, khiếu nại theo từng nhân viên",khen thưởng người tốt và hỗ trợ/xử lý người kém,"• Xếp hạng, lọc theo khu vực/cấp độ
-• Xuất CSV",,,,,Should,,US-12-003,report-service,WF-A-08,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Xuất CSV",,,,,Should,,US-12-003,report-service,WF-A-08,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-13-006,EP13,"Quản trị, vận hành & báo cáo",Cấu hình tham số vận hành,R06 Quản trị viên (Admin),"chỉnh tham số: ngưỡng chỉ số sinh tồn mặc định, thời gian chờ ghép, bán kính, giới hạn giờ làm, trọng số chấm điểm...",vận hành linh hoạt mà không cần sửa code,"• Mỗi service sở hữu tham số của mình (không tạo service cấu hình chung)
 • Có version + ai đổi + audit
-• Validate min/max cho từng tham số",,,,,Should,,,nhiều service,WF-A-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Validate min/max cho từng tham số",,,,,Should,,,nhiều service,WF-A-05,Đã duyệt,,,,Chờ duyệt,TV2,,TV3,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-13-007,EP13,"Quản trị, vận hành & báo cáo",Thông báo hàng loạt (broadcast),R06 Quản trị viên (Admin),"gửi thông báo tới nhóm người dùng theo khu vực/vai trò (ví dụ cần thêm người dịp Tết, tạm ngưng vì bão lũ)",huy động nhân lực và thông tin kịp thời,"• Chọn đối tượng: vai trò + tỉnh/phường + dịch vụ
 • Lên lịch gửi, xem trước số người nhận
-• Giới hạn tần suất chống spam",,"SC-023, SC-024",,Thông báo quảng cáo cần đồng ý nhận,Should,,US-11-001,notification-service,WF-A-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Giới hạn tần suất chống spam",,"SC-023, SC-024",,Thông báo quảng cáo cần đồng ý nhận,Should,,US-11-001,notification-service,WF-A-05,Đã duyệt,,,,Chờ duyệt,TV1,,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-13-008,EP13,"Quản trị, vận hành & báo cáo",Tạm ngưng dịch vụ khu vực khẩn cấp,R06 Quản trị viên (Admin),"tạm ngưng một khu vực (thiên tai, dịch bệnh, lệnh hạn chế đi lại) và xử lý hàng loạt đơn bị ảnh hưởng","bảo vệ nhân viên và khách, hoàn tiền đúng khi bất khả kháng","• Chọn khu vực + khoảng thời gian + lý do
 • Ca trong khoảng đó: hệ thống hỏi khách giữ (nếu nhân viên vẫn đến được, cùng phường) hoặc hủy miễn phí + hoàn 100%
-• Người phụ thuộc cao ở một mình → đưa vào danh sách ưu tiên điều phối liên hệ người thân",,SC-024,,,Should,,US-04-004,catalog-service,WF-A-04,Chưa vẽ,,,,Approved,TV2,,TV3,AI: Claude Code,2026-11-22,
+• Người phụ thuộc cao ở một mình → đưa vào danh sách ưu tiên điều phối liên hệ người thân",,SC-024,,,Should,,US-04-004,catalog-service,WF-A-04,Đã duyệt,,,,Approved,TV2,,TV3,AI: Claude Code,2026-11-22,
 US-14-001,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Quản lý đồng ý xử lý dữ liệu,R00 Mọi người dùng,"đồng ý riêng từng mục đích (dữ liệu cơ bản, dữ liệu sức khỏe, vị trí, ảnh trong ca, marketing) và rút lại đồng ý bất kỳ lúc nào",kiểm soát dữ liệu của mình đúng quy định pháp luật,"• Mỗi mục đích 1 nút bật/tắt + giải thích ngắn gọn
 • Lưu bằng chứng: ai, mục đích, phiên bản văn bản, thời điểm, kênh
 • Rút đồng ý dữ liệu sức khỏe → cảnh báo không dùng được dịch vụ y tế
-• Chính sách đổi phiên bản → yêu cầu đồng ý lại",,SC-029,,Nghị định 13/2023/NĐ-CP + Luật Bảo vệ dữ liệu cá nhân (hiệu lực 01/01/2026),Must,,US-01-001,identity-service,"WF-S-08, WF-S-09",Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Chính sách đổi phiên bản → yêu cầu đồng ý lại",,SC-029,,Nghị định 13/2023/NĐ-CP + Luật Bảo vệ dữ liệu cá nhân (hiệu lực 01/01/2026),Must,,US-01-001,identity-service,"WF-S-08, WF-S-09",Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-14-002,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Xem & tải dữ liệu của tôi,R00 Mọi người dùng,tải về toàn bộ dữ liệu cá nhân nền tảng đang giữ về tôi,biết nền tảng giữ gì và mang dữ liệu đi nơi khác,"• Yêu cầu → hệ thống tổng hợp từ các service (qua event) → file ZIP (JSON + PDF) → link tải 7 ngày
 • Xác thực lại (OTP) trước khi tải
-• Hoàn thành trong 72h",,,,Quyền truy cập dữ liệu của chủ thể dữ liệu,Should,,US-14-001,identity-service,WF-S-08,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Hoàn thành trong 72h",,,,Quyền truy cập dữ liệu của chủ thể dữ liệu,Should,,US-14-001,identity-service,WF-S-08,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-14-003,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Xóa tài khoản & dữ liệu,R00 Mọi người dùng,yêu cầu xóa tài khoản và dữ liệu cá nhân,thực hiện quyền xóa dữ liệu khi không dùng nữa,"• Chặn khi còn đơn sắp tới, tranh chấp, sự cố đang mở, số dư ví > 0 (nhân viên)
 • 30 ngày chờ (có thể hủy yêu cầu) → phát account.deleted
 • Mỗi service tự ẩn danh hóa dữ liệu của mình; giữ chứng từ kế toán và hồ sơ sự cố theo thời hạn luật định (OQ-030)
-• Xác nhận hoàn tất qua email/SMS",,SC-042,OQ-030,Quyền xóa dữ liệu; nghĩa vụ lưu trữ chứng từ kế toán theo Luật Kế toán,Must,,US-14-001,identity-service,WF-S-05,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Xác nhận hoàn tất qua email/SMS",,SC-042,OQ-030,Quyền xóa dữ liệu; nghĩa vụ lưu trữ chứng từ kế toán theo Luật Kế toán,Must,,US-14-001,identity-service,WF-S-05,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-14-004,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Mã hóa dữ liệu nhạy cảm,R09 Lập trình viên / DevOps,"mã hóa cột dữ liệu sức khỏe, số CCCD, số GPHN, số tài khoản, BHYT và file ảnh nhạy cảm",dữ liệu bị lộ DB cũng không đọc được,"• AES-256-GCM qua JPA AttributeConverter (EncryptedStringConverter), khóa từ biến môi trường, hỗ trợ xoay khóa (key id)
 • Cột cần tìm kiếm (CCCD) lưu thêm hash HMAC để tra trùng
 • File: bucket private + mã hóa phía server, chỉ truy cập qua presigned URL ≤ 5 phút
@@ -581,7 +581,7 @@ US-14-006,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Che dữ liệu t
 US-14-007,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Quy trình khi rò rỉ dữ liệu,R06 Quản trị viên (Admin),"có quy trình và công cụ khi phát hiện rò rỉ: thu hồi token hàng loạt, khóa tài khoản, xuất danh sách người bị ảnh hưởng",xử lý đúng thời hạn thông báo theo luật,"• Runbook (tài liệu) trong repo
 • Nút 'Thu hồi toàn bộ phiên' theo nhóm (Keycloak)
 • Truy vấn audit để xác định phạm vi
-• Mẫu thông báo cho người dùng bị ảnh hưởng",,SC-029,,Nghị định 13/2023: thông báo vi phạm cho cơ quan chuyên trách trong 72 giờ (cần xác minh theo luật mới),Could,,US-13-004,identity-service,WF-A-07,Chưa vẽ,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
+• Mẫu thông báo cho người dùng bị ảnh hưởng",,SC-029,,Nghị định 13/2023: thông báo vi phạm cho cơ quan chuyên trách trong 72 giờ (cần xác minh theo luật mới),Could,,US-13-004,identity-service,WF-A-07,Đã duyệt,,,,In progress,TV1,2026-11-25,TV2,TV1 + AI: Claude Code,2026-11-25,
 US-14-008,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Chống lạm dụng & brute force,R09 Lập trình viên / DevOps,"giới hạn tần suất gọi API, OTP, đăng nhập và chặn đặt đơn ảo","hệ thống không bị spam, chiếm tài khoản hay quấy rối nhân viên bằng đơn giả","• Rate limit tại gateway (Bucket4j + Redis) theo IP + userId
 • OTP: 5 lần/giờ/SĐT, 20 lần/ngày/IP
 • Khách hủy > 5 đơn/tuần → cảnh báo, yêu cầu xác minh
@@ -589,7 +589,7 @@ US-14-008,EP14,"Bảo mật, quyền riêng tư & tuân thủ",Chống lạm d�
 US-15-001,EP15,Nền tảng kỹ thuật SOA (enabler),Khởi tạo repo multi-module,R09 Lập trình viên / DevOps,"có repo Maven multi-module với parent POM quản lý phiên bản theo 02_Tech_Stack, Spotless format, cấu trúc thư mục chuẩn",5 người + AI code cùng một chuẩn ngay từ đầu,"• Cấu trúc: /backend/{homecare-common, api-gateway, discovery-server, config-server, <12 service>}, /frontend (React + Vite, pnpm), /infra (docker, keycloak), /docs/backlog
 • Parent POM: Java 25, Spring Boot 4.1.x, Spring Cloud 2025.1.x, BOM các thư viện
 • AGENTS.md + CLAUDE.md + .github/copilot-instructions.md ở gốc trỏ về 01_AI_RULES
-• .gitignore chặn .env, secret, node_modules, dist",,,OQ-001,,Must,,,nhiều service,Không cần UI,Không cần UI,,"NM-0001→NM-0049 (module, package, *Application)",,In progress,TV1,2026-11-24,TV5,TV1 + AI: Claude Code,2026-11-24,
+• .gitignore chặn .env, secret, node_modules, dist",,,OQ-001,,Must,,,nhiều service,Không cần UI,Không cần UI,,"NM-0001→NM-0049 (module, package, *Application)",,In progress,TV1,2026-11-24,TV2,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-15-002,EP15,Nền tảng kỹ thuật SOA (enabler),Docker Compose chạy toàn hệ thống,R09 Lập trình viên / DevOps,chạy toàn bộ hạ tầng + service trên máy cá nhân bằng 1 lệnh,mỗi thành viên có môi trường riêng (kể cả PostgreSQL) mà không cần tài khoản cloud,"• docker compose up: postgres+postgis (script tạo 12 schema + 12 user DB), redis, rabbitmq, keycloak (import realm), zipkin, minio
 • Profile 'infra' (chỉ hạ tầng, chạy service bằng IDE) và 'full'
 • .env.example đầy đủ biến, không có giá trị thật",,,OQ-001,,Must,,US-15-001,infra (keycloak/rabbitmq/redis/postgres),Không cần UI,Không cần UI,,"infra/docker-compose.yml, infra/postgres/init (NM-0050→NM-0061)",,In progress,TV1,2026-11-24,TV2,TV1 + AI: Claude Code,2026-11-24,
@@ -608,7 +608,7 @@ US-15-004,EP15,Nền tảng kỹ thuật SOA (enabler),Thư viện dùng chung h
 US-15-005,EP15,Nền tảng kỹ thuật SOA (enabler),Kiểm tra kiến trúc tự động + CI,R09 Lập trình viên / DevOps,có ArchUnit test cho mọi service và GitHub Actions chạy build + test + ArchUnit mỗi PR,code sai kiến trúc (do người hoặc AI) bị chặn tự động trước khi merge,"• Quy tắc ArchUnit: controller không phụ thuộc repository; entity không ra khỏi service layer; không package lạ ngoài R-03; không import package của service khác; tên class theo hậu tố (Controller/Service/ServiceImpl/Repository/Mapper); mọi method public của @RestController phải có @PreAuthorize (trừ danh sách public đã duyệt)
 • Test phân quyền bắt buộc: mỗi endpoint có test gọi bằng role KHÔNG được phép theo 13_RBAC → 403 (đặc biệt CUSTOMER, CAREGIVER_PENDING gọi API nhân viên)
 • CI fail → không cho merge (branch protection); PR gắn nhãn 'security' cần TV1 duyệt (R-35)
-• CI kiểm tra thêm: Spotless, Dependabot, CodeQL, OWASP Dependency-Check, quét lộ secret (gitleaks)",,,,,Must,,US-15-001,nhiều service,Không cần UI,Không cần UI,,,,Approved,,,,AI: Claude Code,2026-11-22,Công cụ cưỡng chế quy tắc 'AI không được tự ý làm kiến trúc khác'
+• CI kiểm tra thêm: Spotless, Dependabot, CodeQL, OWASP Dependency-Check, quét lộ secret (gitleaks)",,,,,Must,,US-15-001,nhiều service,Không cần UI,Không cần UI,,,,Approved,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Công cụ cưỡng chế quy tắc 'AI không được tự ý làm kiến trúc khác'
 US-15-006,EP15,Nền tảng kỹ thuật SOA (enabler),Giám sát & truy vết,R09 Lập trình viên / DevOps,"có health check, tracing phân tán và log JSON có traceId",tìm lỗi khi 1 request đi qua nhiều service,"• Actuator health/readiness cho mọi service
 • Micrometer Tracing → Zipkin
 • Log JSON gồm traceId, correlationId, service",,,,,Should,,US-15-003,nhiều service,Không cần UI,Không cần UI,,"Actuator probes, Micrometer Tracing → Zipkin, log ECS JSON (correlationId, traceId)",,In progress,TV1,2026-11-24,TV2,TV1 + AI: Claude Code,2026-11-24,
@@ -624,48 +624,48 @@ US-15-008,EP15,Nền tảng kỹ thuật SOA (enabler),Khung dự án React,R09 
 • Đăng nhập qua BFF: nút 'Đăng nhập' chuyển tới /oauth2/authorization/keycloak của gateway; client chỉ gọi /api/** cùng domain kèm cookie + header CSRF
 • Dữ liệu server qua TanStack Query; client API bằng openapi-fetch + kiểu sinh từ springdoc (openapi-typescript)
 • Responsive theo UI-15
-• ESLint + Prettier + tsc --noEmit bắt buộc trong CI",,,,,Must,,US-15-007,web-app,WF-S-01,Chưa vẽ,,"NM-0122, NM-0295, NM-0304",TC-US-15-008-1→14 (Vitest + Playwright 1440/390),In progress,TV1,2026-11-24,TV2,TV1 + AI: Claude Code,2026-11-24,
+• ESLint + Prettier + tsc --noEmit bắt buộc trong CI",,,,,Must,,US-15-007,web-app,WF-S-01,Đã duyệt,,"NM-0122, NM-0295, NM-0304",TC-US-15-008-1→14 (Vitest + Playwright 1440/390),In progress,TV1,2026-11-24,TV2,TV1 + AI: Claude Code,2026-11-24,
 US-15-009,EP15,Nền tảng kỹ thuật SOA (enabler),Dữ liệu mẫu demo,R09 Lập trình viên / DevOps,"có seed data: khu vực, dịch vụ, giá, tài khoản mẫu từng role, nhân viên đã xác minh, đơn mẫu",demo cho giảng viên và test thủ công nhanh,"• Flyway migration riêng profile 'demo' (không chạy ở prod)
 • Khu vực: phường Quy Nhơn Nam (Hoạt động) + các phường lân cận thuộc tỉnh Gia Lai (Sắp mở); ít nhất 2 bệnh viện mẫu cho dịch vụ trông bệnh
 • Dịch vụ mẫu cho 3 nhóm: người cao tuổi, người bệnh, mẹ & trẻ sơ sinh
 • Tài khoản mẫu mỗi role, nhân viên đã xác minh ở nhiều cấp độ, đơn mẫu ở mọi trạng thái
-• Dữ liệu giả, không dùng thông tin người thật",,,,Không dùng dữ liệu cá nhân thật,Should,,US-15-002,nhiều service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• Dữ liệu giả, không dùng thông tin người thật",,,,Không dùng dữ liệu cá nhân thật,Should,,US-15-002,nhiều service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-15-010,EP15,Nền tảng kỹ thuật SOA (enabler),Đồng bộ backlog sang repo,R09 Lập trình viên / DevOps,có script export các sheet backlog thành docs/backlog/*.csv,AI không đọc được Google Sheet vẫn đọc được backlog mới nhất (R-25),"• Script tải CSV từng sheet (link export của Google Sheets)
 • Chạy tay hoặc bằng GitHub Actions theo lịch
-• File PENDING_CHANGES.md cho AI chỉ sửa được file",,,,,Should,,US-15-001,nhiều service,Không cần UI,Không cần UI,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,
+• File PENDING_CHANGES.md cho AI chỉ sửa được file",,,,,Should,,US-15-001,nhiều service,Không cần UI,Không cần UI,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,
 US-02-012,EP02,Hồ sơ khách hàng & người được chăm sóc,Địa điểm chăm sóc là bệnh viện,R01 Khách hàng (người đặt/người thân),"chọn loại địa điểm 'Bệnh viện' và khai báo bệnh viện, khoa, phòng, giường, quy định ra vào",nhân viên tìm đúng chỗ nằm của bố mẹ và tuân thủ nội quy bệnh viện,"• Loại địa điểm: Nhà riêng / Bệnh viện
 • Bệnh viện chọn từ danh mục (US-04-008); nhập khoa, tầng, phòng, số giường
 • Ghi quy định: giờ được vào, số người nuôi bệnh được phép, thẻ/giấy ra vào do ai giữ, có cần đăng ký người nuôi bệnh với khoa không
 • Bệnh nhân chuyển khoa/giường → người thân cập nhật, nhân viên đang ca nhận thông báo ngay
 • Xuất viện → gợi ý chuyển địa điểm sang Nhà riêng","• Liên hệ khẩn cấp vẫn bắt buộc
-• Gia đình chịu trách nhiệm đăng ký nhân viên là người nuôi bệnh nếu bệnh viện yêu cầu","SC-043, SC-044",OQ-034,Tuân thủ nội quy của bệnh viện về người nhà chăm sóc,Should,,"US-02-003, US-04-008",customer-service,WF-C-03,Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Thêm theo OQ-034
+• Gia đình chịu trách nhiệm đăng ký nhân viên là người nuôi bệnh nếu bệnh viện yêu cầu","SC-043, SC-044",OQ-034,Tuân thủ nội quy của bệnh viện về người nhà chăm sóc,Should,,"US-02-003, US-04-008",customer-service,WF-C-03,Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Thêm theo OQ-034
 US-04-008,EP04,"Danh mục dịch vụ, giá & khu vực",Danh mục bệnh viện & dịch vụ trông bệnh,R06 Quản trị viên (Admin),quản lý danh sách bệnh viện trong khu vực và dịch vụ 'Trông bệnh tại bệnh viện',"khách chọn đúng bệnh viện, hệ thống check-in đúng vị trí và phạm vi công việc rõ ràng","• Bệnh viện: tên, địa chỉ, tọa độ, vùng geofence (polygon hoặc bán kính), giờ thăm, ghi chú chung, khu vực phục vụ
 • Dịch vụ trông bệnh: chỉ việc sinh hoạt (vệ sinh, ăn uống, đi lại, theo dõi và báo điều dưỡng của khoa)
 • Giá theo ca 12h/24h và theo ngày
-• Ẩn/hiện bệnh viện","• Nhân viên nền tảng KHÔNG làm thủ thuật y tế thay nhân viên bệnh viện, kể cả khi là điều dưỡng có GPHN",SC-043,OQ-034,,Should,,"US-04-001, US-04-004",catalog-service,"WF-A-03, WF-A-04",Chưa vẽ,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Thêm theo OQ-034
+• Ẩn/hiện bệnh viện","• Nhân viên nền tảng KHÔNG làm thủ thuật y tế thay nhân viên bệnh viện, kể cả khi là điều dưỡng có GPHN",SC-043,OQ-034,,Should,,"US-04-001, US-04-004",catalog-service,"WF-A-03, WF-A-04",Đã duyệt,,,,Approved,TV2,2026-11-25,TV3,AI: Claude Code,2026-11-22,Thêm theo OQ-034
 US-05-016,EP05,Đặt lịch,Đặt trông bệnh tại bệnh viện,R01 Khách hàng (người đặt/người thân),"đặt người trông bệnh theo ca 12h/24h, nhiều ngày cho người thân đang nằm viện",có người ở cạnh bố mẹ trong viện khi tôi phải đi làm,"• Chỉ chọn được hồ sơ có địa điểm Bệnh viện + dịch vụ trông bệnh
 • Ca dài ngày dùng lại US-05-004 (chia ca ≤ 12h, bàn giao ca)
 • Thường đặt gấp (vào viện bất ngờ) → dùng luồng đặt gấp US-05-005
 • Bệnh nhân xuất viện sớm → kết thúc đơn, hoàn phần chưa dùng theo chính sách, gợi ý đặt chăm sóc tại nhà
-• Hiển thị rõ: 'Người trông bệnh không thay thế điều dưỡng/bác sĩ của bệnh viện'",• Xuất viện sớm do bệnh viện quyết định → không tính phí hủy muộn,"SC-043, SC-030",OQ-034,,Should,,"US-02-012, US-05-004",booking-service,WF-C-05,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Thêm theo OQ-034
+• Hiển thị rõ: 'Người trông bệnh không thay thế điều dưỡng/bác sĩ của bệnh viện'",• Xuất viện sớm do bệnh viện quyết định → không tính phí hủy muộn,"SC-043, SC-030",OQ-034,,Should,,"US-02-012, US-05-004",booking-service,WF-C-05,Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Thêm theo OQ-034
 US-08-015,EP08,Thực hiện ca chăm sóc,Check-in khi trông bệnh tại bệnh viện,R11 Nhân viên (cả R03 và R04),check-in trong khuôn viên bệnh viện và xác nhận đã đến đúng giường bệnh,chứng minh có mặt đúng chỗ dù GPS trong tòa nhà kém,"• GPS trong geofence bệnh viện (thay cho 200m quanh nhà) + selfie
 • GPS không đủ chính xác → mã xác nhận 6 số từ người nhà / nhân viên ca trước, hoặc ảnh biển số giường
 • Bắt buộc đọc ghi chú bàn giao (US-08-011) trước khi bắt đầu
-• Bệnh nhân đã chuyển giường mà chưa cập nhật → nút báo 'Không tìm thấy bệnh nhân' → điều phối gọi gia đình",,"SC-025, SC-043",,,Should,,"US-08-002, US-02-012",care-record-service,WF-N-09,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Thêm theo OQ-034
+• Bệnh nhân đã chuyển giường mà chưa cập nhật → nút báo 'Không tìm thấy bệnh nhân' → điều phối gọi gia đình",,"SC-025, SC-043",,,Should,,"US-08-002, US-02-012",care-record-service,WF-N-09,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Thêm theo OQ-034
 US-09-012,EP09,Khẩn cấp & sự cố,Sự cố khi trông bệnh tại bệnh viện,R11 Nhân viên (cả R03 và R04),xử lý đúng cách khi bệnh nhân đang nằm viện có diễn biến xấu hoặc xảy ra sự cố khác,bệnh nhân được nhân viên y tế của bệnh viện xử trí nhanh nhất,"• SOS khi địa điểm là Bệnh viện: màn hình hướng dẫn GỌI NGAY điều dưỡng/bác sĩ trực của khoa (bấm chuông đầu giường, chạy tới phòng trực), KHÔNG gọi 115
 • Đồng thời báo gia đình + điều phối viên
 • Ghi lại ai của bệnh viện tiếp nhận, lúc nào
 • Mất đồ / mâu thuẫn với người nhà bệnh nhân khác → sự cố loại Tài sản / Hành vi
-• Bệnh viện không cho nhân viên vào → loại sự cố 'Không vào được nơi chăm sóc', điều phối liên hệ gia đình",• Nhân viên không tự cho bệnh nhân dùng thuốc/đồ ăn ngoài chỉ định của bệnh viện,"SC-043, SC-044",OQ-034,,Should,,"US-09-001, US-02-012",incident-service,WF-N-11,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code,2026-11-22,Thêm theo OQ-034
+• Bệnh viện không cho nhân viên vào → loại sự cố 'Không vào được nơi chăm sóc', điều phối liên hệ gia đình",• Nhân viên không tự cho bệnh nhân dùng thuốc/đồ ăn ngoài chỉ định của bệnh viện,"SC-043, SC-044",OQ-034,,Should,,"US-09-001, US-02-012",incident-service,WF-N-11,Đã duyệt,,,,Chờ duyệt,TV3,,TV4,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Thêm theo OQ-034
 US-15-011,EP15,Nền tảng kỹ thuật SOA (enabler),Code mẫu chuẩn (golden sample),R09 Lập trình viên / DevOps,làm trọn 1 luồng mẫu end-to-end (đề xuất US-02-001 Tạo hồ sơ người được chăm sóc): React page → gateway (BFF) → customer-service (controller/service/repository/entity/dto/mapper) → Flyway → outbox event → unit + integration + ArchUnit test + Vitest/Playwright test,"mọi người và mọi AI code các story sau bằng cách bắt chước 1 mẫu duy nhất, không mỗi người một kiểu","• Cả nhóm review chung trước khi merge (ít nhất 3/5 người duyệt)
 • Có file docs/GOLDEN_SAMPLE.md liệt kê từng file mẫu và giải thích vì sao viết như vậy
 • Có template module backend/_template-service (copy để tạo service mới) và frontend/src/features/_template
-• AGENTS.md trỏ tới mẫu này (R-33)",• Là story code ĐẦU TIÊN sau hạ tầng (US-15-001 → 005). Chưa Done thì không code story nghiệp vụ khác,,,,Must,,"US-15-001, US-15-004, US-15-005, US-15-012, US-02-001",nhiều service,WF-C-03,Chưa vẽ,API-SV05-003→006,"NM-0132, NM-0133, NM-0218→0225",TC-US-15-011-1→10,Approved,TV2,2026-11-25,TV3 (nhóm ≥3/5),TV1 + AI: Gemini,2026-11-25,Cưỡng chế thống nhất khi code (R-33)
+• AGENTS.md trỏ tới mẫu này (R-33)",• Là story code ĐẦU TIÊN sau hạ tầng (US-15-001 → 005). Chưa Done thì không code story nghiệp vụ khác,,,,Must,,"US-15-001, US-15-004, US-15-005, US-15-012, US-02-001",nhiều service,WF-C-03,Đã duyệt,API-SV05-003→006,"NM-0132, NM-0133, NM-0218→0225",TC-US-15-011-1→10,Approved,TV2,2026-11-25,TV3,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Cưỡng chế thống nhất khi code (R-33)
 US-15-012,EP15,Nền tảng kỹ thuật SOA (enabler),Bộ UI Kit React theo Design System,R09 Lập trình viên / DevOps,"code toàn bộ token (CSS variables --hc-*, theme Tailwind, AppColors/AppSpacing TS) và component dùng chung (Hc...) trong src/shared/ui theo đúng bảng 17_UI_Standards, kèm trang 'UI Gallery' (UiGalleryPage) hiển thị tất cả component",màn hình do 5 người code trông giống hệt wireframe và giống nhau,"• Mỗi component Figma có đúng 1 component React cùng tên cột E 17_UI_Standards (xây trên Radix UI)
 • Nhãn + màu enum (UI-40, UI-41) là map dùng chung (bookingStatusMeta...)
 • Chuỗi hiển thị nằm trong src/i18n/vi.json (react-i18next)
 • ESLint (CI) chặn màu hex/rgb, style={{...}} và class Tailwind giá trị tùy ý (vd. p-[13px]) bên ngoài src/shared
-• Test từng component bằng Vitest + React Testing Library; ảnh chụp so sánh UiGalleryPage bằng Playwright",• Làm song song khi G5 chốt Design System; sau đó chỉ G5 (hoặc người được giao) sửa src/shared/ui,,,,Must,,US-15-008,web-app,Không cần UI,Không cần UI,,,TC-US-15-012-1→10,In progress,TV2,2026-11-25,TV3,TV1 + AI: Gemini,2026-11-25,Cưỡng chế thống nhất wireframe ↔ code (R-32)
+• Test từng component bằng Vitest + React Testing Library; ảnh chụp so sánh UiGalleryPage bằng Playwright",• Làm song song khi G5 chốt Design System; sau đó chỉ G5 (hoặc người được giao) sửa src/shared/ui,,,,Must,,US-15-008,web-app,Không cần UI,Không cần UI,,,TC-US-15-012-1→10,In progress,TV2,2026-11-25,TV3,TV1 + AI: Claude Code (chuyển từ PENDING_CHANGES của TV2),2026-11-26,"Cưỡng chế thống nhất wireframe ↔ code (R-32). 26/11: đã merge nhánh feat/us-15-012-ui-kit vào main (code + Vitest + Playwright 1440×900 & 390×844). Hậu kiểm: TV3 xem UI Kit; TV1 đã xem router.tsx (route /dev/ui chỉ bật ở DEV, R-35)"
 US-15-013,EP15,Nền tảng kỹ thuật SOA (enabler),CI kiểm tra tên đã đăng ký + PR checklist,R09 Lập trình viên / DevOps,"CI tự so tên class/record/enum/interface (Java) và component React (Page + src/shared/ui) trong code với 11_Naming_Registry, kèm mẫu PR có checklist bắt buộc","AI đổi tên mà quên cập nhật backlog thì bị chặn merge ngay, không phụ thuộc vào việc ai đó nhớ","• scripts/check-naming.py đọc docs/backlog/11_Naming_Registry.csv, chấp nhận tên trạng thái Approved/Implemented/Renamed (Renamed = tên hiện tại sau khi đổi)
 • Quét frontend/src/**/*.tsx: component export có tên kết thúc bằng 'Page' và mọi component trong src/shared/ui
 • Tên chưa đăng ký, tên Deprecated hoặc tên nằm ở cột 'Tên cũ' → CI fail, in ra tên + file
@@ -683,18 +683,18 @@ US-03-017,EP03,Tuyển chọn & xác minh nhân viên,Đổi vai trò / đổi h
 • Rời bệnh viện (nhân viên tự báo hoặc bệnh viện chấm dứt) → gỡ role CAREGIVER ngay, thu hồi phiên, ca tương lai chuyển tìm người thay; tài khoản vẫn dùng được chế độ Khách
 • Hiển thị trước các ca tương lai bị ảnh hưởng, phải xác nhận
 • Mỗi thời điểm tối đa 1 yêu cầu đang chờ; mọi thay đổi ghi audit","• Vai trò/bệnh viện chỉ đổi qua yêu cầu được duyệt, không có API cho nhân viên tự sửa
-• Không có trạng thái 'không thuộc bệnh viện nào' mà vẫn nhận ca","SC-047, SC-048","OQ-037, OQ-039",,Must,,"US-03-016, US-06-007",caregiver-service,"WF-N-15, WF-P-01",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code (TV1),2026-11-24,Thêm theo OQ-037 (b)
+• Không có trạng thái 'không thuộc bệnh viện nào' mà vẫn nhận ca","SC-047, SC-048","OQ-037, OQ-039",,Must,,"US-03-016, US-06-007",caregiver-service,"WF-N-15, WF-P-01",Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Thêm theo OQ-037 (b)
 US-03-018,EP03,Tuyển chọn & xác minh nhân viên,Admin quản lý bệnh viện / cơ sở đối tác,R06 Quản trị viên (Admin),"tiếp nhận hồ sơ bệnh viện muốn làm đối tác, đối chiếu giấy phép, ký hợp đồng (tỷ lệ chia tiền), tạo tài khoản cho người duyệt của bệnh viện và tạm khóa đối tác khi cần","chỉ bệnh viện hợp pháp, có người trực duyệt mới được duyệt nhân viên và nhận tiền qua nền tảng","• Hồ sơ đối tác: tên, mã số thuế, giấy phép hoạt động KBCB (tải lên, có hạn), địa chỉ + tọa độ, khu vực phục vụ, tài khoản ngân hàng nhận tiền, người liên hệ
 • Hợp đồng: % chia cho bệnh viện (theo version, có ngày hiệu lực – US-04-006), SLA duyệt
 • Tạo ≥ 2 tài khoản PARTNER_ORG cho người được bệnh viện cử (mời qua email, bắt buộc MFA); thu hồi khi người đó nghỉ
 • Trạng thái đối tác: Chờ xác minh / Hoạt động / Tạm khóa / Ngừng hợp tác. Tạm khóa → bệnh viện không duyệt được, các duyệt 7 ngày gần nhất chuyển về chờ xem lại
 • Giấy phép sắp hết hạn → nhắc trước 30 ngày; hết hạn → tự tạm khóa
 • Mọi thao tác ghi audit","• Chỉ ADMIN (MFA) làm được
-• Ngừng hợp tác → nhân viên liên kết phải chuyển bệnh viện (US-03-017) trong 30 ngày, quá hạn mất role CAREGIVER",SC-047,"OQ-037, OQ-039, OQ-041",Luật KBCB 2023 (giấy phép hoạt động),Must,,"US-03-016, US-04-006",caregiver-service,WF-A-10,Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code (TV1),2026-11-24,Thêm khi rà soát thiếu sót 24/11
+• Ngừng hợp tác → nhân viên liên kết phải chuyển bệnh viện (US-03-017) trong 30 ngày, quá hạn mất role CAREGIVER",SC-047,"OQ-037, OQ-039, OQ-041",Luật KBCB 2023 (giấy phép hoạt động),Must,,"US-03-016, US-04-006",caregiver-service,WF-A-10,Đã duyệt,,,,Chờ duyệt,TV4,,TV5,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,Thêm khi rà soát thiếu sót 24/11
 US-10-015,EP10,"Thanh toán, hoa hồng & đối soát",Phần chia & thanh toán cho bệnh viện đối tác,R10 Đối tác tổ chức (bệnh viện/phòng khám),"xem phần tiền bệnh viện được chia từ từng ca của nhân viên thuộc bệnh viện, bảng đối soát hằng tháng và nhận tiền về tài khoản bệnh viện","bệnh viện được trả công cho việc duyệt và đảm bảo chất lượng nhân viên, số liệu minh bạch","• Mỗi ca hoàn thành: chia 3 phần theo hợp đồng đối tác + policyVersion lúc đặt (US-10-003): nhân viên / bệnh viện / nền tảng
 • Ví bệnh viện: số dư Chờ → Khả dụng sau khi qua thời gian khiếu nại (như ví nhân viên)
 • Đối soát theo tháng: danh sách ca, nhân viên, giá, phần chia; xuất Excel; bệnh viện xác nhận hoặc báo sai lệch
 • Payout cho bệnh viện theo tháng, kế toán duyệt (WF-K-02, 2 người nếu > ngưỡng)
 • Hoàn tiền/tranh chấp sau khi đã chia → bút toán đảo cả phần bệnh viện
 • Bệnh viện KHÔNG thấy dữ liệu sức khỏe/địa chỉ của khách trong báo cáo (chỉ mã ca, dịch vụ, ngày, số tiền)","• Tiền: BIGINT VND; sổ cái kép, không sửa/xóa
-• Phần bệnh viện trích từ hoa hồng nền tảng, mặc định 5% giá ca (OQ-041 b)",,"OQ-039, OQ-041",Hóa đơn/chứng từ giữa nền tảng và bệnh viện (cần xác minh),Must,,"US-10-003, US-03-018",payment-service,"WF-P-02, WF-K-02, WF-K-01",Chưa vẽ,,,,Chờ duyệt,,,,AI: Claude Code (TV1),2026-11-24,"Chủ dự án: bệnh viện vẫn nhận tiền ca vì làm trung gian duyệt, đảm bảo chất lượng"
+• Phần bệnh viện trích từ hoa hồng nền tảng, mặc định 5% giá ca (OQ-041 b)",,"OQ-039, OQ-041",Hóa đơn/chứng từ giữa nền tảng và bệnh viện (cần xác minh),Must,,"US-10-003, US-03-018",payment-service,"WF-P-02, WF-K-02, WF-K-01",Đã duyệt,,,,Chờ duyệt,TV5,,TV1,TV1 + AI: Claude Code (phân công 26/11),2026-11-26,"Chủ dự án: bệnh viện vẫn nhận tiền ca vì làm trung gian duyệt, đảm bảo chất lượng"

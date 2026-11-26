@@ -5,11 +5,11 @@ BACKLOG – HỆ THỐNG ĐẶT LỊCH & ĐIỀU PHỐI CHĂM SÓC TẠI NHÀ (H
 DANH SÁCH SHEET,Mục đích,Khi nào cần đọc / ghi
 00_README,"Hướng dẫn tổng quan, quy ước ID, quy trình làm việc",Đọc đầu tiên
 01_AI_RULES,Quy tắc BẮT BUỘC cho mọi AI và mọi người,Đọc trước mọi phiên làm việc
-02_Tech_Stack,Công nghệ đã chốt + phiên bản + lý do. KHÔNG tự thêm thư viện ngoài danh sách,Trước khi thêm dependency
+02_Tech_Stack,Công nghệ đã chốt + phiên bản + lý do. Thư viện không nằm trong danh sách CẤM và không trùng chức năng → tự thêm và ghi vào đây (R-16),Trước khi thêm dependency
 03_Epics,Danh sách Epic theo đúng form template (Epic | As a | I want to | So that I can | User stories),Khi cần nhìn tổng thể
 04_Backlog,"Sheet chính: mỗi dòng = 1 user story, có AC, rule, wireframe, service, người nhận",Trước khi code bất kỳ tính năng nào
 05_Scenarios,"Tình huống thực tế / edge case (hết nhân viên, sự cố y tế, ở một mình...) + cách hệ thống xử lý","Khi viết AC, khi test"
-06_Open_Questions,Câu hỏi chưa chốt + quyết định (Decision log). Chưa chốt = chưa được code phần liên quan,Khi gặp điều không rõ
+06_Open_Questions,Câu hỏi chưa chốt + quyết định (Decision log). Nghiệp vụ trong gói: chủ gói tự chốt; chéo gói: quá 24h thì chốt theo phương án đề xuất (R-15),Khi gặp điều không rõ
 07_Team,"Thành viên, liên hệ, đang nhận story nào",Khi nhận việc
 08_Wireframes,Danh sách màn hình + link Figma + trạng thái duyệt,Trước khi code UI / API
 09_Service_Catalog,"Danh sách service SOA: trách nhiệm, port, schema DB, base path, event",Khi quyết định code nằm ở service nào
@@ -46,16 +46,16 @@ Bước 6,"Reviewer (gói duyệt chéo: G1←G2, G2←G3, G3←G4, G4←G5, G5�
 Bước 7,"Reviewer (gói duyệt chéo: G1←G2, G2←G3, G3←G4, G4←G5, G5←G1) chấm theo đúng checklist → 'Đã duyệt' hoặc 'Cần sửa' (kèm comment Figma)","R-13, R-30"
 Bước 8,"Hai wireframe mâu thuẫn: 17_UI_Standards là chuẩn → chưa có chuẩn thì G5 (chủ Design System) quyết và bổ sung vào 17 → mâu thuẫn nghiệp vụ thì theo story, story chưa rõ thì tạo OQ. KHÔNG sửa frame của gói khác",R-31
 ,,
-QUY TRÌNH LÀM (CODE) 1 STORY (bắt buộc theo thứ tự),,Luật chi tiết
-Bước 1,"Story ở trạng thái Approved, không còn OQ liên quan ở trạng thái 'Mở'",R-15
-Bước 2,Wireframe liên quan ở trạng thái 'Đã duyệt' (hoặc 'Không cần UI'),R-13
-Bước 3,"Code mẫu chuẩn US-15-011 đã Done; đọc docs/GOLDEN_SAMPLE.md và bắt chước đúng cấu trúc file, đặt tên, cách viết test",R-33
-Bước 4,"Đã khai báo đủ API (10), tên class/method/biến (11), bảng/cột (12), quyền (13) ở trạng thái Approved. Thiếu → đề xuất Proposed, chờ người duyệt","R-10, R-14"
-Bước 5,Ghi tên mình vào cột 'Người nhận' + 'Ngày nhận' (04_Backlog) để người khác không làm trùng; đổi trạng thái In progress,R-22
-Bước 6,Chạy build + unit/integration test + ArchUnit + pnpm lint / typecheck / test (Vitest) + Playwright (1440 & 390) + scripts/check-naming.py; tạo PR theo .github/pull_request_template.md (kèm ảnh trang web đặt cạnh wireframe),"R-02 → R-09, R-32, P-2"
-Bước 7,"Đổi/thêm tên: cập nhật 11_Naming_Registry (ghi tên cũ vào cột 'Tên cũ'), 10, 12, cột 'Class/Method chính' ở 04 và 15_Change_Log trong CÙNG 1 PR",R-11
-Bước 8,Chạy build + unit/integration test + ArchUnit + scripts/check-naming.py; tạo PR theo .github/pull_request_template.md (kèm ảnh app đặt cạnh wireframe),"R-20, R-34"
-Bước 9,CI xanh → người khác review → Done; ghi 15_Change_Log; AI báo cáo cuối phiên,"R-24, R-26"
+QUY TRÌNH LÀM (CODE) 1 STORY – không chờ ai duyệt (bản nới 26/11/2026),,Luật chi tiết
+Bước 1,"Nhận story thuộc gói mình: ghi mã TV vào 'Người nhận' + 'Ngày nhận' ở 04, đổi In progress. Chủ gói tự chuyển story sang Approved khi AC đã rõ",R-22
+Bước 2,"Đọc story + wireframe (64/64 WF đã duyệt). Chỗ nghiệp vụ không rõ: trong gói → tự chốt, ghi OQ 'Đã chốt'; chéo gói → tạo OQ kèm phương án, quá 24h không ai phản đối thì chốt theo phương án đó","R-13, R-15"
+Bước 3,"Bắt chước docs/GOLDEN_SAMPLE.md, hoặc copy backend/_template-service / frontend/src/features/_template (KHÔNG cần chờ code mẫu Done)",R-33
+Bước 4,"Tên, API, bảng/cột, quyền: TÌM trong 11 / 10 / 12 / 13 → có thì dùng lại đúng tên đó; chưa có thì TỰ THÊM dòng (Approved) rồi dùng ngay. Không cần ai duyệt","R-10, R-14"
+Bước 5,"Phụ thuộc gói khác chưa xong → viết client theo 10_API_Contract và giả lập (WireMock/Testcontainers ở backend, MSW ở frontend). Đổi/xóa hợp đồng hoặc code dùng chung mà người khác đang dùng → báo chủ, quá 24h thì làm",R-36
+Bước 6,"Dùng AI → dán prompt P-2 (cuối sheet 01). Đổi tên → cập nhật 11 (cột 'Tên cũ', Renamed) + 15_Change_Log trong cùng PR (+10 nếu đổi hợp đồng gói khác đang dùng)","R-11, P-2"
+Bước 7,Chạy build + unit/integration test + ArchUnit + pnpm lint / typecheck / Vitest + Playwright (1440 & 390) + scripts/check-naming.py; tạo PR theo .github/pull_request_template.md,"R-20, R-34"
+Bước 8,"CI xanh → TỰ MERGE. Security lõi (Keycloak, gateway, src/app, callback thanh toán/payout, cấp role CAREGIVER) → TV1 review trong 48h, quá hạn thì merge và TV1 hậu kiểm","R-34, R-35"
+Bước 9,"Ghi 15_Change_Log; AI báo cáo cuối phiên. Hậu kiểm chéo hàng tuần (sheet 18, cột J): thấy lỗi thì mở issue/PR sửa","R-24, R-26"
 ,,
 QUY ƯỚC CHUNG,,
 Mô tả nghiệp vụ,Tiếng Việt,
@@ -63,4 +63,4 @@ Mô tả nghiệp vụ,Tiếng Việt,
 Không xóa dòng,Không xóa story/tên/câu hỏi. Muốn bỏ thì đổi trạng thái sang Deprecated/Hủy + ghi lý do,
 Không gộp ô (merge),Trừ 03_Epics. Gộp ô làm hỏng lọc/sắp xếp và AI đọc sai,
 Thêm cột / sheet mới,"Được, nhưng thêm ở cuối bảng, ghi vào 15_Change_Log và cập nhật mục 'DANH SÁCH SHEET' phía trên",
-Story có chữ [CẦN CHỐT],Phụ thuộc câu hỏi ở 06_Open_Questions. Chưa chốt thì chưa code,
+Story có chữ [CẦN CHỐT],Phụ thuộc câu hỏi ở 06_Open_Questions. Làm theo R-15: chủ gói tự chốt (trong gói) hoặc chốt theo phương án sau 24h (chéo gói),

@@ -5,12 +5,13 @@
 
 ## 1. Nguồn sự thật (đọc trước khi làm bất cứ gì)
 - Google Sheet "BacklogSOA": https://docs.google.com/spreadsheets/d/1vDcaNERk0rVuWwJB1E1nSSgjEPIZZiWqv06KFli6ick
-  - Đọc theo thứ tự: 00_README → 01_AI_RULES (R-00 → R-35, prompt P-1 vẽ / P-2 code) → 02_Tech_Stack → 09_Service_Catalog
+  - Đọc theo thứ tự: 00_README → 01_AI_RULES (R-00 → R-36, cột 'Tầng' A/B/C, prompt P-1 vẽ / P-2 code) → 02_Tech_Stack → 09_Service_Catalog
     → các sheet liên quan việc đang làm (04 Backlog, 05 Scenarios, 06 OQ, 08 Wireframes, 10 API, 11 Naming, 12 Data, 13 RBAC,
     14 Glossary, 16 WF_Packages, 17 UI_Standards, 18 Code_Packages). Mọi thay đổi ghi 15_Change_Log (đang tới CL-0015).
-  - Quy ước sheet: không xóa dòng (đổi Deprecated); AI không tự Approve (chỉ Proposed, người duyệt).
+  - Quy ước sheet: không xóa dòng (đổi Deprecated). Từ 26/11/2026 (CL-0025) tên/API/bảng KHÔNG cần duyệt: tìm trong 10/11/12,
+    có thì dùng lại, chưa có thì tự thêm dòng (Approved). Chủ gói tự duyệt story. Chỉ việc tầng C (R-36) / security lõi (R-35) mới phải báo.
 - Repo files mẫu (chưa có git remote): AGENTS.md, CLAUDE.md, .github/copilot-instructions.md, .github/pull_request_template.md,
-  scripts/check-naming.py (quét Java + TSX, chấp nhận Approved/Implemented/Renamed, chặn Deprecated + cột "Tên cũ"),
+  scripts/check-naming.py (quét Java + TSX, chấp nhận mọi tên đã đăng ký trừ Deprecated, chặn Deprecated + cột "Tên cũ"),
   scripts/export-backlog.sh (export CSV các sheet, gid 0,101…118,199), docs/backlog/PENDING_CHANGES.md.
 
 ## 2. Quyết định đã chốt (không hỏi lại)
@@ -65,13 +66,13 @@
 
 ## 6. Việc tiếp theo (theo thứ tự)
 1. Vẽ tiếp wireframe: G4 → G1 → G2 → G3 (4–6 WF mỗi lượt), cập nhật 08 + 15_Change_Log.
-2. ĐÃ KHAI BÁO (24/11, trạng thái Proposed – TV1 cần duyệt trước khi code, R-14):
+2. ĐÃ KHAI BÁO (24/11, trạng thái Proposed – từ 26/11 không cần duyệt, dùng được ngay, R-14):
    - 10_API_Contract: 195 API (API-SV01-001 → API-SV15-005), mỗi API có DTO, role, story, errorCode.
    - 12_Data_Dictionary: DD-0001 → DD-0140 (~75 bảng; mỗi dòng có thể gom vài cột cùng bảng; quy ước chung DD-0001→0008).
    - 11_Naming_Registry: NM-0207 → NM-0295 (Controller/Service/Entity/Repository/DTO/Mapper/Enum/Client theo service, frontend hook).
      Quy ước ô tên: phân cách , ; | ; "(+ …ServiceImpl)" = mỗi XxxService có XxxServiceImpl (check-naming.py đã hiểu).
-   - Khi code thiếu tên/API/cột → thêm dòng Proposed mới (KHÔNG tự đặt tên ngoài sheet), báo TV1 duyệt.
-3. Code: theo thứ tự 18_Code_Packages (GĐ0 nền tảng → GĐ1 code mẫu chuẩn US-15-011 → GĐ2 nghiệp vụ Must). Mỗi phiên code dán prompt P-2.
+   - Khi code thiếu tên/API/cột → tự thêm dòng mới (Approved) trong cùng PR (KHÔNG đặt tên ngoài sheet), không cần ai duyệt.
+3. Code: mỗi gói làm song song (18_Code_Packages, GĐ0–GĐ2 không còn tuần tự; code mẫu US-15-011 không chặn ai). Mỗi phiên code dán prompt P-2.
 
 ## 7. Câu hỏi còn mở
 - Không còn OQ "Mở" quan trọng. Tỷ lệ hoa hồng nền tảng mặc định theo OQ-005/OQ-008 (20% trong wireframe chỉ là số minh họa).

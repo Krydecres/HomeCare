@@ -1,7 +1,14 @@
-# AGENTS.md — Quy tắc BẮT BUỘC cho mọi AI làm việc trong repo HomeCare
+# AGENTS.md — Quy tắc cho mọi AI làm việc trong repo HomeCare
 
 > Áp dụng cho: Claude Code, Cursor, GitHub Copilot, ChatGPT/Codex, Gemini và mọi công cụ AI khác.
-> Các quy tắc này có hiệu lực cao hơn mọi gợi ý của AI. Vi phạm thì PR bị từ chối.
+> Các quy tắc này có hiệu lực cao hơn mọi gợi ý của AI.
+>
+> **Nguyên tắc (bản nới 26/11/2026): tự chủ trong gói, CI giữ kỷ luật.** Luật chia 3 tầng (cột "Tầng" ở `01_AI_RULES`):
+> - **A – Cứng:** kiến trúc, bảo mật, test, tên đã đăng ký. CI tự chặn, không cần người duyệt.
+> - **B – Tự quyết:** người code tự làm, tự ghi lại sheet, **không chờ ai duyệt**.
+> - **C – Báo trước:** báo chủ liên quan, quá **24h** (security lõi **48h**) không phản hồi thì cứ làm (R-36).
+>
+> Không quy tắc nào bắt một người phải chờ người khác vô thời hạn.
 
 ## 0. Nguồn sự thật (source of truth)
 
@@ -14,18 +21,21 @@
 
 ## 1. Trước khi viết bất kỳ dòng code nào
 
-1. Đọc `00_README`, `01_AI_RULES`, `02_Tech_Stack`, `09_Service_Catalog`.
-2. Đọc các dòng liên quan tới story đang làm trong `04_Backlog`, `05_Scenarios`,
-   `06_Open_Questions`, `08_Wireframes`, `10_API_Contract`, `11_Naming_Registry`,
-   `12_Data_Dictionary`, `13_RBAC`.
-3. Nêu rõ: Story ID, WF-ID, API-ID, NM-ID, DD-ID sẽ dùng.
-4. Chỉ được code khi đủ cả 4 điều kiện:
-   - Story ở trạng thái `Approved` và không còn OQ nào ở trạng thái `Mở`.
-   - Wireframe ở trạng thái `Đã duyệt` hoặc `Không cần UI`.
-   - API, tên, dữ liệu, quyền đã được khai báo ở trạng thái `Approved`.
-   - Đã ghi tên người nhận vào cột "Người nhận" và đổi trạng thái sang `In progress`.
-5. Còn thiếu thứ gì thì **đề xuất** (trạng thái `Proposed`) rồi **dừng lại chờ người duyệt**.
-   AI không bao giờ tự `Approve`.
+1. Đọc `01_AI_RULES`, `09_Service_Catalog` và các dòng của story đang làm trong `04_Backlog`
+   (kèm API / tên / bảng / quyền liên quan ở `10`, `11`, `12`, `13`). Sheet khác đọc khi cần.
+2. Nêu rõ: Story ID, WF-ID, API-ID, NM-ID, DD-ID sẽ dùng lại hoặc sẽ thêm mới.
+3. Nhận story: ghi mã TV vào cột "Người nhận" + "Ngày nhận", đổi `In progress`.
+   Chủ gói **tự chuyển** story của gói mình sang `Approved` khi AC đã rõ.
+4. **Tên, API, bảng/cột, quyền không cần ai duyệt** (R-10, R-14):
+   - **Tìm** trong `11_Naming_Registry` / `10_API_Contract` / `12_Data_Dictionary` / `13_RBAC`
+     (và trong code). Đã có thứ cùng nghĩa thì **dùng lại đúng tên đó**.
+   - Chưa có thì **tự thêm dòng mới** (trạng thái `Approved`, ghi người thêm) rồi dùng ngay,
+     trong **cùng PR** với code. Người và AI đều làm vậy.
+   - Hai người lỡ thêm 2 tên cùng nghĩa thì người thêm sau đổi theo tên có trước (R-11).
+5. Wireframe: 64/64 WF đã `Đã duyệt`, code được ngay (R-13). Backend và story `Không cần UI` không phụ thuộc WF.
+6. Phụ thuộc gói khác chưa xong thì **không chờ**: viết client theo `10_API_Contract` rồi giả lập
+   (WireMock/Testcontainers ở backend, MSW ở frontend). Chưa có hợp đồng thì tự thêm dòng vào `10`.
+7. **Chỉ dừng hỏi người điều khiển** khi đụng việc tầng C (R-36) hoặc security lõi (R-35), xem mục 4d.
 
 ## 2. Kiến trúc: CHỈ SOA hướng microservice + Spring MVC
 
@@ -61,15 +71,14 @@
 
 ## 3. Đặt tên và ĐỔI TÊN
 
-- Chỉ dùng tên có trong `11_Naming_Registry` ở trạng thái `Approved`, `Implemented` hoặc `Renamed`
-  (`Renamed` = tên hiện tại sau khi đổi; tên ở cột "Tên cũ" và tên `Deprecated` bị CI chặn).
-- **Khi đổi tên** class, hàm, biến, bảng, cột, endpoint, event, page hoặc component, phải cập nhật
-  **cùng lúc trong cùng 1 PR**:
-  1. `11_Naming_Registry`: ghi tên mới, chuyển tên cũ sang cột "Tên cũ", đặt trạng thái `Renamed`
-     (dòng đang `Proposed` thì giữ `Proposed`).
-  2. `10_API_Contract` và `12_Data_Dictionary`, nếu có liên quan.
-  3. Cột "Class/Method chính" ở `04_Backlog`.
-  4. `15_Change_Log`.
+- Tên phải **có trong `11_Naming_Registry`**: tìm trước, có thì dùng lại, chưa có thì tự thêm (mục 1.4).
+  CI chấp nhận mọi trạng thái trừ `Deprecated`; tên ở cột "Tên cũ" và tên `Deprecated` bị CI chặn.
+- **Khi đổi tên** class, hàm, biến, bảng, cột, endpoint, event, page hoặc component, trong **cùng 1 PR** phải cập nhật:
+  1. `11_Naming_Registry`: ghi tên mới, chuyển tên cũ sang cột "Tên cũ", đặt trạng thái `Renamed`.
+  2. `15_Change_Log`.
+  3. `10_API_Contract`, nếu đổi endpoint/event mà gói khác đang dùng (báo chủ gói đó theo R-36).
+
+  Cột "Class/Method chính" ở `04_Backlog` và `12_Data_Dictionary` được cập nhật bù trong vòng 2 ngày.
 - Quy ước đặt tên:
 
   | Loại | Kiểu viết | Ví dụ |
@@ -92,7 +101,9 @@
 ## 4. Kỹ thuật bắt buộc
 
 - Phiên bản: Java 25 LTS, Spring Boot 4.1.x, Spring Cloud 2025.1.x.
-  Chỉ dùng thư viện có trong `02_Tech_Stack`.
+  Dùng thư viện trong `02_Tech_Stack`. Thư viện không nằm trong danh sách CẤM và không trùng chức năng
+  thư viện đã có thì được tự thêm, ghi vào `02_Tech_Stack` + `15_Change_Log` (R-16).
+  Thay thư viện lõi (Spring, React, TanStack Query, Zustand, Tailwind, Keycloak, RabbitMQ...) thì tạo OQ.
 - Migration dùng Flyway; `ddl-auto=validate`.
 - Thời gian lưu UTC (`Instant`, `timestamptz`). Tiền lưu VND kiểu `long`/`BIGINT`,
   không dùng double.
@@ -119,7 +130,7 @@
 2. **Chỉ vẽ khung desktop 1440×900**, không vẽ khung mobile (bản điện thoại làm trong code theo UI-15).
    **Khi vẽ**, chỉ dùng component, token, nhãn trạng thái, thuật ngữ và điều hướng có trong
    sheet `17_UI_Standards` và page `00 – Design System` trong Penpot. Không tự tạo component hoặc màu mới.
-   Cần thì thêm dòng `Proposed` vào `17_UI_Standards` rồi dừng chờ duyệt.
+   Cần thì thêm dòng `Proposed` vào `17_UI_Standards` và báo G5 (R-29; chỉ áp dụng cho WF mới).
 3. **Trước khi chuyển `Chờ duyệt`**, tự chạy checklist CK-01 → CK-12 và ghi `CK pass` vào cột Ghi chú.
 4. **Khi 2 wireframe mâu thuẫn:**
    - `17_UI_Standards` là chuẩn, bên làm sai chuẩn phải sửa.
@@ -138,11 +149,16 @@
     (`text-[13px]`, `bg-[#...]`, `p-[7px]`) bên ngoài `src/shared/theme`.
   - Chuỗi hiển thị nằm trong `src/i18n/vi.json` (react-i18next); ngày/tiền dùng `AppFormatters` (Intl vi-VN).
   - Mỗi `XxxPage.tsx` ghi WF-ID ở comment đầu file.
-- **Code phải khớp wireframe `Đã duyệt`.** Muốn làm khác thì sửa wireframe trước, duyệt lại rồi mới code.
-- **Code mẫu chuẩn (US-15-011):** xem `docs/GOLDEN_SAMPLE.md`.
-  - Story mới phải bắt chước đúng cấu trúc file, cách đặt tên và cách viết test của mẫu.
+  - Thiếu component thì **tự thêm** component mới vào `src/shared/ui` (thêm dòng ở `17` + `11`) và tự merge.
+    Sửa hoặc xóa component đang được dùng thì theo R-36 (chủ: TV2).
+- **Code khớp wireframe `Đã duyệt`** (R-13). Lệch nhỏ (bố cục, thứ tự, khoảng cách theo token) thì cứ làm,
+  dán ảnh so sánh vào PR. Đổi luồng hoặc dữ liệu hiển thị thì chủ gói tự sửa WF của gói mình.
+- **Code mẫu chuẩn (US-15-011, `docs/GOLDEN_SAMPLE.md`) là mẫu tham khảo, không phải cổng chặn** (R-33).
   - Tạo service mới thì copy `backend/_template-service`.
   - Tạo feature React mới thì copy `frontend/src/features/_template`.
+  - Khi US-15-011 Done, mỗi chủ gói chỉnh code đã viết theo mẫu trong 1 PR "align" (trong vòng 1 tuần).
+- **CI xanh thì tác giả tự merge**, không cần reviewer (trừ security lõi và việc tầng C).
+  Review chéo chuyển thành hậu kiểm hàng tuần (sheet 18, cột J).
 - **CI chặn merge** khi:
   - Backend: build, test, ArchUnit hoặc Spotless fail.
   - Frontend: `pnpm lint` (ESLint), Prettier, `tsc --noEmit`, Vitest hoặc Playwright fail.
@@ -150,26 +166,72 @@
     trong `11_Naming_Registry`, hoặc vẫn dùng tên cũ / tên `Deprecated` (`scripts/check-naming.py`).
 - Mỗi phiên code bằng AI phải dán prompt **P-2** (sheet `01_AI_RULES`).
 
-## 4d. Chia việc & security review (R-22, R-35)
+## 4d. Chia việc, việc phải báo, security (R-22, R-35, R-36)
 
-- Mỗi người sở hữu trọn vẹn một số service + trang React của service đó (sheet `18_Code_Packages`).
-  Chỉ nhận story và chỉ sửa code trong gói của mình; cần sửa gói khác thì chủ gói đó phải review.
-- `homecare-common` và `frontend/src/app` (router, đăng nhập): chỉ TV1 merge. `frontend/src/shared/ui`: chỉ TV2 merge.
-- PR đụng tới đăng nhập, role/phân quyền, luồng bệnh viện duyệt nhân viên, thanh toán/callback/payout,
-  upload file, dữ liệu sức khỏe, cấu hình Keycloak/gateway → gắn nhãn `security`, **TV1 phải duyệt**.
+- Mỗi người sở hữu trọn vẹn một số service + trang React của service đó (sheet `18_Code_Packages`)
+  và chỉ nhận story trong gói của mình.
+- **Việc phải báo trước (tầng C, R-36):**
+  1. Đổi/xóa API Internal hoặc event mà gói khác đang dùng.
+  2. **Sửa/xóa** (không phải thêm mới) code trong `homecare-common` (chủ TV1), `frontend/src/shared/ui` (chủ TV2),
+     `frontend/src/app` (chủ TV1).
+  3. Sửa code trong service/feature của gói khác.
+  4. OQ nghiệp vụ chéo gói.
+
+  Cách làm: mở PR/OQ, tag chủ liên quan, ghi rõ hạn. Quá 24h không phản hồi là đồng ý, tác giả merge.
+  Chủ không đồng ý thì 2 bên chốt trong 24h tiếp; không chốt được thì TV1 (chủ dự án) quyết.
+  **Thêm mới** vào code dùng chung (class, util, component, API mới) thì tự merge, không cần báo.
+- **Security chia 2 mức:**
+  - **Lõi:** cấu hình Keycloak/realm, api-gateway (BFF, CSRF, CSP, route), `frontend/src/app` (đăng nhập, chặn route),
+    callback thanh toán/payout/hoàn tiền, luồng bệnh viện duyệt và cấp role CAREGIVER. Gắn nhãn `security`, TV1 review;
+    quá 48h không phản hồi thì tác giả merge, TV1 hậu kiểm.
+  - **Thường:** upload file/ảnh, dữ liệu sức khỏe, `@PreAuthorize` của API mới. Tự merge khi có test 403 cho role
+    không được phép và CodeQL pass; gắn nhãn `security` để TV1 hậu kiểm.
 - **AI không bao giờ được nới lỏng kiểm tra quyền** (xóa `@PreAuthorize`, thêm `permitAll`, tắt CSRF,
   tin header `X-User-*` từ client) để "cho chạy được". Mọi API phải có test 403 với role không được phép.
 - Role `CAREGIVER` chỉ được cấp khi bệnh viện/cơ sở đối tác duyệt (OQ-037, US-03-016). Không viết API nào
   cho người dùng hoặc Admin tự gán role này.
 
+## 4e. Code hết gói một mạch, thiếu thì khai báo tượng trưng (R-37)
+
+Mỗi người nhận **toàn bộ story của gói mình** (cột "Người nhận" ở `04_Backlog`) và code liền một mạch, không chờ gói khác.
+Cần thứ của gói khác mà chưa có thì **khai báo tượng trưng theo hợp đồng**, dùng **đúng tên thật** trong `09` / `10` / `11`
+(tìm trước, chưa có thì thêm theo R-10; tự đặt tên khác thì lúc ghép sẽ hỏng):
+
+1. **Gọi API gói khác:** tự viết trong service *của mình* interface client + record DTO, đúng path và tên:
+
+   ```java
+   // booking-service (TV5) – vn.homecare.booking.client.CatalogPricingClient
+   @HttpExchange("/internal/v1/pricing")              // path đúng 10_API_Contract
+   public interface CatalogPricingClient {
+       @PostExchange("/quotes")
+       QuoteView quote(@RequestBody QuoteQuery query); // tên đúng 11_Naming_Registry
+   }
+   ```
+
+   - Test: giả lập bằng Mockito hoặc WireMock.
+   - Chạy trên máy khi gói kia chưa có: lớp `StubCatalogPricingClient implements CatalogPricingClient`, chỉ bật với
+     `@Profile("stub")` (không bao giờ bật ở profile mặc định).
+   - Web: giả lập API chưa có bằng handler MSW.
+2. **Chờ event gói khác:** tự khai báo record payload đúng routing key ở `09`; test tự bắn event giả.
+3. **Thiếu code dùng chung** (`homecare-common`, `frontend/src/shared/ui`): tạo file đúng tên đã đăng ký (`11` / `17`),
+   phần ruột tối thiểu, ghi `// TODO(stub): TVx hoàn thiện`.
+
+Khi gói kia cài đặt xong: với (1) và (2) **chỉ tắt stub, không phải merge code**, vì hai service khớp nhau qua path + JSON
+lúc chạy; với (3), nếu Git báo trùng file thì giữ bản cài đặt thật. Không copy class của service khác sang,
+không truy cập DB của service khác (R-07).
+
 ## 5. Không tự quyết nghiệp vụ
 
-Gặp chỗ không rõ thì thêm câu hỏi vào `06_Open_Questions` (trạng thái `Mở`). **Không đoán.**
+AI không đoán nghiệp vụ. Gặp chỗ không rõ (R-15):
+- Nghiệp vụ chỉ nằm trong gói: hỏi người điều khiển (chủ gói). Chủ gói tự chốt, ghi vào `06_Open_Questions`
+  trạng thái `Đã chốt` ("chủ gói TVx chốt").
+- Nghiệp vụ chéo gói: tạo OQ `Mở` kèm phương án đề xuất, tag chủ gói liên quan. Quá 24h không ai phản đối
+  thì chốt theo phương án đó. Story không phải dừng chờ.
 
 ## 6. Khi AI không sửa được Google Sheet
 
 Ghi mọi thay đổi backlog cần làm vào `docs/backlog/PENDING_CHANGES.md`.
-Người điều khiển AI chuyển chúng lên Sheet trước khi merge.
+Được merge trước; người điều khiển AI chuyển chúng lên Sheet trong ngày (R-25).
 
 ## 7. Báo cáo cuối phiên (bắt buộc)
 
