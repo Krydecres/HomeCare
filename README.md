@@ -44,16 +44,47 @@ cd frontend && pnpm install && pnpm dev                          # http://localh
 Chạy service từ IDE: nạp biến môi trường từ `infra/.env` (`DB_PASSWORD=<DB_PASSWORD_xxx>`, `RABBITMQ_PASSWORD`, `KEYCLOAK_BFF_CLIENT_SECRET`…).
 Toàn bộ hệ thống trong Docker: `bash scripts/build-images.sh` (build JAR 1 lần rồi đóng image) rồi `docker compose -f infra/docker-compose.yml --profile full up -d` (web ở :5173). Nên cấp cho Docker Desktop ≥ 8 GB RAM.
 
-Tài khoản dev (mật khẩu = `HOMECARE_DEV_USER_PASSWORD` trong `infra/.env`): `dev.customer`, `dev.elder`, `dev.caregiver`,
+### Windows PowerShell (chạy nhanh FE Vite + BE Docker)
+
+```powershell
+# 1. Tạo infra/.env (1 lần, nếu máy chưa cài Python thì dùng Docker Python)
+cd d:\homecare
+docker run --rm -v "${PWD}:/work" -w /work python:3.12-slim python3 scripts/init-dev-env.py
+
+# 2. Build 17 module Backend (JDK 25) & bật toàn bộ stack
+cd d:\homecare\backend
+.\mvnw.cmd -B -ntp -DskipTests package
+cd d:\homecare
+docker compose -f infra/docker-compose.yml --profile full build
+docker compose -f infra/docker-compose.yml --profile full up -d
+
+# 3. Nếu muốn dùng Vite dev (:5173, có HMR + /dev/ui) thay vì nginx trong container:
+docker compose -f infra/docker-compose.yml stop web
+cd d:\homecare\frontend
+corepack pnpm dev
+```
+
+*(Lưu ý: nếu dùng Command Prompt `cmd.exe`, phải gõ `cd /d d:\homecare` để chuyển ổ đĩa; khởi tạo bucket Garage S3 chạy 1 lần qua `bash scripts/init-storage.sh` hoặc `docker compose exec garage /garage ...`.)*
+
+Tài khoản dev (mật khẩu nằm ở biến `HOMECARE_DEV_USER_PASSWORD` trong `infra/.env`): `dev.customer`, `dev.elder`, `dev.caregiver`,
 `dev.pending`, `dev.dispatcher`, `dev.admin`, `dev.accountant`, `dev.partner`. Role nội bộ bắt buộc OTP (cài app TOTP ở lần đầu).
+Keycloak tắt tự đăng ký (`registrationAllowed: false` theo `OQ-037`); màn `/register` (`WF-S-02`) hiện là placeholder chờ `US-01-001` hoàn thiện.
 
 | Công cụ | URL |
 |---|---|
-| Web | http://localhost:5173 |
+| Web chính | http://localhost:5173 |
+| UI Kit Gallery (chỉ khi `pnpm dev`) | http://localhost:5173/dev/ui |
 | Swagger gộp | http://localhost:8080/swagger-ui (đăng nhập trước) |
+| Eureka Discovery | http://localhost:8761 |
 | Keycloak admin | http://localhost:8180 (admin / `KEYCLOAK_ADMIN_PASSWORD`) |
 | RabbitMQ | http://localhost:15672 (homecare / `RABBITMQ_PASSWORD`) |
 | Zipkin | http://localhost:9411 |
+
+## Bộ UI Kit & Design System (`US-15-012`)
+
+- **Tokens & Formats**: `frontend/src/shared/theme/{theme.css, tokens.ts, AppFormatters.ts}`, map trạng thái `UI-40`→`UI-44` ở `frontend/src/shared/lib/statusMeta.ts`.
+- **Component dùng chung**: `frontend/src/shared/ui/{buttons, inputs, display, cards, domain, navigation, states, feedback, web}` (dùng 100% CSS var `--hc-*`, responsive `1440×900` và `390×844`, hỗ trợ `.hc-elder` ×1.25).
+- **Xem trực tiếp**: mở `http://localhost:5173/dev/ui` khi chạy `pnpm dev` (bị loại khỏi production build).
 
 ## Kiểm tra trước khi tạo PR
 
