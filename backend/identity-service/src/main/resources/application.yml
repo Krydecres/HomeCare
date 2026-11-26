@@ -31,6 +31,27 @@ spring:
     schemas: identity
     default-schema: identity
     create-schemas: false
+  data:
+    web:
+      pageable:
+        # {content, page:{size, number, totalElements, totalPages}} – stable JSON for the web (R-19)
+        serialization-mode: via-dto
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+  security:
+    oauth2:
+      client:
+        registration:
+          identity-service:
+            provider: keycloak
+            client-id: identity-service
+            client-secret: ${KC_SECRET_IDENTITY_SERVICE}
+            authorization-grant-type: client_credentials
+        provider:
+          keycloak:
+            token-uri: ${KEYCLOAK_INTERNAL_URL:http://localhost:8180}/realms/homecare/protocol/openid-connect/token
   rabbitmq:
     host: ${RABBITMQ_HOST:localhost}
     port: ${RABBITMQ_PORT:5672}
@@ -45,7 +66,43 @@ eureka:
     prefer-ip-address: true
 
 homecare:
+  identity:
+    keycloak-admin-url: ${KEYCLOAK_INTERNAL_URL:http://localhost:8180}/admin/realms/homecare
+    deletion-grace-period: P30D
+    invite-link-lifespan: P3D
+    # Current versions of the policy texts (US-14-001). Bump a version to ask every user to consent again.
+    policy-versions:
+      TERMS: "2026.11"
+      PRIVACY: "2026.11"
+      HEALTH_DATA: "2026.11"
+      LOCATION: "2026.11"
+      CARE_PHOTO: "2026.11"
+      MARKETING: "2026.11"
+      CAREGIVER_CODE: "2026.11"
+      PARTNER_SHARING: "2026.11"
+    otp:
+      ttl: PT5M
+      max-sends-per-hour: 5
+      max-attempts: 5
+      lock-duration: PT30M
+      # Mock SMS (02_Tech_Stack): prints codes to the log. MUST be false in production (OQ-043).
+      log-codes: ${OTP_LOG_CODES:true}
+    export:
+      bucket: ${STORAGE_BUCKET:homecare-private}
+      link-validity: P7D
+  storage:
+    endpoint: ${STORAGE_ENDPOINT:http://localhost:3900}
+    public-endpoint: ${STORAGE_PUBLIC_ENDPOINT:http://localhost:3900}
+    region: ${STORAGE_REGION:garage}
+    access-key-id: ${GARAGE_ACCESS_KEY_ID:}
+    secret-access-key: ${GARAGE_SECRET_ACCESS_KEY:}
   security:
+    # 10_API_Contract role "Khách vãng lai" (API-SV04-001 → 003); also @PreAuthorize("permitAll()") + gateway list.
+    public-endpoints:
+      - POST /api/v1/otp
+      - POST /api/v1/accounts/customers
+      - POST /api/v1/accounts/password-reset
+    lookup-hash-key: ${HOMECARE_LOOKUP_HASH_KEY:}
     encryption-key: ${HOMECARE_ENCRYPTION_KEY:}
     jwt:
       issuer: ${KEYCLOAK_ISSUER:http://localhost:8180/realms/homecare}

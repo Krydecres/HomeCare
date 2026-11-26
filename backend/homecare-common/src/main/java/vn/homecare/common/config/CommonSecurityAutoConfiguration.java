@@ -11,6 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,6 +29,7 @@ import org.springframework.security.web.SecurityFilterChain;
 import vn.homecare.common.security.EncryptedStringConverter;
 import vn.homecare.common.security.HomecareSecurityProperties;
 import vn.homecare.common.security.KeycloakRoleConverter;
+import vn.homecare.common.security.LookupHasher;
 
 /**
  * Default security of every business service (US-15-003, R-35): OAuth2 Resource Server that only trusts a Keycloak JWT
@@ -66,17 +68,30 @@ public class CommonSecurityAutoConfiguration {
 
     @Bean
     @ConditionalOnMissingBean(SecurityFilterChain.class)
-    public SecurityFilterChain resourceServerSecurityFilterChain(HttpSecurity http) throws Exception {
+    public SecurityFilterChain resourceServerSecurityFilterChain(
+            HttpSecurity http, HomecareSecurityProperties properties) throws Exception {
         JwtAuthenticationConverter authenticationConverter = new JwtAuthenticationConverter();
         authenticationConverter.setJwtGrantedAuthoritiesConverter(new KeycloakRoleConverter());
-        http.authorizeHttpRequests(auth -> auth.requestMatchers(PUBLIC_PROBES)
-                        .permitAll()
-                        .anyRequest()
-                        .authenticated())
+        List<String> publicEndpoints = properties.publicEndpoints() == null ? List.of() : properties.publicEndpoints();
+        http.authorizeHttpRequests(auth -> {
+                    auth.requestMatchers(PUBLIC_PROBES).permitAll();
+                    for (String endpoint : publicEndpoints) {
+                        String[] parts = endpoint.trim().split(" +", 2);
+                        auth.requestMatchers(HttpMethod.valueOf(parts[0]), parts[1])
+                                .permitAll();
+                    }
+                    auth.anyRequest().authenticated();
+                })
                 .oauth2ResourceServer(oauth2 -> oauth2.jwt(j -> j.jwtAuthenticationConverter(authenticationConverter)))
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .csrf(csrf -> csrf.disable());
         return http.build();
+    }
+
+    @Bean
+    @ConditionalOnMissingBean
+    public LookupHasher lookupHasher(HomecareSecurityProperties properties) {
+        return new LookupHasher(properties.lookupHashKey());
     }
 
     /** Separate class so that apps without JPA (api-gateway) never load AttributeConverter. */

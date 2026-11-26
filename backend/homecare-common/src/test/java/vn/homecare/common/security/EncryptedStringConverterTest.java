@@ -45,7 +45,7 @@ class EncryptedStringConverterTest {
     @Test
     @DisplayName("TC-US-15-004-4: thiếu khóa thì báo lỗi khi dùng, null giữ nguyên null")
     void missingKey() {
-        EncryptedStringConverter converter = new EncryptedStringConverter(null);
+        EncryptedStringConverter converter = new EncryptedStringConverter((String) null);
         assertThat(converter.convertToDatabaseColumn(null)).isNull();
         assertThatThrownBy(() -> converter.convertToDatabaseColumn("x"))
                 .isInstanceOf(IllegalStateException.class)

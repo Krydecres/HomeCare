@@ -57,7 +57,7 @@ spring:
           - id: identity-service
             uri: lb://identity-service
             predicates:
-              - Path=/api/v1/accounts/**,/api/v1/admin/accounts/**,/api/v1/consents/**,/api/v1/devices/**,/api/v1/otp/**
+              - Path=/api/v1/accounts/**,/api/v1/admin/accounts/**,/api/v1/admin/sessions/**,/api/v1/consents/**,/api/v1/devices/**,/api/v1/otp/**
             filters:
               - TokenRelay=
               - RemoveRequestHeader=Cookie

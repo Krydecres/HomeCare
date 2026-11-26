@@ -1,3 +1,4 @@
 vn.homecare.common.config.CommonWebAutoConfiguration
 vn.homecare.common.config.CommonSecurityAutoConfiguration
 vn.homecare.common.config.CommonMessagingAutoConfiguration
+vn.homecare.common.config.CommonStorageAutoConfiguration

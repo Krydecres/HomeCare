@@ -17,7 +17,7 @@ TARGET = INFRA / ".env"
 
 
 def generate(key: str) -> str:
-    if key == "HOMECARE_ENCRYPTION_KEY":
+    if key in ("HOMECARE_ENCRYPTION_KEY", "HOMECARE_LOOKUP_HASH_KEY"):
         return base64.b64encode(secrets.token_bytes(32)).decode()  # AES-256
     if key == "GARAGE_RPC_SECRET":
         return secrets.token_hex(32)

@@ -16,6 +16,7 @@ x-service-env: &service-env
   KEYCLOAK_ISSUER: http://localhost:8180/realms/homecare
   KEYCLOAK_JWK_SET_URI: http://keycloak:8080/realms/homecare/protocol/openid-connect/certs
   HOMECARE_ENCRYPTION_KEY: ${HOMECARE_ENCRYPTION_KEY:?run scripts/init-dev-env.py}
+  HOMECARE_LOOKUP_HASH_KEY: ${HOMECARE_LOOKUP_HASH_KEY:?run scripts/init-dev-env.py}
   MANAGEMENT_TRACING_EXPORT_ZIPKIN_ENDPOINT: http://zipkin:9411/api/v2/spans
   LOGGING_STRUCTURED_FORMAT_CONSOLE: ecs
   SPRING_DATASOURCE_HIKARI_MAXIMUM_POOL_SIZE: "5"

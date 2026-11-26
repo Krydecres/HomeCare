@@ -11,6 +11,7 @@ import javax.crypto.Cipher;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.GCMParameterSpec;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * AES-256-GCM column encryption for sensitive data: health data, ID card numbers, phone/email (NM-0107, R-17, 02_Tech_Stack
@@ -32,6 +33,12 @@ public class EncryptedStringConverter implements AttributeConverter<String, Stri
 
     private final SecureRandom random = new SecureRandom();
     private final SecretKey key;
+
+    /** Used by Hibernate, which creates converters through their constructor (JPA-compliant bean creation). */
+    @Autowired
+    public EncryptedStringConverter(HomecareSecurityProperties properties) {
+        this(properties.encryptionKey());
+    }
 
     public EncryptedStringConverter(String base64Key) {
         this.key = base64Key == null || base64Key.isBlank() ? null : toKey(base64Key);
