@@ -14,7 +14,7 @@ public interface RoleGrantService {
     void grantByPartner(UUID accountId, GrantRoleRequest request);
 
     /** API-SV04-021: removes the role and signs the account out everywhere at once (US-01-009). */
-    void revoke(UUID accountId, AppRole role, String reason);
+    void revoke(UUID accountId, String role, String reason);
 
     /** Used inside identity-service (registration, internal accounts). */
     void grant(UUID accountId, AppRole role, UUID partnerOrgId, UUID grantedBy);

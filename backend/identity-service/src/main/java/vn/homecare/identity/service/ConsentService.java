@@ -18,8 +18,11 @@ public interface ConsentService {
     ConsentResponse grant(Jwt jwt, GrantConsentRequest request);
 
     /** API-SV04-017. TERMS/PRIVACY cannot be withdrawn while the account exists (CONSENT_REQUIRED_FOR_ACTIVE_SERVICE). */
-    void withdraw(Jwt jwt, ConsentType type);
+    void withdraw(Jwt jwt, String consentType);
 
     /** Records several consents at registration; each version must be the current one. */
     void recordAll(UUID accountId, Map<ConsentType, String> acceptedVersions);
+
+    /** Fails with POLICY_VERSION_OUTDATED before anything is created (TC-US-14-001-1). */
+    void requireCurrentVersions(Map<ConsentType, String> acceptedVersions);
 }

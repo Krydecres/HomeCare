@@ -159,6 +159,7 @@ public class AccountServiceImpl implements AccountService {
         Map<ConsentType, String> consents = new EnumMap<>(ConsentType.class);
         consents.put(ConsentType.TERMS, request.acceptedTermsVersion());
         consents.put(ConsentType.PRIVACY, request.acceptedPrivacyVersion());
+        consentService.requireCurrentVersions(consents);
         otpService.verify(phone, OtpPurpose.REGISTER, request.otpCode());
 
         UUID accountId = UuidV7.next(Instant.now(clock));
@@ -528,7 +529,7 @@ public class AccountServiceImpl implements AccountService {
                 AGGREGATE,
                 target.getId(),
                 "account.locked",
-                Map.of("accountId", target.getId(), "safetyIncident", request.safetyIncident()));
+                Map.of("accountId", target.getId(), "safetyIncident", Boolean.TRUE.equals(request.safetyIncident())));
         audit.record(
                 "ACCOUNT_LOCKED", AGGREGATE, target.getId(), request.reason().trim());
         return toResponse(target, null);

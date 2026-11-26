@@ -15,6 +15,8 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.net.URI;
+import java.security.SecureRandom;
+import java.util.Base64;
 import java.util.concurrent.atomic.AtomicReference;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -30,6 +32,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.test.context.DynamicPropertyRegistry;
+import org.springframework.test.context.DynamicPropertySource;
 import org.springframework.test.context.bean.override.mockito.MockitoBean;
 import org.springframework.test.web.servlet.MockMvc;
 import org.testcontainers.containers.GenericContainer;
@@ -57,8 +61,6 @@ import vn.homecare.identity.entity.OtpPurpose;
             "spring.flyway.default-schema=identity",
             "spring.flyway.create-schemas=true",
             "KC_SECRET_IDENTITY_SERVICE=test-only",
-            "homecare.security.encryption-key=MDEyMzQ1Njc4OWFiY2RlZjAxMjM0NTY3ODlhYmNkZWY=",
-            "homecare.security.lookup-hash-key=bG9va3VwLWtleS1mb3ItaW50ZWdyYXRpb24tdGVzdHM=",
             "homecare.outbox.poll-interval=PT1H",
             "homecare.identity.jobs.export-delay=PT1H",
             "homecare.identity.jobs.export-expiry-delay=PT1H"
@@ -74,6 +76,19 @@ class IdentityIntegrationTest {
     @Container
     @ServiceConnection(name = "redis")
     static final GenericContainer<?> REDIS = new GenericContainer<>("redis:7.4-alpine").withExposedPorts(6379);
+
+    /** Fresh random keys for every run: no key-like literal is committed (R-17, secret scanners). */
+    @DynamicPropertySource
+    static void randomKeys(DynamicPropertyRegistry registry) {
+        registry.add("homecare.security.encryption-key", IdentityIntegrationTest::randomBase64Key);
+        registry.add("homecare.security.lookup-hash-key", IdentityIntegrationTest::randomBase64Key);
+    }
+
+    private static String randomBase64Key() {
+        byte[] key = new byte[32];
+        new SecureRandom().nextBytes(key);
+        return Base64.getEncoder().encodeToString(key);
+    }
 
     @Autowired
     MockMvc mvc;

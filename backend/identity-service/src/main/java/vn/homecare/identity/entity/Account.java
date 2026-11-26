@@ -9,6 +9,8 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import vn.homecare.common.security.EncryptedStringConverter;
 
 /**
@@ -28,6 +30,7 @@ public class Account extends BaseEntity {
     @Column(name = "phone_enc")
     private String phone;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "phone_hash", length = 64)
     private String phoneHash;
 
@@ -35,6 +38,7 @@ public class Account extends BaseEntity {
     @Column(name = "email_enc")
     private String email;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "email_hash", length = 64)
     private String emailHash;
 

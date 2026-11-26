@@ -6,6 +6,8 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 
 /**
  * Browser/device info of a Keycloak SSO session, reported by the gateway right after login (US-01-006, DD-0020,
@@ -19,12 +21,14 @@ public class LoginSession extends BaseEntity {
     @Column(name = "account_id", nullable = false)
     private UUID accountId;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "session_ref_hash", nullable = false, unique = true, length = 64)
     private String sessionRefHash;
 
     @Column(name = "user_agent", length = 255)
     private String userAgent;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "ip_hash", length = 64)
     private String ipHash;
 

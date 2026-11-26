@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import vn.homecare.identity.dto.request.GrantRoleRequest;
-import vn.homecare.identity.entity.AppRole;
 import vn.homecare.identity.service.RoleGrantService;
 
 /**
@@ -46,7 +45,7 @@ public class InternalRoleController {
     @PreAuthorize(CAREGIVER_SERVICE_ONLY)
     public void revokeRole(
             @PathVariable UUID id,
-            @PathVariable AppRole role,
+            @PathVariable String role,
             @RequestParam(defaultValue = "Bệnh viện gỡ vai trò") String reason) {
         roleGrantService.revoke(id, role, reason);
     }

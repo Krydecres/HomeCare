@@ -11,6 +11,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.homecare.common.audit.AuditEventRecorder;
 import vn.homecare.common.exception.BusinessException;
+import vn.homecare.common.exception.GlobalExceptionHandler;
 import vn.homecare.identity.client.KeycloakAdminClient;
 import vn.homecare.identity.client.KeycloakRole;
 import vn.homecare.identity.client.KeycloakUser;
@@ -55,7 +56,7 @@ public class RoleGrantServiceImpl implements RoleGrantService {
         if (request.role() == AppRole.CAREGIVER) {
             accountRoleRepository
                     .findByAccountIdAndRoleAndRevokedAtIsNull(accountId, AppRole.CAREGIVER_PENDING)
-                    .ifPresent(pending -> revoke(accountId, AppRole.CAREGIVER_PENDING, "Bệnh viện đã duyệt"));
+                    .ifPresent(pending -> revoke(accountId, AppRole.CAREGIVER_PENDING.name(), "Bệnh viện đã duyệt"));
         }
         setPartnerOrgAttribute(account(accountId), request.partnerOrgId());
     }
@@ -76,7 +77,8 @@ public class RoleGrantServiceImpl implements RoleGrantService {
 
     @Override
     @Transactional
-    public void revoke(UUID accountId, AppRole role, String reason) {
+    public void revoke(UUID accountId, String roleName, String reason) {
+        AppRole role = parseEnum(AppRole.class, roleName);
         Account account = account(accountId);
         AccountRole active = accountRoleRepository
                 .findByAccountIdAndRoleAndRevokedAtIsNull(accountId, role)
@@ -105,5 +107,15 @@ public class RoleGrantServiceImpl implements RoleGrantService {
         Map<String, List<String>> attributes = new HashMap<>(user.attributes() == null ? Map.of() : user.attributes());
         attributes.put("partnerOrgId", List.of(partnerOrgId.toString()));
         keycloak.updateUser(account.getKeycloakUserId(), user.withAttributes(attributes));
+    }
+
+    /** Parses the path variable here so the controller never sees entity enums (R-06). */
+    private static <E extends Enum<E>> E parseEnum(Class<E> type, String value) {
+        try {
+            return Enum.valueOf(type, value.trim().toUpperCase(java.util.Locale.ROOT));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new BusinessException(
+                    HttpStatus.BAD_REQUEST, GlobalExceptionHandler.VALIDATION_FAILED, "Giá trị không hợp lệ: " + value);
+        }
     }
 }

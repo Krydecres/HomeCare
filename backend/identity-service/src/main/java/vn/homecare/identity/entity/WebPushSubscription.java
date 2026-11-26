@@ -7,6 +7,8 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 import lombok.Getter;
+import org.hibernate.annotations.JdbcTypeCode;
+import org.hibernate.type.SqlTypes;
 import vn.homecare.common.security.EncryptedStringConverter;
 
 /** Web Push subscription of a browser (US-01-006, DD-0022, DD-0023). Endpoint and keys are encrypted. */
@@ -22,6 +24,7 @@ public class WebPushSubscription extends BaseEntity {
     @Column(name = "endpoint_enc", nullable = false)
     private String endpoint;
 
+    @JdbcTypeCode(SqlTypes.CHAR)
     @Column(name = "endpoint_hash", nullable = false, unique = true, length = 64)
     private String endpointHash;
 

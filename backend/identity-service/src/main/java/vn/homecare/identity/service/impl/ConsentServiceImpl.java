@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import vn.homecare.common.audit.AuditEventRecorder;
 import vn.homecare.common.exception.BusinessException;
+import vn.homecare.common.exception.GlobalExceptionHandler;
 import vn.homecare.identity.config.IdentityProperties;
 import vn.homecare.identity.dto.request.GrantConsentRequest;
 import vn.homecare.identity.dto.response.ConsentResponse;
@@ -82,7 +83,8 @@ public class ConsentServiceImpl implements ConsentService {
 
     @Override
     @Transactional
-    public void withdraw(Jwt jwt, ConsentType type) {
+    public void withdraw(Jwt jwt, String consentType) {
+        ConsentType type = parseEnum(ConsentType.class, consentType);
         if (type.isMandatory()) {
             throw new BusinessException(
                     HttpStatus.CONFLICT,
@@ -103,7 +105,12 @@ public class ConsentServiceImpl implements ConsentService {
         acceptedVersions.forEach((type, version) -> record(accountId, type, version));
     }
 
-    private void record(UUID accountId, ConsentType type, String version) {
+    @Override
+    public void requireCurrentVersions(Map<ConsentType, String> acceptedVersions) {
+        acceptedVersions.forEach(this::requireCurrentVersion);
+    }
+
+    private void requireCurrentVersion(ConsentType type, String version) {
         String current = properties.versionOf(type);
         if (current == null || !current.equals(version)) {
             throw new BusinessException(
@@ -111,11 +118,25 @@ public class ConsentServiceImpl implements ConsentService {
                     "POLICY_VERSION_OUTDATED",
                     "Văn bản " + type.name() + " đã có phiên bản mới, vui lòng đọc và đồng ý lại.");
         }
+    }
+
+    private void record(UUID accountId, ConsentType type, String version) {
+        requireCurrentVersion(type, version);
         Instant now = Instant.now(clock);
         consentRepository
                 .findByAccountIdAndConsentTypeAndWithdrawnAtIsNull(accountId, type)
                 .forEach(c -> c.withdraw(now));
         consentRepository.save(new Consent(accountId, type, version, Consent.CHANNEL_WEB, now));
         audit.record("CONSENT_GRANTED", "Account", accountId, type.name() + " v" + version);
+    }
+
+    /** Parses the path variable here so the controller never sees entity enums (R-06). */
+    private static <E extends Enum<E>> E parseEnum(Class<E> type, String value) {
+        try {
+            return Enum.valueOf(type, value.trim().toUpperCase(java.util.Locale.ROOT));
+        } catch (IllegalArgumentException | NullPointerException e) {
+            throw new BusinessException(
+                    HttpStatus.BAD_REQUEST, GlobalExceptionHandler.VALIDATION_FAILED, "Giá trị không hợp lệ: " + value);
+        }
     }
 }

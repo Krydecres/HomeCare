@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import vn.homecare.identity.dto.request.GrantConsentRequest;
 import vn.homecare.identity.dto.response.ConsentResponse;
-import vn.homecare.identity.entity.ConsentType;
 import vn.homecare.identity.service.ConsentService;
 
 /** API-SV04-015 → 017 (US-14-001). */
@@ -47,7 +46,7 @@ public class ConsentController {
     @DeleteMapping("/{consentType}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     @PreAuthorize("isAuthenticated()")
-    public void withdrawConsent(@AuthenticationPrincipal Jwt jwt, @PathVariable ConsentType consentType) {
+    public void withdrawConsent(@AuthenticationPrincipal Jwt jwt, @PathVariable String consentType) {
         consentService.withdraw(jwt, consentType);
     }
 }
